@@ -17,7 +17,7 @@ class MenuItem(Base):
 	id = Column(Integer, primary_key = True)
 	name = Column(String(80), nullable=False)
 	description = Column(String(300))
-	category_name = Column(String(80),ForeignKey('category.id'))
+	category_id = Column(String(80),ForeignKey('category.id'))
 	category = relationship(Category)
 
 # put everything together in a file called itemcatalogue.db
