@@ -31,27 +31,31 @@ def readMainPage():
 	#return template filled with query result
 	return render_template('main.html',menuItems = menuItems, categories = categories)
 
-# @app.route('/<string:category_name>/')
-# def readCategory(category_name):
-# 	"""
-# 	readCategory()
+@app.route('/<string:category_name>/')
+def readCategory(category_name):
+	"""s
+	readCategory()
 
-# 	Returns all categories and menu items of whatever clicked category in alphabetical order
+	Returns all categories and menu items of whatever clicked category in alphabetical order
 
-# 	"""	
-# 	session = DBSession()
+	"""	
+	session = DBSession()
 
-# 	#query all entries in category.
-# 	categories = session.query(Category).all()
+	#query all entries in category.
+	categories = session.query(Category).all()
 
-# 	#query all menu items in the category
-# 	menuItems = session.query(MenuItem).filter_by(category_name= category_name).order_by(desc(MenuItem.name))
+	#converting harvested category name into category id
+	category = session.query(Category).filter_by(name = category_name).one()
+	category_id = category.id
+
+	#query all menu items in the category
+	menuItems = session.query(MenuItem).filter_by(category_id= category_id).order_by(desc(MenuItem.name))
 	
-# 	count = session.query(func.count(MenuItem)).filter_by(category_name=category_name).group_by(MenuItem.category_name)
+	itemCount = session.query(func.count(MenuItem)).filter_by(category_id = category_id).group_by(MenuItem.category_id)
 
-# 	session.close()
+	session.close()
 
-# 	return render_template('category.html',category_name=category_name,categories=categories,menuItems=menuItems,count=count)
+	return render_template('category.html',category_name=category_name,categories=categories,menuItems=menuItems,count=count)
 
 
 # @app.route('/<string:category_name>/new', methods=['GET','POST'])

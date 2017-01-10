@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<ul>
+		{%for category in categories%}
+		<li>
+			{{category.name}}
+		</li>
+		{%endfor%}
+	</ul>
+
+	<h2>{{category.name}} Items ({{count}} items)</h2>
+	<ul>
+		{%for menuItem in menuItems%}
+		<li>
+			<p>
+				{{menuItem.name}}<br>
+				{{menuitem.category_name}}<br>
+				{{menuItem.description}}<br>
+				{{menuItem.date_created}}<br>
+			</p>
+		</li>
+		{%endfor%}
+	</ul>
+</body>
+</html>

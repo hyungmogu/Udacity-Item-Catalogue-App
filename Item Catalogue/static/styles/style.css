@@ -1,0 +1,22 @@
+a {text-decoration:none; color: #DB5015;}
+
+html {height: 100%;}
+body {margin: 0; height: relative; background-color: #DCDCDC;}
+.button {border-style: solid; border-width: 0.1em; border-radius: 0.3em; border-color: transparent; padding: 0.3em 0.9em; display: inline-block;}
+.button.orange {background-color: #DB5015; color: white;}
+.content {padding: 0 0.6em; max-width: 768px; margin: 0 auto;}
+.title {color: #0A2243;}
+
+/*Header*/
+header {background-color: #0A2243; color: white; margin-bottom: 1em;}
+header .content {padding-top: 0.7em; padding-bottom: 0.7em; display: flex;}
+header .content #logo {width: 60%;} 
+header .content #logo a {color: white;}
+header .content #logo h1 {margin: 0; display:inline-block;}
+header .content #user {text-align: right; width: 40%;}
+
+/*Main*/
+main .content .box {background-color: white; border-style: solid; border-width: 1px; border-color: #AFAFAF; padding: 0 0.6em;} 
+
+/*Main - Menu*/
+main .content .box #menu .part ul {list-style-type:none; padding-left: 0;}
