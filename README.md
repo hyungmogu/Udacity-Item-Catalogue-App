@@ -1,5 +1,7 @@
 # Udacity-Item-Catalogue-App
 
+---
+
 ## Introduction
 
 ## Step-by-step Instruction
