@@ -15,13 +15,13 @@ This is a project for Udacity's "Introduction to Full-stack Development" course.
 1. Install [git bash](https://git-scm.com/downloads) 
 2. Open git bash
 3. Navigate to a directory of choice
-4. Type `git clone https://github.com/hyungmogu/Udacity-Item-Catalogue-App/`; clone the repository
+4. Type `git clone https://github.com/hyungmogu/Udacity-Item-Catalogue-App/`; download the repository
 
 #### Linux/MacOS
 
 1. Open terminal
 2. Navigate to a directory of choice
-3. Type `git clone https://github.com/hyungmogu/Udacity-Item-Catalogue-App/`; clone the repository
+3. Type `git clone https://github.com/hyungmogu/Udacity-Item-Catalogue-App/`; download the repository
 
 ### 2. Installing Vagrant
 
@@ -37,9 +37,20 @@ This is a project for Udacity's "Introduction to Full-stack Development" course.
 
 #### Windows
 
-1. 
+1. Open git bash
+2. Navigate to the directory where the cloned repo is located
+3. Type `cd /udacity-tournament-result/vagrant/`; navigate to where `VagrantFile` is located
+4. Type `vagrant up`; let vagrant to setup dependencies
+5. Type `vagrant ssh` when step 4 is finished; login to the virtual machine
+
 
 #### Linux, Mac OS
+
+1. Open terminal
+2. Navigate to the directory where the cloned repo is located
+3. Type `cd /udacity-tournament-result/vagrant/`; navigate to where `VagrantFile` is located
+4. Type `vagrant up`; let vagrant to setup dependencies
+5. Type `vagrant ssh` when step 4 is finished; login to the virtual machine
 
 ### 4. Running Flask Server (In Vagrant)
 
@@ -48,6 +59,7 @@ This is a project for Udacity's "Introduction to Full-stack Development" course.
 3. Type `flask run`
 
 ### 5. Viewing Content
+
 1. Type `http://localhost:5000/` in browser
 
 ### 6. Closing Server
