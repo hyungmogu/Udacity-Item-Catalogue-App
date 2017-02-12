@@ -117,7 +117,7 @@ function onSignInFailure() {
     // These three cases are handled in the callback function.
     FB.getLoginStatus(function(response) {
       statusChangeCallback(response);
-    }
+    });
   };
 
   // Load the SDK asynchronously
