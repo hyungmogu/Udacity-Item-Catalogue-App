@@ -15,27 +15,27 @@ session.query(MenuItem).delete()
 session.commit()
 
 #adding categories
-category_names = ['Soccer','Basketball','Frisbee','Snowboarding']
+categories = [{'name':'Soccer','slug':'soccer'},{'name':'Basketball','slug':'basketball'},{'name':'Frisbee','slug':'frisbee'},{'name':'Snowboarding','slug':'snowboarding'}]
 
-for category_name in category_names:
-	newCategory = Category(name = category_name)
+for category in categories:
+	newCategory = Category(name = category['name'], slug= category['slug'])
 	session.add(newCategory)
 	session.commit()
 
 
 #adding menu items for soccer category
 soccer = session.query(Category).filter_by(name="Soccer").first()
-shingGuards = MenuItem(name="Two Shinguards", category_id=soccer.id)
+shingGuards = MenuItem(name="Two Shinguards", slug="two_singuards", category_id=soccer.id)
 session.add(shingGuards)
 session.commit()
 
 #adding menu items for snowboarding category
-sbItemNames = ["Goggles","Snowboard"]
+sbItems = [{'name':"Goggles",'slug':'goggles'},{'name':"Snowboard",'slug':'snowboard'}]
 snowboarding = session.query(Category).filter_by(name="Snowboarding").first()
 
 
-for sbItemName in sbItemNames:
-	newSbItem = MenuItem(name = sbItemName, category_id=snowboarding.id)
+for sbItem in sbItems:
+	newSbItem = MenuItem(name = sbItem['name'], slug=sbItem['slug'], category_id=snowboarding.id)
 	session.add(newSbItem)
 	session.commit()
 

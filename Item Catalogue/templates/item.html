@@ -1,0 +1,36 @@
+{%extends "base.html"%}
+
+{%block title%}{{item.name}}|Item Catalogue{%endblock%}
+{%block import%}{%endblock%}
+
+{%block main_navigation%}
+	{%if logged_in%}
+		<div id="user">
+			<a href="/logout" class="button orange">Logout</a>
+		</div>
+	{%else%}
+		<div id="user">
+			<a href="/login" class="button orange">Login</a>
+		</div>
+	{%endif%}
+{%endblock%}
+
+{%block header%}
+	<section class="header">
+		<h2 class="title">{{item.MenuItem.name}}</h2>
+		{%if logged_in%}
+		<div class="options">
+			<div class="wrapper">
+				<a href="/items/{{item.slug}}/{{item.MenuItem.slug}}/edit/">Edit</a> 
+				| <a href="/items/{{item.slug}}/{{item.MenuItem.slug}}/delete/">Delete</a>
+			</div>
+		</div>
+		{%endif%}
+	</section>
+{%endblock%}
+
+{%block contents%}
+	<section class="content">
+		<p>{{item.MenuItem.description}}</p>
+	</section>
+{%endblock%}

@@ -1,45 +1,49 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-	<title></title>
-	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
-</head>
-<body>
-	<header>
-		<div class="content">
-			<section id="logo">
-				<a href="#"><h1>Catalogue App</h1></a>
-			</section>
-			<section id="user">
-				<a href="#" class="button orange">Login</a>
-			</section>
+{%extends "base.html"%}
+
+{%block title%}Item Catalogue{%endblock%}
+{%block import%}{%endblock%}
+
+{%block main_navigation%}
+	{%if logged_in%}
+		<div id="user">
+			<a href="/logout" class="button orange">Logout</a>
 		</div>
-	</header>
-	<main>
-		<div class="content">
-			<div class="box">
-				<section id="menu">
-					<div id="categories" class="part">
-						<h2 class="title">Categories</h2>
-						<ul>
-						{%for category in categories%}
-							<li class="menu-item"><a href="#">{{category.name}}</a></li>
-						{%endfor%}
-						</ul>
-					</div>
-					<div id="menu-items" class="part">
-						<h2 class="title">Latest Items</h2>
-						<ul>
-						{%for menuItem in menuItems%}
-							<li class="menu-item"><a href="#">{{menuItem.name}}</a></li>
-						{%endfor%}
-						</ul>
-					</div>
-				</section>
+	{%else%}
+		<div id="user">
+			<a href="/login" class="button orange">Login</a>
+		</div>
+	{%endif%}
+{%endblock%}
+
+{%block header%}
+	<section class="header">
+		{%if logged_in%}
+		<div class="options">
+			<div class="wrapper">
+				<a href="/items/new/">Add New Item</a>
 			</div>
 		</div>
-	</main>
-</body>
-</html>
+		{%endif%}
+	</section>
+{%endblock%}
+
+{%block contents%}
+	<section id="menu">
+		<div id="categories" class="part">
+			<h2 class="title">Categories</h2>
+			<ul>
+			{%for category in categories%}
+				<li class="menu-item"><a href="/items/{{category.slug}}/">{{category.name}}</a></li>
+			{%endfor%}
+			</ul>
+		</div>
+		<div id="menu-items" class="part">
+			<h2 class="title">Latest Items</h2>
+			<ul>
+			{%for menuItem in menuItems%}
+				<li class="menu-item"><a href="/items/{{menuItem[0]}}/{{menuItem[2]}}/">{{menuItem[1]}}</a></li>
+			{%endfor%}
+			</ul>
+		</div>
+	</section>
+{%endblock%}

@@ -1,22 +1,38 @@
+h1,
+h2,
+h3,
+h4,
+h5 {font-family: Arial;}
 a {text-decoration:none; color: #DB5015;}
 
 html {height: 100%;}
 body {margin: 0; height: relative; background-color: #DCDCDC;}
+label {display: block; font-weight: bold;}
+
 .button {border-style: solid; border-width: 0.1em; border-radius: 0.3em; border-color: transparent; padding: 0.3em 0.9em; display: inline-block;}
 .button.orange {background-color: #DB5015; color: white;}
-.content {padding: 0 0.6em; max-width: 768px; margin: 0 auto;}
+.contents {padding: 0 0.6em; max-width: 768px; margin: 0 auto;}
+.form-group {margin: 1em 0;}
 .title {color: #0A2243;}
 
 /*Header*/
 header {background-color: #0A2243; color: white; margin-bottom: 1em;}
-header .content {padding-top: 0.7em; padding-bottom: 0.7em; display: flex;}
-header .content #logo {width: 60%;} 
-header .content #logo a {color: white;}
-header .content #logo h1 {margin: 0; display:inline-block;}
-header .content #user {text-align: right; width: 40%;}
+header .contents {padding-top: 0.7em; padding-bottom: 0.7em;}
+header .contents #nav {display:flex;}
+header .contents #nav #logo {width: 60%;} 
+header .contents #nav #logo a {color: white;}
+header .contents #nav #logo h1 {margin: 0; display:inline-block;}
+header .contents #nav #user {text-align: right; width: 40%;}
 
 /*Main*/
-main .content .box {background-color: white; border-style: solid; border-width: 1px; border-color: #AFAFAF; padding: 0 0.6em;} 
+main .contents .box {background-color: white; border-style: solid; border-width: 1px; border-color: #AFAFAF; padding: 0 0.83em; position: relative;} 
+main .contents .box .header .options {left: 0; margin: 0.4em 0; position: absolute; text-align: right; top: 0; width: 100%; z-index: 9999;}
+main .contents .box .header .options .wrapper {padding: 0 0.83em;} 
+/*Main - Header*/
 
 /*Main - Menu*/
-main .content .box #menu .part ul {list-style-type:none; padding-left: 0;}
+main .contents .box #menu {display:flex; flex-wrap:wrap; position: relative;}
+main .contents .box #menu .part ul {list-style-type:none; padding-left: 0;}
+
+main .contents .box #menu #menu-items {width: 70%;}
+main .contents .box #menu #categories {width: 30%;}

@@ -1,0 +1,27 @@
+{%extends "base.html"%}
+
+{%block title%}Delete Item|Item Catalogue{%endblock%}
+{%block import%}{%endblock%}
+
+{%block main_navigation%}
+		<div id="user">
+			<a href="/logout" class="button orange">Logout</a>
+		</div>
+{%endblock%}
+
+{%block header%}
+	<section class="header">
+		<h2 class="title">Delete Item</h2>
+	</section>
+{%endblock%}
+
+{%block contents%}
+	<section id="menu-item-delete-form">
+		<p>Are you sure you want to delete?</p>
+		<form action="/items/{{category_slug}}/{{item_slug}}/delete/" method="POST" enctype="multipart/form-data">
+			<div class="form-group">
+				<input type="submit" value="Delete">
+			</div>
+		</form>						
+	</section>
+{%endblock%}

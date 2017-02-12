@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>{%block title%}{%endblock%}</title>
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
+	<link rel="shortcut icon" href="{{url_for('static',filename='favicon.ico')}}" type="image/x-icon">
+	{%block import%}{%endblock%}
+</head>
+<body>
+	<header>
+		<div class="contents">
+			<section id="nav">
+				<div id="logo">
+					<a href="/"><h1>Catalogue App</h1></a>
+				</div>
+				{%block main_navigation%}{%endblock%}
+			</section>
+		</div>
+	</header>
+	{%with messages = get_flashed_messages()%}
+		{%if messages%}
+		<section id="messages">
+			<ul>
+				{%for message in messages%}
+				<li class="message">{{message}}</li>
+				{%endfor%}
+			</ul>
+		</section>
+		{%endif%}
+	{%endwith%}
+	<main>
+		<div class="contents">
+			<div class="box">
+				{%block header%}{%endblock%}
+				{%block contents%}{%endblock%}
+			</div>
+		</div>
+	</main>
+</body>
+{%block javascript%}{%endblock%}
+</html>
