@@ -42,7 +42,11 @@ def is_data_changed(new_title, new_description, new_item_slug, new_category_id, 
 	return False
 
 def has_unique_slug_in_cat(new_category_id,new_item_slug):
-	count = int(session.query(MenuItem).filter_by(category_id=category_id,slug=item_slug).count())
+	session = DBSession()
+	count = int(session.query(MenuItem)
+					   .filter_by(category_id=category_id,slug=item_slug)
+					   .count())
+	session.close()
 	if count is not 0:
 		return False
 	else:
@@ -327,7 +331,7 @@ def createItem():
 				  "slug.","error")
 			return render_template("newItem.html",categories=categories, logged_in=True, title=title, category_id=category_id, description=description)
 
-		item = MenuItem(name=title, slug=item_slug, 
+		item = MenuItem(name=title, slug=item_slug,
 				description=description, category_id=category_id)
 		session.add(item)
 		session.commit()
@@ -340,7 +344,6 @@ def createItem():
 @app.route("/items/<string:category_slug>/<string:item_slug>/edit/", 
 	methods=["GET","POST"])
 def editItem(category_slug,item_slug):
-
 	if request.method == "GET":
 		session = DBSession()
 		categories = session.query(Category).all()
@@ -364,7 +367,6 @@ def editItem(category_slug,item_slug):
 		# TODO: Add a function that returns true if user is modifying the same post.
 		#		If so, update title, description, and then redirect user to readItem page.
 		# TODO: Fix the problem of user not being allowed to modify their own post.
-
 		new_title = request.form["title"]
 		new_description = request.form["description"]
 		new_category_id = int(request.form["category"])
