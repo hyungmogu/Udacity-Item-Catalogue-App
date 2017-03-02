@@ -427,29 +427,38 @@ def editItem(category_slug,item_slug):
 
 @app.route("/items/<string:category_slug>/<string:item_slug>/delete/", 
 	methods=["GET","POST"])
-def deleteItem(category_slug,item_slug):
+def deleteItem(category_slug, item_slug):
 	if(request.method == "GET"):
-		# Checks if user is logged in.
-		if "username" not in login_session:
+		if not is_signed_in():
 			flash("Not allowed. 'Delete' feature requires login.","error")
 			return redirect(url_for("readLogin"))
-		return render_template("deleteItem.html",category_slug=category_slug,
+
+		return render_template("deleteItem.html", category_slug=category_slug,
 			item_slug=item_slug)
+
 	elif (request.method == "POST"):
-		# Checks if user is logged in.
-		if "username" not in login_session:
-			flash("Not allowed. 'Delete' feature requires login.","error")
-			return redirect(url_for("readLogin"))
 		session = DBSession()
-		# Find item by slug and then delete it
-		# NOTE: need error message here. what if item is already deleted?
-		item = (session.query(MenuItem).join(MenuItem.category).
-			filter(Category.slug == category_slug, MenuItem.slug == item_slug).
-			one())
+
+		try:
+			item = (session.query(MenuItem).join(MenuItem.category).
+				filter(Category.slug==category_slug, MenuItem.slug==item_slug).
+				one())
+		except exc.SQLAlchemyError:
+			session.close()
+
+			flash("Not allowed. The item doesn't exist.")
+			return redirect(url_for("readMain"))
+
+		if not is_signed_in():
+			flash("Not allowed. 'Delete' feature requires login.", "error")
+			return redirect(url_for("readLogin"))
+
 		session.delete(item)
 		session.commit()
+
 		session.close()
-		flash("'%s' successfully deleted."%item.name,"success")
+		
+		flash("'%s' successfully deleted." % item.name,"success")
 		return redirect(url_for("readMain"))
 
 @app.route("/items/<string:category_slug>/<string:item_slug>/")
