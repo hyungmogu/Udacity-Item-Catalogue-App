@@ -3,7 +3,7 @@ import string
 import random
 from datetime import datetime
 
-from sqlalchemy import create_engine, desc, asc, func, and_
+from sqlalchemy import create_engine, desc, asc, func, and_, exc
 from sqlalchemy.orm import sessionmaker, joinedload
 from database_setup import Category, MenuItem
 
@@ -250,30 +250,35 @@ def readMain():
 @app.route("/items/<string:category_slug>/")
 def readCategory(category_slug):
 	session = DBSession()
-	# Query all categories for category menu.
-	categories = session.query(Category).order_by(asc(Category.name)).all()
-	# Query all items in the current category for current category menu.
-	currentCategory = session.query(Category).filter_by(slug = category_slug).one()
-	currentCategoryItems = (session.query(Category.slug,MenuItem.name,
-								MenuItem.slug).
-							join(MenuItem.category).
-							filter(Category.slug == category_slug).all())
-	# Find number of items. 
-	# Note: This is to be displayed beside the title of current category menu.
-	itemsCount = (session.query(MenuItem).
-				filter_by(category_id = currentCategory.id).count())
-	session.close()
-	# Checks if user is logged in.
-	# If so, insert logout buttion.
+
+	try:
+		current_category = session.query(Category).filter_by(slug=category_slug).one()
+	except exc.SQLAlchemyError:
+			session.close()
+
+			flash("Not allowed. The page doesn't exist.")
+			return redirect(url_for("readMain"))
+
+	categories_for_menu = session.query(Category).order_by(asc(Category.name)).all()
+	items = session.query(MenuItem).filter_by(category_id=current_category.id).all()
+	items_count = (session.query(MenuItem)
+						  .filter_by(category_id=current_category.id).count())
+
+	# Determine which button to put. Login or logout?
+	# If logged in, insert logout buttion.
 	# If not, insert login button
-	if "username" in login_session:
-		return render_template("category.html",currentCategory=currentCategory,
-				categories=categories,menuItems=currentCategoryItems,
-				count=itemsCount,logged_in=True)
-	else:
-		return render_template("category.html",currentCategory=currentCategory,
-				categories=categories,menuItems=currentCategoryItems,
-				count=itemsCount)
+	if not is_signed_in():
+		session.close()
+
+		return render_template("category.html", currentCategory=current_category,
+				categories=categories_for_menu, menuItems=items,
+				count=items_count)
+
+	session.close()
+
+	return render_template("category.html", currentCategory=current_category,
+			categories=categories_for_menu, menuItems=items,
+			count=items_count, logged_in=True)
 
 @app.route("/items/new/", methods=["GET","POST"])
 def createItem():
