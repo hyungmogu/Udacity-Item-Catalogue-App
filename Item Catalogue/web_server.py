@@ -24,6 +24,41 @@ DBSession = sessionmaker(bind = engine)
 CLIENT_ID = json.loads(open("client_secrets.json","r").read())["web"]["client_id"]
 
 
+#EXTRA FUNCTIONS
+def is_signed_in():
+	if "username" not in login_session:
+		return False
+	return True
+
+def is_data_changed(new_title, new_description, new_item_slug, new_category_id, old_item):
+	if not (new_title == old_item.name):
+		return True
+	if not (new_item_slug == old_item.slug):
+		return True
+	if not (new_description == old_item.description):
+		return True
+	if not (new_category_id == old_item.category_id):
+		return True	
+	return False
+
+def has_unique_slug_in_cat(new_category_id,new_item_slug):
+	session = DBSession()
+	count = int(session.query(MenuItem)
+					 .filter_by(category_id=new_category_id,
+							 	slug=new_item_slug).count())
+	session.close()
+
+	if count is not 0:
+		return False
+	else:
+		return True
+
+def generate_slug(title):
+	lowercase_title = title.lower()
+	slug = "_".join(lowercase_title.split())	
+
+	return slug
+
 #LOGIN
 @app.route("/login/")
 def readLogin():
@@ -273,7 +308,15 @@ def createItem():
 		description = request.form["description"]
 		category_id = request.form["category"]
 		# Validate data.
-		# First, check if the same name exists in a category.
+		# First, check if both title and description are present
+		# If not, re-render page with error
+		if not (title and descriptions):
+			session = DBSession()
+			categories = session.query(Category).all()
+			session.close()
+			flash("Not allowed. Both title and description must exist.")
+			return render_template('newItem.html', categories=categories, logged_in=True, title=title, description=description)
+		# Second, check if the same name exists in a category.
 		# This ensures the uniqueness of url.
 		capitalizedItemName = string.capwords(title)
 		session = DBSession()
@@ -301,64 +344,73 @@ def createItem():
 @app.route("/items/<string:category_slug>/<string:item_slug>/edit/", 
 	methods=["GET","POST"])
 def editItem(category_slug,item_slug):
-	if(request.method == "GET"):
-		# Check if user is logged in.
-		if "username" not in login_session:
-			flash("Not allowed. 'Update' page requires login.","error")
-			return redirect(url_for("readLogin"))
+
+	if request.method == "GET":
 		session = DBSession()
-		# Query target data by slug.
-		item = (session.query(MenuItem,Category.slug).join(MenuItem.category).
-			filter(Category.slug==category_slug,MenuItem.slug == item_slug).one())
-		# Query all categories for the select tag in editItem.html.
 		categories = session.query(Category).all()
-		return render_template("editItem.html",categories=categories,item=item)
-	elif (request.method == "POST"):
-		# Check if user is logged in.
-		# If not, stop and inform user.
-		if "username" not in login_session:
-			flash("Not allowed. 'Update' feature requires login.","error")
+		try:
+			category = session.query(Category).filter_by(slug=category_slug).one()
+			item = session.query(MenuItem).filter_by(slug=item_slug,category_id=category.id).one()
+		except NoResultFound:
+			flash("Not allowed. The page doesn't exist.")
+			redirect(url_for("readMain"))
+		session.close()
+		# Check if user is authorized to edit the post.
+		if not is_signed_in():
+			flash("Not allowed. 'Update' feature requires login","error")
 			return redirect(url_for("readLogin"))
-		# If all is well, harvest data.
-		title = request.form["title"]
-		description = request.form["description"]
-		category_id = request.form["category"]
-		# Prepare for the validation of changed data.
-		lowercase_title = title.lower()
-		slug = "_".join(lowercase_title.split())
-		capitalized_title = string.capwords(title)
+
+		return render_template("editItem.html",categories=categories,category_slug=category_slug,item=item,item_slug=item_slug)
+
+	elif request.method == "POST":	
+		# TODO: Add a feature that allows users to choose their own slug
+		# TODO: Add a function that checks for special symbols other than '_' in slugs
+		# TODO: Add a function that returns true if user is modifying the same post.
+		#		If so, update title, description, and then redirect user to readItem page.
+		# TODO: Fix the problem of user not being allowed to modify their own post.
+
+		new_title = request.form["title"]
+		new_description = request.form["description"]
+		new_category_id = int(request.form["category"])
+		new_item_slug = generate_slug(new_title)
+		
 		session = DBSession()
-		category = session.query(Category).filter_by(id=category_id).one()
-		count = (session.query(MenuItem).filter_by(name=capitalized_title,
-				category_id=category_id).count())
-		# Validate data
-		# First, check if changed title exists in the current/other categories,
-		# If so, return error message, saying different title should be chosen.
-		if ((slug != item_slug) and (count > 0)):
-			flash("The title already exists. Choose a different one.","error")
-			return redirect(url_for("editItem",category_slug=category_slug,
-					item_slug=item_slug))
-		# Second, check if title and category are unchanged, 
-		# or if title is changed, but no title is found in the chosen category.
-		# If satisfied, continue.
-		elif(((slug == item_slug) and (category_slug == category.slug)) or 
-			(count == 0)):
-			item = (session.query(MenuItem).join(MenuItem.category).
-				filter(Category.slug == category_slug,MenuItem.slug == item_slug).
-				one())
-			item.name = capitalized_title
-			item.slug = slug
-			item.description = description
-			item.category_id = category_id 
-			session.add(item)
-			session.commit()
-			session.close()
-			flash("'%s' successfully edited."%capitalized_title,"success")
-			return redirect(url_for("readItem",category_slug=category_slug,
-					item_slug=item_slug))
-		# else:
-		# 	flash('Unknown error occured while editing content.')
-		# 	return render_template('editItem.html')
+		categories = session.query(Category).all()
+		try:
+			new_category_slug = session.query(Category).filter_by(id=new_category_id).one().slug
+			old_item = (session.query(MenuItem, Category.slug)
+				   .join(MenuItem.category)
+				   .filter(Category.slug==category_slug, MenuItem.slug==item_slug)
+				   .one())[0]
+		except NoResultFound:
+			flash("Not allowed. The page doesn't exist.")
+			redirect(url_for("readMain"))
+		session.close()
+
+		# Check if all conditions are met to edit blog post.
+		if not is_signed_in():
+			flash("Not allowed. 'Update' feature requires login","error")
+			return redirect(url_for("readLogin"))
+		if not is_data_changed(new_title, new_description, new_item_slug, new_category_id, old_item):
+			flash("No data has been changed.","warning")
+			return redirect(url_for('readItem', category_slug=category_slug, item_slug=item_slug))	
+		if not (new_title and new_description):
+			flash("Not allowed. Both title and description must not be empty.", "error")
+			return render_template("editItem.html", new_title=new_title,new_description=new_description,new_category_id=new_category_id,categories=categories,category_slug=category_slug,item_slug=item_slug)
+		if not has_unique_slug_in_cat(new_category_id,new_item_slug):
+			flash("Not allowed. There already exists an item with the same slug.","error")
+			return render_template("editItem.html",new_title=new_title,new_description=new_description,new_category_id=new_category_id,categories=categories,category_slug=category_slug,item_slug=item_slug)
+
+		session = DBSession()
+		old_item.title = new_title
+		old_item.description = new_description
+		old_item.category_id = new_category_id
+		session.add(old_item)
+		session.commit()
+		session.close()
+
+		flash("'%s' successfully edited."%new_title,"success")
+		return redirect(url_for('readItem',category_slug=new_category_slug,item_slug=new_item_slug))
 
 @app.route("/items/<string:category_slug>/<string:item_slug>/delete/", 
 	methods=["GET","POST"])

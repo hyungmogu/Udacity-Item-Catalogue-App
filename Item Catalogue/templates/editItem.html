@@ -17,26 +17,44 @@
 
 {%block contents%}
 	<section id="menu-item-form">
-		<form action="/items/{{item.slug}}/{{item.MenuItem.slug}}/edit/" method="POST" enctype="multipart/form-data">
+		<form action="/items/{{category_slug}}/{{item_slug}}/edit/" method="POST" enctype="multipart/form-data">
 			<div class="form-group">
-				<label for='form-title'>Title</label>
-				<input id="form-title" type="text" name="title" value="{{item.MenuItem.name}}">
+				<label for="form-title">Title</label>
+				{%if new_title%}
+					<input id="form-title" type="text" name="title" value={{new_title}}>
+				{%elif item%}
+					<input id="form-title" type="text" name="title" value={{item.name}}>
+				{%else%}
+					<input id="form-title" type="text" name="title">
+				{%endif%}
 			</div>
 			<div class="form-group">
-				<label for='form-description'>Description</label>
-				<textarea id="form-description" name="description" cols='40' rows='4'>{{item.MenuItem.description}}</textarea>
+				<label for="form-description">Description</label>
+				{%if new_description%}
+					<textarea id="form-description" name="description">{{new_description}}</textarea>
+				{%elif item%}
+					<textarea id="form-description" name="description">{{item.description}}</textarea>
+				{%else%}
+					<textarea id="form-description" name="description"></textarea>
+				{%endif%}
 			</div>
 			<div class="form-group">
 				<label for='form-category'>Category</label>
 				<select id='form-category' name="category">
-					{%for category in categories%}
-						<option value={{category.id}} {%if(category.id == item.MenuItem.category_id)%}selected{%endif%}>{{category.name}}</option>
-					{%endfor%}
+					{%if new_category_id%}
+						{%for category in categories%}
+							<option value={{category.id}} {%if category.id == new_category_id%}selected{%endif%}>{{category.name}}</option>
+						{%endfor%}
+					{%elif item%}
+						{%for category in categories%}
+							<option value={{category.id}} {%if category.id == item.category_id%}selected{%endif%}>{{category.name}}</option>
+						{%endfor%}
+					{%endif%}
 				</select>
 			</div>
 			<div class="form-group">
 				<input type="submit" value="Update">
 			</div>
-		</form>						
+		</form>				
 	</section>
 {%endblock%}
