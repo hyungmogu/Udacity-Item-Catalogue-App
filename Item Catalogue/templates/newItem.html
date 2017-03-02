@@ -26,18 +26,30 @@
 		<form action="/items/new/" method="POST" enctype="multipart/form-data">
 			<div class="form-group">
 				<label for='form-title'>Title</label>
+				{%if title%}
+				<input id="form-title" type="text" name="title" value="{{title}}">
+				{%else%}
 				<input id="form-title" type="text" name="title">
+				{%endif%}
 			</div>
 			<div class="form-group">
 				<label for='form-description'>Description</label>
+				{%if description%}
+				<textarea id="form-description" name="description" cols='40' rows='4'>{{description}}</textarea>
+				{%else%}
 				<textarea id="form-description" name="description" cols='40' rows='4'></textarea>
+				{%endif%}
 			</div>
 			<div class="form-group">
 				<label for='form-category'>Category</label>
 				<select id='form-category' name="category">
-					{%for category in categories%}
-						<option value={{category.id}}>{{category.name}}</option>
-					{%endfor%}
+					{%if category_id%}
+						{%for category in categories%}
+						<option value={{category.id}} {%if category.id == category_id%}selected{%endif%}>{{category.name}}</option>
+						{%endfor%}
+					{%else%}
+						<option value={{category.id}}>{{category.name}}</option>					
+					{%endif%}
 				</select>
 			</div>
 			<div class="form-group">

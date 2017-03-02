@@ -38,16 +38,17 @@ def is_data_changed(new_title, new_description, new_item_slug, new_category_id, 
 	if not (new_description == old_item.description):
 		return True
 	if not (new_category_id == old_item.category_id):
-		return True	
+		return True
 	return False
 
 def has_unique_slug_in_cat(new_category_id,new_item_slug):
-	session = DBSession()
-	count = int(session.query(MenuItem)
-					 .filter_by(category_id=new_category_id,
-							 	slug=new_item_slug).count())
-	session.close()
+	count = int(session.query(MenuItem).filter_by(category_id=category_id,slug=item_slug).count())
+	if count is not 0:
+		return False
+	else:
+		return True
 
+def is_unique(count):
 	if count is not 0:
 		return False
 	else:
@@ -55,7 +56,7 @@ def has_unique_slug_in_cat(new_category_id,new_item_slug):
 
 def generate_slug(title):
 	lowercase_title = title.lower()
-	slug = "_".join(lowercase_title.split())	
+	slug = "_".join(lowercase_title.split())
 
 	return slug
 
@@ -284,62 +285,57 @@ def readCategory(category_slug):
 @app.route("/items/new/", methods=["GET","POST"])
 def createItem():
 	if(request.method == "GET"):
-		# Check if user is logged in.
-		if "username" not in login_session:
+		session = DBSession()
+
+		categories = session.query(Category).all()
+
+		if is_signed_in():
 			flash("Not allowed. 'New Item' page requires login.","error")
 			return redirect(url_for("readLogin"))
-		session = DBSession()
-		# Query all categories for the select tag in newItem.html.
-		categories = session.query(Category).all()
+
 		session.close()
+
 		return render_template("newItem.html", categories = categories,
 				logged_in=True)
+
 	elif(request.method == "POST"):
-		# Check if user is logged in.
-		# If not, stop and inform user.
-		if "username" not in login_session:
-			# response = make_response(json.dumps("Not allowed. Login required."),
-			# 		401)
-			# response.headers["Content-Type"] = "application/json"
-			flash("Not allowed. 'New Item' feature requires login.","error")
-			return redirect(url_for('readLogin'))
-		# If all is well, harvest data.
+		session = DBSession()
+
 		title = request.form["title"]
 		description = request.form["description"]
-		category_id = request.form["category"]
-		# Validate data.
-		# First, check if both title and description are present
-		# If not, re-render page with error
-		if not (title and descriptions):
-			session = DBSession()
-			categories = session.query(Category).all()
+		category_id = int(request.form["category"])
+
+		item_slug = generate_slug(title)
+		categories = session.query(Category).all()
+		category_slug = session.query(Category).filter_by(id=category_id).one().slug
+		num_of_identical_items = int(session.query(MenuItem).filter_by(category_id=category_id, slug=item_slug).count())
+
+		if not is_signed_in():
 			session.close()
+
+			flash("Not allowed. 'New Item' feature requires login.","error")
+			return redirect(url_for('readLogin'))
+		if not (title and description):
+			session.close()
+
 			flash("Not allowed. Both title and description must exist.")
-			return render_template('newItem.html', categories=categories, logged_in=True, title=title, description=description)
-		# Second, check if the same name exists in a category.
-		# This ensures the uniqueness of url.
-		capitalizedItemName = string.capwords(title)
-		session = DBSession()
-		count = session.query(MenuItem).filter_by(name=capitalizedItemName,
-				category_id=category_id).count()
-		# If not none, the same item already exists. So, return error.
-		# If none, continue.
-		if (count > 0):
-			flash("Not allowed. The title already exists.","error")
-			return redirect(url_for("createItem"))
-		else:
-			# Create slug or url-friendly name before storing.
-			lowercase_title = title.lower()
-			slug = "_".join(lowercase_title.split())
-			# Store data
-			items = MenuItem(name=capitalizedItemName,slug=slug,
-					description=description,category_id=int(category_id))
-			session.add(items)
-			session.commit()
+			return render_template('newItem.html', categories=categories, logged_in=True, title=title, category_id=category_id, description=description)
+		if not is_unique(num_of_identical_items):
 			session.close()
-			flash("'%s' has been successfully created."%capitalizedItemName,
-				"success")
-			return redirect(url_for('readMain'))
+
+			flash("Not allowed. There already exists an item with the same "
+				  "slug.","error")
+			return render_template("newItem.html",categories=categories, logged_in=True, title=title, category_id=category_id, description=description)
+
+		item = MenuItem(name=title, slug=item_slug, 
+				description=description, category_id=category_id)
+		session.add(item)
+		session.commit()
+
+		session.close()
+
+		flash("'%s' has been successfully created."%title, "success")
+		return redirect(url_for('readItem', category_slug=category_slug, item_slug=item_slug))
 
 @app.route("/items/<string:category_slug>/<string:item_slug>/edit/", 
 	methods=["GET","POST"])
@@ -373,7 +369,7 @@ def editItem(category_slug,item_slug):
 		new_description = request.form["description"]
 		new_category_id = int(request.form["category"])
 		new_item_slug = generate_slug(new_title)
-		
+
 		session = DBSession()
 		categories = session.query(Category).all()
 		try:
