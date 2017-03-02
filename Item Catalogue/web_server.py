@@ -41,17 +41,6 @@ def is_data_changed(new_title, new_description, new_item_slug, new_category_id, 
 		return True
 	return False
 
-def has_unique_slug_in_cat(new_category_id,new_item_slug):
-	session = DBSession()
-	count = int(session.query(MenuItem)
-					   .filter_by(category_id=category_id,slug=item_slug)
-					   .count())
-	session.close()
-	if count is not 0:
-		return False
-	else:
-		return True
-
 def is_unique(count):
 	if count is not 0:
 		return False
@@ -346,18 +335,25 @@ def createItem():
 def editItem(category_slug,item_slug):
 	if request.method == "GET":
 		session = DBSession()
+
 		categories = session.query(Category).all()
 		try:
 			category = session.query(Category).filter_by(slug=category_slug).one()
 			item = session.query(MenuItem).filter_by(slug=item_slug,category_id=category.id).one()
 		except NoResultFound:
+			session.close()
+
 			flash("Not allowed. The page doesn't exist.")
-			redirect(url_for("readMain"))
-		session.close()
+			return redirect(url_for("readMain"))
+
 		# Check if user is authorized to edit the post.
 		if not is_signed_in():
+			session.close()
+
 			flash("Not allowed. 'Update' feature requires login","error")
 			return redirect(url_for("readLogin"))
+
+		session.close()
 
 		return render_template("editItem.html",categories=categories,category_slug=category_slug,item=item,item_slug=item_slug)
 
@@ -367,13 +363,15 @@ def editItem(category_slug,item_slug):
 		# TODO: Add a function that returns true if user is modifying the same post.
 		#		If so, update title, description, and then redirect user to readItem page.
 		# TODO: Fix the problem of user not being allowed to modify their own post.
+		session = DBSession()
+
 		new_title = request.form["title"]
 		new_description = request.form["description"]
 		new_category_id = int(request.form["category"])
 		new_item_slug = generate_slug(new_title)
 
-		session = DBSession()
 		categories = session.query(Category).all()
+		num_of_identical_items = int(session.query(MenuItem).filter_by(category_id=new_category_id,slug=new_item_slug).count())
 		try:
 			new_category_slug = session.query(Category).filter_by(id=new_category_id).one().slug
 			old_item = (session.query(MenuItem, Category.slug)
@@ -381,30 +379,39 @@ def editItem(category_slug,item_slug):
 				   .filter(Category.slug==category_slug, MenuItem.slug==item_slug)
 				   .one())[0]
 		except NoResultFound:
+			session.close()
+
 			flash("Not allowed. The page doesn't exist.")
-			redirect(url_for("readMain"))
-		session.close()
+			return redirect(url_for("readMain"))
 
 		# Check if all conditions are met to edit blog post.
 		if not is_signed_in():
+			session.close()
+
 			flash("Not allowed. 'Update' feature requires login","error")
 			return redirect(url_for("readLogin"))
 		if not is_data_changed(new_title, new_description, new_item_slug, new_category_id, old_item):
+			session.close()
+
 			flash("No data has been changed.","warning")
 			return redirect(url_for('readItem', category_slug=category_slug, item_slug=item_slug))	
 		if not (new_title and new_description):
+			session.close()
+
 			flash("Not allowed. Both title and description must not be empty.", "error")
 			return render_template("editItem.html", new_title=new_title,new_description=new_description,new_category_id=new_category_id,categories=categories,category_slug=category_slug,item_slug=item_slug)
-		if not has_unique_slug_in_cat(new_category_id,new_item_slug):
+		if not is_unique(num_of_identical_items):
+			session.close()
+
 			flash("Not allowed. There already exists an item with the same slug.","error")
 			return render_template("editItem.html",new_title=new_title,new_description=new_description,new_category_id=new_category_id,categories=categories,category_slug=category_slug,item_slug=item_slug)
 
-		session = DBSession()
 		old_item.title = new_title
 		old_item.description = new_description
 		old_item.category_id = new_category_id
 		session.add(old_item)
 		session.commit()
+
 		session.close()
 
 		flash("'%s' successfully edited."%new_title,"success")
