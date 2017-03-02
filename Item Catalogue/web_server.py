@@ -232,20 +232,23 @@ def readAPI():
 @app.route("/")
 def readMain():
 	session = DBSession()
-	# Querying all categories for category menu.
-	categories = session.query(Category).order_by(asc(Category.name)).all()
-	# Query 20 most recent entries in descending order.
+
+	categories_for_menu = session.query(Category).order_by(asc(Category.name)).all()
 	items = (session.query(Category.slug,MenuItem.name,MenuItem.slug).
 			join(MenuItem.category).order_by(desc(MenuItem.id)).limit(20).all())
+
+	# Determine which button to put. Login or logout?
+	# If logged in, insert logout buttion.
+	# If not, insert login button
+	if not is_signed_in():
+		session.close()
+
+		return render_template("main.html", menuItems=items, categories=categories_for_menu)
+
 	session.close()
-	# Checks if user is logged in.
-	# If so, insert logout buttion.
-	# If not, insert login button.
-	if "username" in login_session:
-		return render_template("main.html",menuItems=items,categories=categories,
-				logged_in=True)
-	else:
-		return render_template("main.html",menuItems=items,categories=categories)
+
+	return render_template("main.html", menuItems=items, categories=categories_for_menu,
+						   logged_in=True)
 
 @app.route("/items/<string:category_slug>/")
 def readCategory(category_slug):
