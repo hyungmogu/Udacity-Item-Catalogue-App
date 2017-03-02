@@ -53,6 +53,12 @@ def generate_slug(title):
 
 	return slug
 
+#ERROR HANDLERS
+@app.errorhandler(404)
+def page_not_found(error):
+	flash("Not allowed. The page or item you've requested doesn't exist.")
+	return redirect(url_for("readMain"))
+
 #LOGIN
 @app.route("/login/")
 def readLogin():
@@ -252,6 +258,8 @@ def readMain():
 
 @app.route("/items/<string:category_slug>/")
 def readCategory(category_slug):
+	# TODO: Fix items not showing on page.
+
 	session = DBSession()
 
 	try:
@@ -285,6 +293,7 @@ def readCategory(category_slug):
 
 @app.route("/items/new/", methods=["GET","POST"])
 def createItem():
+	# TODO: Add `not` in `if is_signed_in()`.
 	if(request.method == "GET"):
 		session = DBSession()
 
@@ -348,10 +357,10 @@ def editItem(category_slug,item_slug):
 		try:
 			category = session.query(Category).filter_by(slug=category_slug).one()
 			item = session.query(MenuItem).filter_by(slug=item_slug,category_id=category.id).one()
-		except NoResultFound:
+		except exc.SQLAlchemyError:
 			session.close()
 
-			flash("Not allowed. The page doesn't exist.")
+			flash("Not allowed. The item doesn't exist.")
 			return redirect(url_for("readMain"))
 
 		# Check if user is authorized to edit the post.
@@ -380,16 +389,17 @@ def editItem(category_slug,item_slug):
 
 		categories = session.query(Category).all()
 		num_of_identical_items = int(session.query(MenuItem).filter_by(category_id=new_category_id,slug=new_item_slug).count())
+
 		try:
 			new_category_slug = session.query(Category).filter_by(id=new_category_id).one().slug
 			old_item = (session.query(MenuItem, Category.slug)
 				   .join(MenuItem.category)
 				   .filter(Category.slug==category_slug, MenuItem.slug==item_slug)
 				   .one())[0]
-		except NoResultFound:
+		except exc.SQLAlchemyError:
 			session.close()
 
-			flash("Not allowed. The page doesn't exist.")
+			flash("Not allowed. The item doesn't exist.")
 			return redirect(url_for("readMain"))
 
 		# Check if all conditions are met to edit blog post.
@@ -429,9 +439,23 @@ def editItem(category_slug,item_slug):
 	methods=["GET","POST"])
 def deleteItem(category_slug, item_slug):
 	if(request.method == "GET"):
+		session = DBSession()
+
+		try:
+			item = (session.query(MenuItem).join(MenuItem.category).
+				filter(Category.slug==category_slug, MenuItem.slug==item_slug).
+				one())
+		except exc.SQLAlchemyError:
+			session.close()
+
+			flash("Not allowed. The item doesn't exist.")
+			return redirect(url_for("readMain"))
+
 		if not is_signed_in():
 			flash("Not allowed. 'Delete' feature requires login.","error")
 			return redirect(url_for("readLogin"))
+
+		session.close()
 
 		return render_template("deleteItem.html", category_slug=category_slug,
 			item_slug=item_slug)
@@ -465,8 +489,13 @@ def deleteItem(category_slug, item_slug):
 def readItem(category_slug,item_slug):
 	session = DBSession()
 	# Query item by slug
-	item = (session.query(Category.slug,MenuItem).join(MenuItem.category).
-		filter(Category.slug == category_slug,MenuItem.slug == item_slug).one())
+	try:
+		item = (session.query(Category.slug,MenuItem).join(MenuItem.category).
+			filter(Category.slug == category_slug,MenuItem.slug == item_slug).one())
+	except exc.SQLAlchemyError:
+
+		flash("Not allowed. The item doesn't exist.")
+		return redirect(url_for("readMain"))
 	session.close()
 	# Checks if user is logged in.
 	# If so, insert logout buttion.
