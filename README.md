@@ -1,4 +1,4 @@
-# Udacity-Item-Catalogue-App
+# Udacity FSND 5th Project: Item Catalogue
 
 ---
 
