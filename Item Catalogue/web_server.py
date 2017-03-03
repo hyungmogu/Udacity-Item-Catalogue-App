@@ -509,11 +509,10 @@ def readItem(category_slug,item_slug):
 
 @app.route("/welcome/")
 def readWelcome():
-	# Checks if user is logged in..
-	if "username" not in login_session:
+	if not is_signed_in():
 		flash("Not allowed. 'Welcome' page requires login.","error")
 		redirect(url_for("readLogin"))
-	# If all is well, retrieve username, and render template
+
 	return render_template("welcome.html",username=login_session["username"])
 
 # url_for cash busting. 
