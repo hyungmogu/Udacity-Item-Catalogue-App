@@ -48,7 +48,9 @@
 						<option value={{category.id}} {%if category.id == category_id%}selected{%endif%}>{{category.name}}</option>
 						{%endfor%}
 					{%else%}
-						<option value={{category.id}}>{{category.name}}</option>					
+						{%for category in categories%}
+						<option value={{category.id}}>{{category.name}}</option>
+						{%endfor%}
 					{%endif%}
 				</select>
 			</div>
