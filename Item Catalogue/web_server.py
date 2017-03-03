@@ -67,6 +67,7 @@ def readLogin():
 	state = "".join(random.choice(string.ascii_uppercase + string.digits + 
 			string.ascii_lowercase) for x in xrange(32))
 	login_session["state"] = state
+
 	return render_template("login.html",session_state=login_session["state"])
 
 @app.route("/login/gconnect", methods=["POST"])
@@ -192,7 +193,7 @@ def logout():
 	# Revoke access code.
 	if login_session["provider"] == "google":
 		access_token = login_session["access_token"]
-		
+
 		url = "https://accounts.google.com/o/oauth2/revoke?token=%s" % access_token
 		internet = httplib2.Http()
 		result = internet.request(url, "GET")[0]
@@ -210,7 +211,7 @@ def logout():
 
 	elif login_session["provider"]=="facebook":
 		facebook_id = login_session["facebook_id"]
-		
+
 		url = "https://graph.facebook.com/%s/permissions" % facebook_id
 		h = httplib2.Http()
 		result = h.request(url, 'DELETE')[1]
@@ -300,7 +301,6 @@ def readCategory(category_slug):
 
 @app.route("/items/new/", methods=["GET","POST"])
 def createItem():
-	# TODO: Add `not` in `if is_signed_in()`.
 	if(request.method == "GET"):
 		session = DBSession()
 
