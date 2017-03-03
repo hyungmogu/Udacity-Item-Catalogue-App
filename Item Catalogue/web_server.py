@@ -56,7 +56,7 @@ def generate_slug(title):
 #ERROR HANDLERS
 @app.errorhandler(404)
 def page_not_found(error):
-	flash("Not allowed. The page or item you've requested doesn't exist.")
+	flash("Not allowed. The page or item you've requested doesn't exist.", "error")
 	return redirect(url_for("readMain"))
 
 #LOGIN
@@ -275,7 +275,7 @@ def readCategory(category_slug):
 	except exc.SQLAlchemyError:
 			session.close()
 
-			flash("Not allowed. The page doesn't exist.")
+			flash("Not allowed. The page doesn't exist.", "error")
 			return redirect(url_for("readMain"))
 
 	categories_for_menu = session.query(Category).order_by(asc(Category.name)).all()
@@ -307,7 +307,7 @@ def createItem():
 		categories = session.query(Category).all()
 
 		if not is_signed_in():
-			flash("Not allowed. 'New Item' page requires login.","error")
+			flash("Not allowed. 'New Item' page requires login.", "error")
 			return redirect(url_for("readLogin"))
 
 		session.close()
@@ -330,18 +330,18 @@ def createItem():
 		if not is_signed_in():
 			session.close()
 
-			flash("Not allowed. 'New Item' feature requires login.","error")
+			flash("Not allowed. 'New Item' feature requires login.", "error")
 			return redirect(url_for('readLogin'))
 		if not (title and description):
 			session.close()
 
-			flash("Not allowed. Both title and description must exist.")
+			flash("Not allowed. Both title and description must exist.", "error")
 			return render_template('newItem.html', categories=categories, logged_in=True, title=title, category_id=category_id, description=description)
 		if not is_unique(num_of_identical_items):
 			session.close()
 
 			flash("Not allowed. There already exists an item with the same "
-				  "slug.","error")
+				  "slug.", "error")
 			return render_template("newItem.html",categories=categories, logged_in=True, title=title, category_id=category_id, description=description)
 
 		item = MenuItem(name=title, slug=item_slug,
@@ -367,14 +367,14 @@ def editItem(category_slug,item_slug):
 		except exc.SQLAlchemyError:
 			session.close()
 
-			flash("Not allowed. The item doesn't exist.")
+			flash("Not allowed. The item doesn't exist.", "error")
 			return redirect(url_for("readMain"))
 
 		# Check if user is authorized to edit the post.
 		if not is_signed_in():
 			session.close()
 
-			flash("Not allowed. 'Update' feature requires login","error")
+			flash("Not allowed. 'Update' feature requires login", "error")
 			return redirect(url_for("readLogin"))
 
 		session.close()
@@ -406,7 +406,7 @@ def editItem(category_slug,item_slug):
 		except exc.SQLAlchemyError:
 			session.close()
 
-			flash("Not allowed. The item doesn't exist.")
+			flash("Not allowed. The item doesn't exist.", "error")
 			return redirect(url_for("readMain"))
 
 		# Check if user is updating post without changing slug and category
@@ -418,7 +418,7 @@ def editItem(category_slug,item_slug):
 
 			session.close()
 
-			flash("'%s' successfully edited."%new_title,"success")
+			flash("'%s' successfully edited."%new_title, "success")
 			return redirect(url_for('readItem',category_slug=category_slug,item_slug=item_slug))
 
 		# Otherwise, proceed.
@@ -426,7 +426,7 @@ def editItem(category_slug,item_slug):
 		if not is_signed_in():
 			session.close()
 
-			flash("Not allowed. 'Update' feature requires login","error")
+			flash("Not allowed. 'Update' feature requires login", "error")
 			return redirect(url_for("readLogin"))
 		if not is_data_changed(new_title, new_description, new_item_slug, new_category_id, old_item):
 			session.close()
@@ -441,7 +441,7 @@ def editItem(category_slug,item_slug):
 		if not is_unique(num_of_identical_items):
 			session.close()
 
-			flash("Not allowed. There already exists an item with the same slug.","error")
+			flash("Not allowed. There already exists an item with the same slug.", "error")
 			return render_template("editItem.html",new_title=new_title,new_description=new_description,new_category_id=new_category_id,categories=categories,category_slug=category_slug,item_slug=item_slug)
 
 		old_item.title = new_title
@@ -452,7 +452,7 @@ def editItem(category_slug,item_slug):
 
 		session.close()
 
-		flash("'%s' successfully edited."%new_title,"success")
+		flash("'%s' successfully edited."%new_title, "success")
 		return redirect(url_for('readItem',category_slug=new_category_slug,item_slug=new_item_slug))
 
 @app.route("/items/<string:category_slug>/<string:item_slug>/delete/", 
@@ -468,11 +468,11 @@ def deleteItem(category_slug, item_slug):
 		except exc.SQLAlchemyError:
 			session.close()
 
-			flash("Not allowed. The item doesn't exist.")
+			flash("Not allowed. The item doesn't exist.", "error")
 			return redirect(url_for("readMain"))
 
 		if not is_signed_in():
-			flash("Not allowed. 'Delete' feature requires login.","error")
+			flash("Not allowed. 'Delete' feature requires login.", "error")
 			return redirect(url_for("readLogin"))
 
 		session.close()
@@ -490,7 +490,7 @@ def deleteItem(category_slug, item_slug):
 		except exc.SQLAlchemyError:
 			session.close()
 
-			flash("Not allowed. The item doesn't exist.")
+			flash("Not allowed. The item doesn't exist.", "error")
 			return redirect(url_for("readMain"))
 
 		if not is_signed_in():
@@ -502,7 +502,7 @@ def deleteItem(category_slug, item_slug):
 
 		session.close()
 		
-		flash("'%s' successfully deleted." % item.name,"success")
+		flash("'%s' successfully deleted." % item.name, "success")
 		return redirect(url_for("readMain"))
 
 @app.route("/items/<string:category_slug>/<string:item_slug>/")
@@ -514,7 +514,7 @@ def readItem(category_slug,item_slug):
 			filter(Category.slug==category_slug,MenuItem.slug==item_slug).one())
 	except exc.SQLAlchemyError:
 
-		flash("Not allowed. The item doesn't exist.")
+		flash("Not allowed. The item doesn't exist.", "error")
 		return redirect(url_for("readMain"))
 
 	session.close()
@@ -530,7 +530,7 @@ def readItem(category_slug,item_slug):
 @app.route("/welcome/")
 def readWelcome():
 	if not is_signed_in():
-		flash("Not allowed. 'Welcome' page requires login.","error")
+		flash("Not allowed. 'Welcome' page requires login.", "error")
 		redirect(url_for("readLogin"))
 
 	return render_template("welcome.html",username=login_session["username"])

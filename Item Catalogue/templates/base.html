@@ -20,15 +20,18 @@
 			</section>
 		</div>
 	</header>
-	{%with messages = get_flashed_messages()%}
+	<section id="messages">
+	{%with messages = get_flashed_messages(with_categories=true)%}
 		{%if messages%}
-		<section id="messages">
-			<ul>
-				{%for message in messages%}
-				<li class="message">{{message}}</li>
-				{%endfor%}
-			</ul>
-		</section>
+			<section id="messages">
+				<div class="contents">		
+					{%for message in messages%}
+					<div class="message {{message[0]}}">
+						<span>{{message[1]}}</span>
+					</div>
+					{%endfor%}
+				</div>
+			</section>
 		{%endif%}
 	{%endwith%}
 	<main>
