@@ -488,22 +488,24 @@ def deleteItem(category_slug, item_slug):
 @app.route("/items/<string:category_slug>/<string:item_slug>/")
 def readItem(category_slug,item_slug):
 	session = DBSession()
-	# Query item by slug
+
 	try:
 		item = (session.query(Category.slug,MenuItem).join(MenuItem.category).
-			filter(Category.slug == category_slug,MenuItem.slug == item_slug).one())
+			filter(Category.slug==category_slug,MenuItem.slug==item_slug).one())
 	except exc.SQLAlchemyError:
 
 		flash("Not allowed. The item doesn't exist.")
 		return redirect(url_for("readMain"))
+
 	session.close()
-	# Checks if user is logged in.
-	# If so, insert logout buttion.
-	# If not, insert login button.
-	if "username" in login_session:
-		return render_template("item.html",item=item,logged_in=True)
-	else:
-		return render_template("item.html",item=item)			
+
+	# Determine which button to put. Login or logout?
+	# If logged in, insert logout buttion.
+	# If not, insert login button
+	if not is_signed_in():
+		return render_template("item.html", item=item)
+	return render_template("item.html", item=item, logged_in=True)
+	
 
 @app.route("/welcome/")
 def readWelcome():
