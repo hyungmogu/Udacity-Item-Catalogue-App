@@ -409,6 +409,19 @@ def editItem(category_slug,item_slug):
 			flash("Not allowed. The item doesn't exist.")
 			return redirect(url_for("readMain"))
 
+		# Check if user is updating post without changing slug and category
+		if (category_slug==new_category_slug) and (item_slug==new_item_slug):
+			old_item.title = new_title
+			old_item.description = new_description
+			session.add(old_item)
+			session.commit()
+
+			session.close()
+
+			flash("'%s' successfully edited."%new_title,"success")
+			return redirect(url_for('readItem',category_slug=category_slug,item_slug=item_slug))
+
+		# Otherwise, proceed.
 		# Check if all conditions are met to edit blog post.
 		if not is_signed_in():
 			session.close()
