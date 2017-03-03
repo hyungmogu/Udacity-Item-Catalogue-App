@@ -299,7 +299,7 @@ def createItem():
 
 		categories = session.query(Category).all()
 
-		if is_signed_in():
+		if not is_signed_in():
 			flash("Not allowed. 'New Item' page requires login.","error")
 			return redirect(url_for("readLogin"))
 
