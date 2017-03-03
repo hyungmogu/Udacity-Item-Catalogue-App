@@ -184,37 +184,44 @@ def fbconnect():
 
 @app.route("/logout")
 def logout():
-	# Checks if user is logged in.
-	# If not, redirect user to main page.
-	# If logged in, log the user out by revoking access code.
-	if('username' not in login_session):
-		flash("You've already logged out.","error")
+	# TODO: Fix Facebook's 'unsupported delete request' error.
+	if not is_signed_in():
+		flash("You've already logged out.", "warning")
 		return redirect(url_for("readMain"))
-	if(login_session["provider"] == "google"):
+
+	# Revoke access code.
+	if login_session["provider"] == "google":
 		access_token = login_session["access_token"]
-		# Note: the url returns 200 if successful, and 400 otherwise.
+		
 		url = "https://accounts.google.com/o/oauth2/revoke?token=%s" % access_token
 		internet = httplib2.Http()
-		result = internet.request(url,"GET")[0]
-		# Finally, dump session data, and free-up resources.
+		result = internet.request(url, "GET")[0]
+
+		if not int(result["status"]) == 200:
+			flash("Error occured while logging out.", "error")
+			return redirect(url_for("readMain"))
+
 		del login_session["access_token"]
 		del login_session["gplus_id"]
 		del login_session["username"]
 		del login_session["email"]
 		del login_session["picture"]
 		del login_session["provider"]
-	elif(login_session["provider"]=="facebook"):
+
+	elif login_session["provider"]=="facebook":
 		facebook_id = login_session["facebook_id"]
-		url = "https://graph.facebook.com/%s/permissions" %facebook_id
+		
+		url = "https://graph.facebook.com/%s/permissions" % facebook_id
 		h = httplib2.Http()
-		result = h.request(url,'DELETE')[1]
-		# Finally, dump session data, and free-up resources.
+		result = h.request(url, 'DELETE')[1]
+
 		del login_session["facebook_id"]
 		del login_session["username"]
 		del login_session["email"]
 		del login_session["picture"]
 		del login_session["provider"]
-	flash("Logout Successful.","success")
+
+	flash("Logout Successful.", "success")
 	return redirect(url_for("readMain"))
 
 #API
