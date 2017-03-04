@@ -15,16 +15,8 @@
 {%block contents%}
     <section>
         <p>Hello. The current session token is: {{session_state}}</p>
-        <div id="signInButton" class="g-signin"
-            data-scope="openid profile email"
-            data-clientid="204396521992-k942mpj3pchloa0njikr3g3alu9l7n6v.apps.googleusercontent.com"
-            data-redirecturi="postmessage"
-            data-accesstype="offline"
-            data-cookiepolicy="single_host_origin"
-            data-callback="onSignIn"
-            data-approvalprompt="force">
+        <button class="g-login-btn" onclick="gLogin();">Login using Google</button>
         </div>
-        <!-- <div class="fb-login-button" scope="public_profile,email" onlogin="checkLoginState();"></div> -->
         <button class="fb-login-btn" onclick="fbLogin();">Login using Facebook</button>
         <div id="result">
         </div>
@@ -33,7 +25,22 @@
 {%block javascript%}
 <script>
 //GOOGLE SIGNIN
-function onSignIn(authResult){
+//The credit for this method goes to 'Google sign-in for server-side apps' guide.
+//See https://developers.google.com/identity/sign-in/web/server-side-flow for details.
+function start(){
+    gapi.load('auth2',function(){
+        auth2 = gapi.auth2.init({
+            client_id: '204396521992-k942mpj3pchloa0njikr3g3alu9l7n6v.apps.googleusercontent.com',
+            scope: 'openid profile email',
+        });
+    });
+}
+
+function gLogin(){
+    auth2.grantOfflineAccess().then(signInCallback);    
+} 
+
+function signInCallback(authResult){
   if(authResult['code']){
     // Hide signin button to prevent user from clicking it multiple times
     $('#signInButton').attr('style','display:none');
@@ -42,18 +49,21 @@ function onSignIn(authResult){
     $.ajax({
       type: 'POST',
       url: '/login/gconnect?state={{session_state}}',
+      headers: {
+        'x-Requested-With': 'XMLHttpRequest'
+      },
       processData: false,
       data: authResult['code'],
       contentType: 'application/octet-stream;charset=utf-8',
       success: function(result) {
         if(!result){
-          $('#result').html('Google OAuth Error: Received error while logging in.'); 
+          $('#result').html('Google OAuth Error: Received error while logging in.');
         }
         else{
           window.location.href = '/welcome'
         }
       }
-    });    
+    });
   } 
 }
 
@@ -68,11 +78,12 @@ function onSignInFailure() {
 </script>
 <script>
 // FB SIGNIN
+
   function fbLogin(){
     FB.login(function(response){
       sendTokenToServer(response);
     },{'scope': 'public_profile,email'});
-  };   
+  };
 
   window.fbAsyncInit = function() {
     FB.init({
@@ -95,7 +106,7 @@ function onSignInFailure() {
 
 function sendTokenToServer(response){
     var access_token = response.authResponse.accessToken;
-    $.ajax({  
+    $.ajax({
       type: 'POST',
       url: '/login/fbconnect?state={{session_state}}',
       processData: false,
@@ -103,12 +114,12 @@ function sendTokenToServer(response){
       contentType: 'application/octet-stream; charset=utf-8',
       success: function(result){
         if(!result){
-          $('#result').html('Facebook OAuth Error: Received error while logging in.'); 
+          $('#result').html('Facebook OAuth Error: Received error while logging in.');
         }
         else{
           window.location.href = '/welcome';
-        } 
-      } 
+        }
+      }
     });
   };
 </script>
