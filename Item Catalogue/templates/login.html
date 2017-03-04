@@ -3,6 +3,7 @@
 {%block title%}Login|Item Catalogue{%endblock%}
 {%block import%}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://use.fontawesome.com/59d17b9f1c.js"></script>
     <script src="http://apis.google.com/js/platform.js?onload=start" async defer></script>
 {%endblock%}
 
@@ -15,9 +16,14 @@
 {%block contents%}
     <section>
         <p>Hello. The current session token is: {{session_state}}</p>
-        <button class="g-login-btn" onclick="gLogin();">Login using Google</button>
+        <div class="login-buttons">
+            <button class="btn btn-block btn-social btn-google" onclick="gLogin();">
+                <span class="fa fa-google"></span>Login using Google
+            </button>
+            <button class="btn btn-block btn-social btn-facebook" onclick="fbLogin();">
+                <span class="fa fa-facebook"></span>Login using Facebook
+            </button>
         </div>
-        <button class="fb-login-btn" onclick="fbLogin();">Login using Facebook</button>
         <div id="result">
         </div>
     </section>
@@ -71,7 +77,8 @@ function signInCallback(authResult){
 </script>
 <script>
 // FB SIGNIN
-
+//The credit for this approach goes to 'Facebook Login for the Web with Javascript SDK' guide.
+//See https://developers.facebook.com/docs/facebook-login/web for details.
   function fbLogin(){
     FB.login(function(response){
       sendTokenToServer(response);
