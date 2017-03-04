@@ -25,16 +25,16 @@ header .contents #nav #logo h1 {margin: 0; display:inline-block;}
 header .contents #nav #user {text-align: right; width: 40%;}
 
 /*Message box*/
-#messages {margin-bottom: 1em;} 
+#messages {margin-bottom: 1em;}
 #messages .message {padding: 1em 0.83em; border-radius: 5px;}
 #messages .message.error {background-color: #d9534f; color: white; border-color: #d43f3a;}
-#messages .message.success {background-color: #5cb85c; color: white; border-color: #4cae4c;} 
+#messages .message.success {background-color: #5cb85c; color: white; border-color: #4cae4c;}
 #messages .message.warning {background-color: #f0ad4e; color: white; border-color: #eea236;}
 
 /*Main*/
-main .contents .box {background-color: white; border-style: solid; border-width: 1px; border-color: #AFAFAF; padding: 0 0.83em; position: relative;} 
+main .contents .box {background-color: white; border-style: solid; border-width: 1px; border-color: #AFAFAF; padding: 0 0.83em; position: relative;}
 main .contents .box .header .options {left: 0; margin: 0.4em 0; position: absolute; text-align: right; top: 0; width: 100%; z-index: 9999;}
-main .contents .box .header .options .wrapper {padding: 0 0.83em;} 
+main .contents .box .header .options .wrapper {padding: 0 0.83em;}
 /*Main - Header*/
 
 /*Main - Menu*/
@@ -43,3 +43,5 @@ main .contents .box #menu .part ul {list-style-type:none; padding-left: 0;}
 
 main .contents .box #menu #menu-items {width: 70%;}
 main .contents .box #menu #categories {width: 30%;}
+
+main .contents .box #menu #menu-items .menu-item span {color: #bbbbbb;}
