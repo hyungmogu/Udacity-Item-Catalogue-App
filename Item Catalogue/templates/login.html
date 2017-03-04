@@ -37,43 +37,36 @@ function start(){
 }
 
 function gLogin(){
-    auth2.grantOfflineAccess().then(signInCallback);    
-} 
-
-function signInCallback(authResult){
-  if(authResult['code']){
-    // Hide signin button to prevent user from clicking it multiple times
-    $('#signInButton').attr('style','display:none');
-
-    //send one time code to server
-    $.ajax({
-      type: 'POST',
-      url: '/login/gconnect?state={{session_state}}',
-      headers: {
-        'x-Requested-With': 'XMLHttpRequest'
-      },
-      processData: false,
-      data: authResult['code'],
-      contentType: 'application/octet-stream;charset=utf-8',
-      success: function(result) {
-        if(!result){
-          $('#result').html('Google OAuth Error: Received error while logging in.');
-        }
-        else{
-          window.location.href = '/welcome'
-        }
-      }
-    });
-  } 
+    auth2.grantOfflineAccess().then(signInCallback);
 }
 
-function onSignInFailure() {
-  if($('#messages').length) {
-      $('section.header').append("<ul id='messages'><li class='message'>Google OAuth Error: Received error while logging in with Google.</li></ul>")
-  } else {
-      $('#messages').html("<li class='message'>Google OAuth Error: Received error while logging in with Google.</li>")
-  }
+function signInCallback(authResult){
+    if(authResult['code']){
+        // Hide signin button to prevent user from clicking it multiple times
+        $('#signInButton').attr('style','display:none');
 
+        //send one time code to server
+        $.ajax({
+            type: 'POST',
+            url: '/login/gconnect?state={{session_state}}',
+            headers: {
+                'x-Requested-With': 'XMLHttpRequest'
+            },
+            processData: false,
+            data: authResult['code'],
+            contentType: 'application/octet-stream;charset=utf-8',
+            success: function(result) {
+                if(!result){
+                  $('#result').html('Google OAuth Error: Received error while logging in.');
+                }
+                else{
+                  window.location.href = '/welcome'
+                }
+            }
+        });
+    } else {
+        $('section.header').append("<ul id='messages'><li class='message'>Google OAuth Error: Error occured while communicating with Google server.</li></ul>");
+    };
 }
 </script>
 <script>
