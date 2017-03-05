@@ -41,7 +41,7 @@
 			<h2 class="title">{{currentCategory.name}} Items ({{count}} Items)</h2>
 			<ul>
 			{%for menuItem in menuItems%}
-				<li class="menu-item"><a href="/items/{{menuItem[0]}}/{{menuItem[2]}}/">{{menuItem[1]}}</a></li>
+				<li class="menu-item"><a href="/items/{{currentCategory.slug}}/{{menuItem.slug}}/">{{menuItem.name}}</a></li>
 			{%endfor%}
 			</ul>
 		</div>
