@@ -1,28 +1,18 @@
 import os
 import string
 import random
-from datetime import datetime
 
-from sqlalchemy import create_engine, desc, asc, func, and_, exc
-from sqlalchemy.orm import sessionmaker, joinedload
-from database_setup import Category, MenuItem
-
-from flask import Flask, render_template, request, url_for, redirect, flash,jsonify
-from flask import session as login_session
-
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.client import FlowExchangeError
 import httplib2
 import json
-from flask import make_response
 import requests
+from database_setup import Category, MenuItem
+from flask import render_template, request, url_for, redirect, flash, jsonify, make_response
+from flask import session as login_session
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.client import FlowExchangeError
+from sqlalchemy import asc, desc, exc
 
-app = Flask(__name__)
-engine = create_engine("sqlite:///itemcatalogue.db")
-DBSession = sessionmaker(bind = engine)
-
-CLIENT_ID = json.loads(open("client_secrets.json","r").read())["web"]["client_id"]
-
+from item_catalogue import app, DBSession, CLIENT_ID
 
 #EXTRA FUNCTIONS
 def is_signed_in():
