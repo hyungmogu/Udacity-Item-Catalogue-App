@@ -14,35 +14,8 @@ from sqlalchemy import asc, desc, exc
 from item_catalogue import app, DBSession, CLIENT_ID
 from item_catalogue.model.category import Category
 from item_catalogue.model.menuitem import MenuItem
+import item_catalogue.handlers.helper
 
-#EXTRA FUNCTIONS
-def is_signed_in():
-	if "username" not in login_session:
-		return False
-	return True
-
-def is_data_changed(new_title, new_description, new_item_slug, new_category_id, old_item):
-	if not (new_title == old_item.name):
-		return True
-	if not (new_item_slug == old_item.slug):
-		return True
-	if not (new_description == old_item.description):
-		return True
-	if not (new_category_id == old_item.category_id):
-		return True
-	return False
-
-def is_unique(count):
-	if count is not 0:
-		return False
-	else:
-		return True
-
-def generate_slug(title):
-	lowercase_title = title.lower()
-	slug = "_".join(lowercase_title.split())
-
-	return slug
 
 #ERROR HANDLERS
 @app.errorhandler(404)
@@ -177,7 +150,7 @@ def fbconnect():
 @app.route("/logout")
 def logout():
 	# TODO: Fix Facebook's 'unsupported delete request' error.
-	if not is_signed_in():
+	if not helper.is_signed_in():
 		flash("You've already logged out.", "warning")
 		return redirect(url_for("readMain"))
 
@@ -245,7 +218,7 @@ def readMain():
 	# Determine which button to put. Login or logout?
 	# If logged in, insert logout buttion.
 	# If not, insert login button
-	if not is_signed_in():
+	if not helper.is_signed_in():
 		session.close()
 
 		return render_template("main.html", menuItems=items, categories=categories_for_menu)
@@ -277,7 +250,7 @@ def readCategory(category_slug):
 	# Determine which button to put. Login or logout?
 	# If logged in, insert logout buttion.
 	# If not, insert login button
-	if not is_signed_in():
+	if not helper.is_signed_in():
 		session.close()
 
 		return render_template("category.html", currentCategory=current_category,
@@ -297,7 +270,7 @@ def createItem():
 
 		categories = session.query(Category).all()
 
-		if not is_signed_in():
+		if not helper.is_signed_in():
 			flash("Not allowed. 'New Item' page requires login.", "error")
 			return redirect(url_for("readLogin"))
 
@@ -313,12 +286,12 @@ def createItem():
 		description = request.form["description"]
 		category_id = int(request.form["category"])
 
-		item_slug = generate_slug(title)
+		item_slug = helper.generate_slug(title)
 		categories = session.query(Category).all()
 		category_slug = session.query(Category).filter_by(id=category_id).one().slug
 		num_of_identical_items = int(session.query(MenuItem).filter_by(category_id=category_id, slug=item_slug).count())
 
-		if not is_signed_in():
+		if not helper.is_signed_in():
 			session.close()
 
 			flash("Not allowed. 'New Item' feature requires login.", "error")
@@ -328,7 +301,7 @@ def createItem():
 
 			flash("Not allowed. Both title and description must exist.", "error")
 			return render_template('newItem.html', categories=categories, logged_in=True, title=title, category_id=category_id, description=description)
-		if not is_unique(num_of_identical_items):
+		if not helper.is_unique(num_of_identical_items):
 			session.close()
 
 			flash("Not allowed. There already exists an item with the same "
@@ -362,7 +335,7 @@ def editItem(category_slug,item_slug):
 			return redirect(url_for("readMain"))
 
 		# Check if user is authorized to edit the post.
-		if not is_signed_in():
+		if not helper.is_signed_in():
 			session.close()
 
 			flash("Not allowed. 'Update' feature requires login", "error")
@@ -383,7 +356,7 @@ def editItem(category_slug,item_slug):
 		new_title = request.form["title"]
 		new_description = request.form["description"]
 		new_category_id = int(request.form["category"])
-		new_item_slug = generate_slug(new_title)
+		new_item_slug = helper.generate_slug(new_title)
 
 		categories = session.query(Category).all()
 		num_of_identical_items = int(session.query(MenuItem).filter_by(category_id=new_category_id,slug=new_item_slug).count())
@@ -414,12 +387,12 @@ def editItem(category_slug,item_slug):
 
 		# Otherwise, proceed.
 		# Check if all conditions are met to edit blog post.
-		if not is_signed_in():
+		if not helper.is_signed_in():
 			session.close()
 
 			flash("Not allowed. 'Update' feature requires login", "error")
 			return redirect(url_for("readLogin"))
-		if not is_data_changed(new_title, new_description, new_item_slug, new_category_id, old_item):
+		if not helper.is_data_changed(new_title, new_description, new_item_slug, new_category_id, old_item):
 			session.close()
 
 			flash("No data has been changed.","warning")
@@ -429,7 +402,7 @@ def editItem(category_slug,item_slug):
 
 			flash("Not allowed. Both title and description must not be empty.", "error")
 			return render_template("editItem.html", new_title=new_title,new_description=new_description,new_category_id=new_category_id,categories=categories,category_slug=category_slug,item_slug=item_slug)
-		if not is_unique(num_of_identical_items):
+		if not helper.is_unique(num_of_identical_items):
 			session.close()
 
 			flash("Not allowed. There already exists an item with the same slug.", "error")
@@ -462,7 +435,7 @@ def deleteItem(category_slug, item_slug):
 			flash("Not allowed. The item doesn't exist.", "error")
 			return redirect(url_for("readMain"))
 
-		if not is_signed_in():
+		if not helper.is_signed_in():
 			flash("Not allowed. 'Delete' feature requires login.", "error")
 			return redirect(url_for("readLogin"))
 
@@ -484,7 +457,7 @@ def deleteItem(category_slug, item_slug):
 			flash("Not allowed. The item doesn't exist.", "error")
 			return redirect(url_for("readMain"))
 
-		if not is_signed_in():
+		if not helper.is_signed_in():
 			flash("Not allowed. 'Delete' feature requires login.", "error")
 			return redirect(url_for("readLogin"))
 
@@ -513,7 +486,7 @@ def readItem(category_slug,item_slug):
 	# Determine which button to put. Login or logout?
 	# If logged in, insert logout buttion.
 	# If not, insert login button
-	if not is_signed_in():
+	if not helper.is_signed_in():
 		return render_template("item.html", item=item)
 	return render_template("item.html", item=item, logged_in=True)
 	
