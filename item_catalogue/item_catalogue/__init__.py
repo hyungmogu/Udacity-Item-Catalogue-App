@@ -1,3 +1,7 @@
+__version__ = "0.0.0"
+__author__ = "Hyungmo Gu"
+
+
 import os
 
 import json
