@@ -79,7 +79,7 @@ def editItem(category_slug,item_slug):
 			session.close()
 
 			flash("Not allowed. The item doesn't exist.", "error")
-			return redirect(url_for("readMain"))
+			return redirect(url_for("home.readMain"))
 
 		# Check if user is authorized to edit the post.
 		if not helper.is_signed_in():
@@ -118,7 +118,7 @@ def editItem(category_slug,item_slug):
 			session.close()
 
 			flash("Not allowed. The item doesn't exist.", "error")
-			return redirect(url_for("readMain"))
+			return redirect(url_for("home.readMain"))
 
 		# Check if user is updating post without changing slug and category
 		if (category_slug==new_category_slug) and (item_slug==new_item_slug):
@@ -180,7 +180,7 @@ def deleteItem(category_slug, item_slug):
 			session.close()
 
 			flash("Not allowed. The item doesn't exist.", "error")
-			return redirect(url_for("readMain"))
+			return redirect(url_for("home.readMain"))
 
 		if not helper.is_signed_in():
 			flash("Not allowed. 'Delete' feature requires login.", "error")
@@ -202,7 +202,7 @@ def deleteItem(category_slug, item_slug):
 			session.close()
 
 			flash("Not allowed. The item doesn't exist.", "error")
-			return redirect(url_for("readMain"))
+			return redirect(url_for("home.readMain"))
 
 		if not helper.is_signed_in():
 			flash("Not allowed. 'Delete' feature requires login.", "error")
@@ -214,7 +214,7 @@ def deleteItem(category_slug, item_slug):
 		session.close()
 		
 		flash("'%s' successfully deleted." % item.name, "success")
-		return redirect(url_for("readMain"))
+		return redirect(url_for("home.readMain"))
 
 @mod.route("/items/<string:category_slug>/<string:item_slug>/")
 def readItem(category_slug,item_slug):
@@ -226,7 +226,7 @@ def readItem(category_slug,item_slug):
 	except exc.SQLAlchemyError:
 
 		flash("Not allowed. The item doesn't exist.", "error")
-		return redirect(url_for("readMain"))
+		return redirect(url_for("home.readMain"))
 
 	session.close()
 

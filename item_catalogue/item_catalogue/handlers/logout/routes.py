@@ -13,7 +13,7 @@ def logout():
 	# TODO: Fix Facebook's 'unsupported delete request' error.
 	if not helper.is_signed_in():
 		flash("You've already logged out.", "warning")
-		return redirect(url_for("readMain"))
+		return redirect(url_for("home.readMain"))
 
 	# Revoke access code.
 	if login_session["provider"] == "google":
@@ -28,7 +28,7 @@ def logout():
 
 		if not int(result["status"]) == 200:
 			flash("Error occured while logging out.", "error")
-			return redirect(url_for("readMain"))
+			return redirect(url_for("home.readMain"))
 
 		del login_session["access_token"]
 		del login_session["gplus_id"]
@@ -51,4 +51,4 @@ def logout():
 		del login_session["provider"]
 
 	flash("Logout Successful.", "success")
-	return redirect(url_for("readMain"))
+	return redirect(url_for("home.readMain"))
