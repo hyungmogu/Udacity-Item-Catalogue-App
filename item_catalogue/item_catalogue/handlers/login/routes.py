@@ -35,7 +35,7 @@ def gconnect():
 	# If all is well, harvest one time code.
 	one_time_code = request.data
 	# Swap one time code and client secret for credentials.
-	try: 
+	try:
 		oauth_flow = flow_from_clientsecrets("client_secrets.json",
 					scope="openid profile email")
 		oauth_flow.redirect_uri = "postmessage"
@@ -102,7 +102,7 @@ def fbconnect():
 	if request.args.get("state") != login_session["state"]:
 		response = make_response("Invalid state token", 401)
 		response.headers["Content-Type"] = "application/json"
-		return response	
+		return response
 
 	# If all is well, harvest one time code.
 	access_token = request.data

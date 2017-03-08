@@ -4,7 +4,7 @@ from flask import Blueprint
 from flask import flash, redirect, url_for
 from flask import session as login_session
 
-import item_catalogue.handlers.helper
+from .. import helper
 
 mod = Blueprint("logout", __name__, template_folder="templates")
 
