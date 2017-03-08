@@ -10,6 +10,7 @@ from item_catalogue.handlers.logout.routes import mod
 from item_catalogue.handlers.post.routes import mod
 from item_catalogue.handlers.api.routes import mod
 from item_catalogue.handlers.home.routes import mod
+from item_catalogue.handlers.category.routes import mod
 from . import helper
 
 app.register_blueprint(login.routes.mod)
@@ -17,6 +18,7 @@ app.register_blueprint(logout.routes.mod)
 app.register_blueprint(post.routes.mod)
 app.register_blueprint(api.routes.mod)
 app.register_blueprint(home.routes.mod)
+app.register_blueprint(category.routes.mod)
 
 #ERROR HANDLERS
 @app.errorhandler(404)
@@ -25,41 +27,6 @@ def page_not_found(error):
 	return redirect(url_for("home.readMain"))
 
 #ROUTES
-@app.route("/items/<string:category_slug>/")
-def readCategory(category_slug):
-	# TODO: Fix items not showing on page.
-
-	session = DBSession()
-
-	try:
-		current_category = session.query(Category).filter_by(slug=category_slug).one()
-	except exc.SQLAlchemyError:
-			session.close()
-
-			flash("Not allowed. The page doesn't exist.", "error")
-			return redirect(url_for("home.readMain"))
-
-	categories_for_menu = session.query(Category).order_by(asc(Category.name)).all()
-	items = session.query(MenuItem).filter_by(category_id=current_category.id).all()
-	items_count = (session.query(MenuItem)
-						  .filter_by(category_id=current_category.id).count())
-
-	# Determine which button to put. Login or logout?
-	# If logged in, insert logout buttion.
-	# If not, insert login button
-	if not helper.is_signed_in():
-		session.close()
-
-		return render_template("category.html", currentCategory=current_category,
-				categories=categories_for_menu, menuItems=items,
-				count=items_count)
-
-	session.close()
-
-	return render_template("category.html", currentCategory=current_category,
-			categories=categories_for_menu, menuItems=items,
-			count=items_count, logged_in=True)
-
 @app.route("/welcome/")
 def readWelcome():
 	if not helper.is_signed_in():
