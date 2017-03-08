@@ -1,4 +1,4 @@
-from flask import render_template, request, url_for, redirect, flash, jsonify, make_response
+from flask import render_template, url_for, redirect, flash
 from flask import session as login_session
 from sqlalchemy import asc, desc, exc
 
@@ -8,34 +8,19 @@ from item_catalogue.model.menuitem import MenuItem
 from item_catalogue.handlers.login.routes import mod
 from item_catalogue.handlers.logout.routes import mod
 from item_catalogue.handlers.post.routes import mod
+from item_catalogue.handlers.api.routes import mod
 from . import helper
 
 app.register_blueprint(login.routes.mod)
 app.register_blueprint(logout.routes.mod)
 app.register_blueprint(post.routes.mod)
+app.register_blueprint(api.routes.mod)
 
 #ERROR HANDLERS
 @app.errorhandler(404)
 def page_not_found(error):
 	flash("Not allowed. The page or item you've requested doesn't exist.", "error")
 	return redirect(url_for("readMain"))
-
-#API
-@app.route("/catalog.json/")
-def readAPI():
-	session = DBSession()
-	categories = session.query(Category).all()
-	# Convert query result into a list of JSON objects.
-	serialized_categories = [x.serialize for x in categories]
-	# Converty query result of menu_items into a list of JSON objects.
-	# Then, fit them inside corresponding categories under "items" attribute.
-	for category in serialized_categories:
-		items = session.query(MenuItem).filter_by(category_id = 
-			  category["id"]).all()
-		if items:
-			category["items"] = [x.serialize for x in items]
-	session.close()
-	return jsonify(category=serialized_categories)
 
 #ROUTES
 @app.route("/")
