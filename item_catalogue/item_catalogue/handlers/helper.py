@@ -1,3 +1,5 @@
+from flask import session as login_session
+
 def is_signed_in():
 	if "username" not in login_session:
 		return False
