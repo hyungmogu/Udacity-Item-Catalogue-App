@@ -16,7 +16,6 @@ DBSession = sessionmaker(bind = engine)
 CLIENT_ID = json.loads(open("client_secrets.json","r").read())["web"]["client_id"]
 
 import item_catalogue.handlers
-print(app.url_map)
 
 # url_for cash busting.
 # Note: This solves the trouble of css not refreshing the old file.
