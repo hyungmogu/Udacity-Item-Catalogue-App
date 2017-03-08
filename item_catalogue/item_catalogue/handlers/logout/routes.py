@@ -10,25 +10,37 @@ mod = Blueprint("logout", __name__, template_folder="templates")
 
 @mod.route("/logout")
 def logout():
+	"""
+
+	NOTE: Revoke login requests are disabled. Both Google 
+	      and Facebook recommends that login be revoked
+	      when user wishes to delete account / application.
+
+		  Source:
+
+		  - Google: https://developers.google.com/identity/protocols/OAuth2InstalledApp#tokenrevoke
+		  - Facebook: https://developers.facebook.com/docs/facebook-login/permissions/requesting-and-revoking#revokelogin 
+
+	"""
 	# TODO: Fix Facebook's 'unsupported delete request' error.
 	if not helper.is_signed_in():
 		flash("You've already logged out.", "warning")
 		return redirect(url_for("home.readMain"))
 
-	# Revoke access code.
+	# Revoke access token.
 	if login_session["provider"] == "google":
-		access_token = login_session["access_token"]
+		# access_token = login_session["access_token"]
 
-		url = "https://accounts.google.com/o/oauth2/revoke?token=%s" % access_token
-		print(url)
-		internet = httplib2.Http()
-		result = internet.request(url, "GET")[0]
+		# url = "https://accounts.google.com/o/oauth2/revoke?token=%s" % access_token
+		# print(url)
+		# internet = httplib2.Http()
+		# result = internet.request(url, "GET")[0]
 
-		print(json.dumps(result))
+		# print(json.dumps(result))
 
-		if not int(result["status"]) == 200:
-			flash("Error occured while logging out.", "error")
-			return redirect(url_for("home.readMain"))
+		# if not int(result["status"]) == 200:
+		# 	flash("Error occured while logging out.", "error")
+		# 	return redirect(url_for("home.readMain"))
 
 		del login_session["access_token"]
 		del login_session["gplus_id"]
@@ -38,11 +50,11 @@ def logout():
 		del login_session["provider"]
 
 	elif login_session["provider"]=="facebook":
-		facebook_id = login_session["facebook_id"]
+		# facebook_id = login_session["facebook_id"]
 
-		url = "https://graph.facebook.com/%s/permissions" % facebook_id
-		h = httplib2.Http()
-		result = h.request(url, 'DELETE')[1]
+		# url = "https://graph.facebook.com/%s/permissions?access_token=" % facebook_id
+		# h = httplib2.Http()
+		# result = h.request(url, 'DELETE')[1]
 
 		del login_session["facebook_id"]
 		del login_session["username"]
