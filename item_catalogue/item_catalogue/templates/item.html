@@ -3,18 +3,6 @@
 {%block title%}{{item.name}}|Item Catalogue{%endblock%}
 {%block import%}{%endblock%}
 
-{%block main_navigation%}
-	{%if logged_in%}
-		<div id="user">
-			<a href="/logout" class="button orange">Logout</a>
-		</div>
-	{%else%}
-		<div id="user">
-			<a href="/login" class="button orange">Login</a>
-		</div>
-	{%endif%}
-{%endblock%}
-
 {%block header%}
 	<section class="header">
 		<h2 class="title">{{item.MenuItem.name}}</h2>
