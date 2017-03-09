@@ -32,7 +32,3 @@ def dated_url_for(endpoint, **values):
                                      endpoint, filename)
             values['q'] = int(os.stat(file_path).st_mtime)
     return url_for(endpoint, **values)
-
-app.debug = False
-app.secret_key = 'A9012ASD09812@)(J*AS(&FJHASHVUaiuw1bSA&Dy712bhc'
-app.run(host='0.0.0.0', port=5000)
