@@ -13,8 +13,6 @@ app = Flask(__name__)
 engine = create_engine("sqlite:///model/itemcatalogue.db")
 DBSession = sessionmaker(bind = engine)
 
-CLIENT_ID = json.loads(open("client_secrets.json","r").read())["web"]["client_id"]
-
 import item_catalogue.handlers
 
 # url_for cash busting.
