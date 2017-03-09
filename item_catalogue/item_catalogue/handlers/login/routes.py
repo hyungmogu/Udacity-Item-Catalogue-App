@@ -1,13 +1,10 @@
 import string
 import random
 
-import httplib2
 import json
-import requests
 from flask import Blueprint
-from flask import render_template, request, make_response
+from flask import render_template, request
 from flask import session as login_session
-from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 
 from . import helper
@@ -31,32 +28,32 @@ def gconnect():
 
 	# Harvest access token and gplus_id
 	try:
-		credentials = g_get_credentials(one_time_code)
+		credentials = helper.g_get_credentials(one_time_code)
 		access_token = credentials.access_token
 		gplus_id = credentials.id_token["sub"]
 	except FlowExchangeError:
 		return send_response(401, "Failed to upgrade the authorization code.")
 
-	result = g_check_access_token(access_token)
+	result = helper.g_check_access_token(access_token)
 
 	# First, check if somebody is attempting CSRF attack
-	if not is_session_token_valid():
+	if not helper.is_session_token_valid():
 		return send_response(401,"Invalid state token")
 	# Check for errors in transmission.
 	if result.get("error"):
-		return send_response(500,result.get("error"))
+		return helper.send_response(500,result.get("error"))
 	# If all is well, check if the token is for intended user.
 	if result["user_id"] != gplus_id:
-		return send_response(500,result.get("error"))
+		return helper.send_response(500,result.get("error"))
 	# If valid, verify that it is for this app.
 	if (result["issued_to"] != G_CLIENT_ID):
-		return send_response(401,result.get("Login invalid. Token's client ID "
+		return helper.send_response(401,result.get("Login invalid. Token's client ID "
 				"does not match"))
 	# If all is well, the credential is correct with high confidence.
-	if g_is_user_already_logged_in(gplus_id):
-		return send_response(200, "Current User is already logged in.")
+	if helper.g_is_user_already_logged_in(gplus_id):
+		return helper.send_response(200, "Current User is already logged in.")
 
-	data = g_get_user_data(access_token)
+	data = helper.g_get_user_data(access_token)
 	
 	login_session["access_token"] = access_token
 	login_session["gplus_id"] = gplus_id
@@ -65,18 +62,18 @@ def gconnect():
 	login_session["picture"] = data["picture"]
 	login_session["email"] = data["email"]
 
-	return send_response(200, "success")
+	return helper.send_response(200, "success")
 
 @mod.route("/login/fbconnect",methods=["POST"])
 def fbconnect():
 	one_time_token = request.data
 
-	if not is_session_token_valid():
-		return send_response(401,"Invalid state token")
+	if not helper.is_session_token_valid():
+		return helper.send_response(401,"Invalid state token")
 
-	access_token = fb_get_access_token(one_time_token)
+	access_token = helper.fb_get_access_token(one_time_token)
 
-	data = fb_get_user_data(access_token)
+	data = helper.fb_get_user_data(access_token)
 
 	login_session["provider"] = "facebook"
 	login_session["username"] = data["name"]
@@ -84,4 +81,4 @@ def fbconnect():
 	login_session["facebook_id"] = data["id"]
 	login_session["picture"] = data["picture"]["data"]["url"]
 
-	return send_response(200, "success")
+	return helper.send_response(200, "success")

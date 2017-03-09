@@ -3,6 +3,7 @@ import json
 import httplib2
 
 from flask import session as login_session
+from flask import request, make_response
 from oauth2client.client import flow_from_clientsecrets
 
 def send_response(status_code,message=""):
@@ -15,7 +16,7 @@ def g_is_user_already_logged_in(gplus_id):
 	stored_credentials = login_session.get("access_token")
 	stored_gplus_id = login_session.get("gplus_id")
 
-	if stored_credentials is None 
+	if stored_credentials is None:
 		return False
 	if gplus_id != stored_gplus_id:
 		return False
@@ -54,7 +55,7 @@ def fb_get_access_token(one_time_token):
 
 	url = ("https://graph.facebook.com/oauth/access_token?"
 		"grant_type=fb_exchange_token&"
-		"G_CLIENT_ID=%s&"
+		"client_id=%s&"
 		"client_secret=%s&"
 		"redirect_uri=%s&"
 		"fb_exchange_token=%s"%(FB_APP_ID, FB_APP_SECRET, REDIRECT_URI, one_time_token))
@@ -63,7 +64,8 @@ def fb_get_access_token(one_time_token):
 	return result.split("&")[0]
 
 def fb_get_user_data(access_token):
-	url = "https://graph.facebook.com/v2.4/me?%s&fields=name,id,email,picture"%access_token
+	url = "https://graph.facebook.com/v2.4/me?%s&fields=name,id,email,picture" % access_token
 	h = httplib2.Http()
 	result = h.request(url,"GET")[1]
+	print(result)
 	return json.loads(result)
