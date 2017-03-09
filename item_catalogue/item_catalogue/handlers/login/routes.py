@@ -10,9 +10,9 @@ from flask import session as login_session
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 
-from item_catalogue import CLIENT_ID
-
 mod = Blueprint("login",__name__,template_folder="templates")
+
+G_CLIENT_ID = json.loads(open("client_secrets.json","r").read())["web"]["client_id"]
 
 #LOGIN
 @mod.route("/login/")
@@ -64,7 +64,7 @@ def gconnect():
 		response.headers["Content-Type"] = "application/json"
 		return response
 	# If valid, verify that it is for this app.
-	if (result["issued_to"] != CLIENT_ID):
+	if (result["issued_to"] != G_CLIENT_ID):
 		response = make_response(json.dumps("Login invalid. Token's client ID "
 				"does not match"),401)
 		response.headers["Content-Type"] = "application/json"
@@ -113,7 +113,7 @@ def fbconnect():
 
 	url = ("https://graph.facebook.com/oauth/access_token?"
 		"grant_type=fb_exchange_token&"
-		"client_id=%s&"
+		"G_CLIENT_ID=%s&"
 		"client_secret=%s&"
 		"redirect_uri=%s&"
 		"fb_exchange_token=%s"%(app_id,app_secret,redirect_uri,access_token))

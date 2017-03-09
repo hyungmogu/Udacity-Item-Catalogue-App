@@ -1,4 +1,4 @@
-__version__ = "0.0.0"
+__version__ = "0.1.1"
 __author__ = "Hyungmo Gu"
 
 
@@ -13,10 +13,7 @@ app = Flask(__name__)
 engine = create_engine("sqlite:///model/itemcatalogue.db")
 DBSession = sessionmaker(bind = engine)
 
-CLIENT_ID = json.loads(open("client_secrets.json","r").read())["web"]["client_id"]
-
 import item_catalogue.handlers
-print(app.url_map)
 
 # url_for cash busting.
 # Note: This solves the trouble of css not refreshing the old file.
@@ -33,7 +30,3 @@ def dated_url_for(endpoint, **values):
                                      endpoint, filename)
             values['q'] = int(os.stat(file_path).st_mtime)
     return url_for(endpoint, **values)
-
-app.debug = False
-app.secret_key = 'A9012ASD09812@)(J*AS(&FJHASHVUaiuw1bSA&Dy712bhc'
-app.run(host='0.0.0.0', port=5000)
