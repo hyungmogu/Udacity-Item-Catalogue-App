@@ -12,7 +12,43 @@ from oauth2client.client import FlowExchangeError
 
 mod = Blueprint("login",__name__,template_folder="templates")
 
-G_CLIENT_ID = json.loads(open("client_secrets.json","r").read())["web"]["client_id"]
+def send_response(status_code,message=""):
+	response = make_response(json.dumps(message),status_code)
+	response.headers["Content-Type"] = "application/json"
+
+	return response
+
+def g_is_user_already_logged_in(gplus_id):
+	stored_credentials = login_session.get("access_token")
+	stored_gplus_id = login_session.get("gplus_id")
+
+	if stored_credentials is not None and gplus_id == stored_gplus_id:
+		return True
+
+def g_get_user_data(access_token):
+	userinfo_url = "https://www.googleapis.com/oauth2/v3/userinfo"
+	params= {"access_token": access_token, "alt": "json"}
+	answer = requests.get(userinfo_url, params=params)
+
+	return answer.json()
+
+def is_session_token_valid():
+	# Note: this shields user from Cross Reference Site Forgery Attack.
+	if request.args.get("state") != login_session["state"]:
+		return False
+	return True	
+
+def g_get_credentials(one_time_code):
+	oauth_flow = flow_from_clientsecrets("client_secrets.json",
+				scope="openid profile email")
+	oauth_flow.redirect_uri = "postmessage"
+	return oauth_flow.step2_exchange(one_time_code)
+
+def g_check_access_token(access_token):
+	url = ("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s"%
+		access_token)
+	h = httplib2.Http()
+	return json.loads(h.request(url,"GET")[1])
 
 #LOGIN
 @mod.route("/login/")
@@ -26,74 +62,47 @@ def readLogin():
 
 @mod.route("/login/gconnect", methods=["POST"])
 def gconnect():
-	# Check the validity of session token.
-	# Note: this is to shield user from Cross Reference Site Forgery Attack.
-	if request.args.get("state") != login_session["state"]:
-		response = make_response("Invalid state token", 401)
-		response.headers["Content-Type"] = "application/json"
-		return response
-	# If all is well, harvest one time code.
+	G_CLIENT_ID = json.loads(open("client_secrets.json","r").read())["web"]["client_id"]
 	one_time_code = request.data
-	# Swap one time code and client secret for credentials.
+
+	# Harvest access token and gplus_id
 	try:
-		oauth_flow = flow_from_clientsecrets("client_secrets.json",
-					scope="openid profile email")
-		oauth_flow.redirect_uri = "postmessage"
-		credentials = oauth_flow.step2_exchange(one_time_code)
+		credentials = g_get_credentials(one_time_code)
+		access_token = credentials.access_token
+		gplus_id = credentials.id_token["sub"]
 	except FlowExchangeError:
-		response = make_response(json.dumps("Failed to upgrade the "
-				"authorization code"),401)
-		response.headers["Content-Type"] = "application/json"
-		return response
-	# Check for the validity of credentials.
-	access_token = credentials.access_token
-	url = ("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s"%
-		access_token)
-	h = httplib2.Http()
-	result = json.loads(h.request(url,"GET")[1])
-	# If error, abort.
+		return send_response(401, "Failed to upgrade the authorization code.")
+
+	result = g_check_access_token(access_token)
+
+	# First, check if somebody is attempting CSRF attack
+	if not is_session_token_valid():
+		return send_response(401,"Invalid state token")
+	# Check for errors in transmission.
 	if result.get("error"):
-		response = make_response(json.dumps(result.get("error")),500)
-		response.headers["Content-Type"] = "application/json"
-		return response
+		return send_response(500,result.get("error"))
 	# If all is well, check if the token is for intended user.
-	gplus_id = credentials.id_token["sub"]
 	if result["user_id"] != gplus_id:
-		response = make_response(json.dumps("Login invalid. Token's user ID "
-				"doesn't match"),401)
-		response.headers["Content-Type"] = "application/json"
-		return response
+		return send_response(500,result.get("error"))
 	# If valid, verify that it is for this app.
 	if (result["issued_to"] != G_CLIENT_ID):
-		response = make_response(json.dumps("Login invalid. Token's client ID "
-				"does not match"),401)
-		response.headers["Content-Type"] = "application/json"
-		return response
+		return send_response(401,result.get("Login invalid. Token's client ID "
+				"does not match"))
 	# If all is well, the credential is correct with high confidence.
-	# Now, Check if user is logged in
-	stored_credentials = login_session.get("access_token")
-	stored_gplus_id = login_session.get("gplus_id")
-	if stored_credentials is not None and gplus_id == stored_gplus_id:
-		response = make_response(json.dumps("Current user is already connected."),200)
-		response.headers["Content-Type"] = "application/json"
-		return response
-	# If all is well, continue the login process.
-	# Retrieve and store the access token.
+	if g_is_user_already_logged_in(gplus_id):
+		return send_response(200, "Current User is already logged in.")
+
+	data = g_get_user_data(access_token)
+	
+	# Store user info.
 	login_session["access_token"] = access_token
 	login_session["gplus_id"] = gplus_id
-	# Get user info.
-	userinfo_url = ("https://www.googleapis.com/oauth2/v3/userinfo")
-	params= {"access_token": credentials.access_token,"alt": "json"}
-	answer = requests.get(userinfo_url,params=params)
-	data = answer.json()
-	# Store user info in flask session.
 	login_session["provider"] = "google"
 	login_session["username"] = data["name"]
 	login_session["picture"] = data["picture"]
 	login_session["email"] = data["email"]
-	response = make_response(json.dumps("success"),200)
-	response.headers["Content-Type"] = "application/json"
-	return response
+
+	return send_response(200, "success")
 
 @mod.route("/login/fbconnect",methods=["POST"])
 def fbconnect():
