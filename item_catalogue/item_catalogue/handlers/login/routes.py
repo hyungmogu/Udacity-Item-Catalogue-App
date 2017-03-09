@@ -50,6 +50,27 @@ def g_check_access_token(access_token):
 	h = httplib2.Http()
 	return json.loads(h.request(url,"GET")[1])
 
+def fb_get_access_token(one_time_token):
+	REDIRECT_URI = "http://localhost:5000/welcome"
+	FB_APP_ID = json.loads(open("fb_client_secrets.json","r").read())["web"]["app_id"]
+	FB_APP_SECRET = json.loads(open("fb_client_secrets.json","r").read())["web"]["app_secret"]
+
+	url = ("https://graph.facebook.com/oauth/access_token?"
+		"grant_type=fb_exchange_token&"
+		"G_CLIENT_ID=%s&"
+		"client_secret=%s&"
+		"redirect_uri=%s&"
+		"fb_exchange_token=%s"%(FB_APP_ID, FB_APP_SECRET, REDIRECT_URI, one_time_token))
+	h = httplib2.Http()
+	result = h.request(url,"GET")[1]
+	return result.split("&")[0]
+
+def fb_get_user_data(access_token):
+	url = "https://graph.facebook.com/v2.4/me?%s&fields=name,id,email,picture"%access_token
+	h = httplib2.Http()
+	result = h.request(url,"GET")[1]
+	return json.loads(result)
+
 #LOGIN
 @mod.route("/login/")
 def readLogin():
@@ -94,7 +115,6 @@ def gconnect():
 
 	data = g_get_user_data(access_token)
 	
-	# Store user info.
 	login_session["access_token"] = access_token
 	login_session["gplus_id"] = gplus_id
 	login_session["provider"] = "google"
@@ -106,34 +126,14 @@ def gconnect():
 
 @mod.route("/login/fbconnect",methods=["POST"])
 def fbconnect():
-	# Check the validity of session token.
-	# Note: this is to shield user from Cross Reference Site Forgery Attack.
-	if request.args.get("state") != login_session["state"]:
-		response = make_response("Invalid state token", 401)
-		response.headers["Content-Type"] = "application/json"
-		return response
+	one_time_token = request.data
 
-	# If all is well, harvest one time code.
-	access_token = request.data
-	redirect_uri = "http://localhost:5000/welcome"
+	if not is_session_token_valid():
+		return send_response(401,"Invalid state token")
 
-	app_id = json.loads(open("fb_client_secrets.json","r").read())["web"]["app_id"]
-	app_secret = json.loads(open("fb_client_secrets.json","r").read())["web"]["app_secret"]
+	access_token = fb_get_access_token(one_time_token)
 
-	url = ("https://graph.facebook.com/oauth/access_token?"
-		"grant_type=fb_exchange_token&"
-		"G_CLIENT_ID=%s&"
-		"client_secret=%s&"
-		"redirect_uri=%s&"
-		"fb_exchange_token=%s"%(app_id,app_secret,redirect_uri,access_token))
-	h = httplib2.Http()
-	result = h.request(url,"GET")[1]
-	token = result.split("&")[0]
-
-	url = "https://graph.facebook.com/v2.4/me?%s&fields=name,id,email,picture"%token
-	h = httplib2.Http()
-	result = h.request(url,"GET")[1]
-	data = json.loads(result)
+	data = fb_get_user_data(access_token)
 
 	login_session["provider"] = "facebook"
 	login_session["username"] = data["name"]
@@ -141,6 +141,4 @@ def fbconnect():
 	login_session["facebook_id"] = data["id"]
 	login_session["picture"] = data["picture"]["data"]["url"]
 
-	response = make_response(json.dumps("success"),200)
-	response.headers["Content-Type"] = "application/json"
-	return response
+	return send_response(200, "success")
