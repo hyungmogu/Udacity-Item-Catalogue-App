@@ -90,7 +90,7 @@ def editItem(category_slug,item_slug):
 
 		session.close()
 
-		return render_template("editItem.html",categories=categories,category_slug=category_slug,item=item,item_slug=item_slug)
+		return render_template("editItem.html", categories=categories, category_slug=category_slug, item=item, item_slug=item_slug, logged_in=True)
 
 	elif request.method == "POST":	
 		# TODO: Add a feature that allows users to choose their own slug
@@ -148,12 +148,12 @@ def editItem(category_slug,item_slug):
 			session.close()
 
 			flash("Not allowed. Both title and description must not be empty.", "error")
-			return render_template("editItem.html", new_title=new_title,new_description=new_description,new_category_id=new_category_id,categories=categories,category_slug=category_slug,item_slug=item_slug)
+			return render_template("editItem.html", new_title=new_title, new_description=new_description, new_category_id=new_category_id, categories=categories, category_slug=category_slug, item_slug=item_slug, logged_in=True)
 		if not helper.is_unique(num_of_identical_items):
 			session.close()
 
 			flash("Not allowed. There already exists an item with the same slug.", "error")
-			return render_template("editItem.html",new_title=new_title,new_description=new_description,new_category_id=new_category_id,categories=categories,category_slug=category_slug,item_slug=item_slug)
+			return render_template("editItem.html", new_title=new_title, new_description=new_description, new_category_id=new_category_id, categories=categories, category_slug=category_slug, item_slug=item_slug, logged_in=True)
 
 		old_item.title = new_title
 		old_item.description = new_description
@@ -189,7 +189,7 @@ def deleteItem(category_slug, item_slug):
 		session.close()
 
 		return render_template("deleteItem.html", category_slug=category_slug,
-			item_slug=item_slug)
+			item_slug=item_slug, logged_in=True)
 
 	elif (request.method == "POST"):
 		session = DBSession()
