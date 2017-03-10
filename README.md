@@ -41,16 +41,26 @@ This is a project for Udacity's "Introduction to Full-stack Development" course.
 3. Type `vagrant ssh` when step 4 is finished; login to the virtual machine
 
 ### Installing Dependencies for Python
+
 1. Type the following commands after loggin in:
 ```
 cd /vagrant/item-catalogue
 python setup.py install
 ```
 
+### Setting up OAuth for Google and Facebook Login
+
+1. Type `cd item-catalogue`; go inside the project directory
+2. Open `client_secret.json` and `fb_client_secret.json` using an editor of choice; follow instructions there
+3. Type `cd static/js`; navigate to the directory containing OAuth Javascript SDKs.
+4. Open `fblogin.js` and `glogin.js`; fill in information obtained from step 2.
+
+
 ### Running Flask Server
-1. Type the following after installing dependencies:
+
+1. Type the following after setting up Facebook and Google OAuths:
 ```
-cd item-catalogue
+cd ../../
 export FLASK_APP=run.py
 flask run
 ```
