@@ -59,7 +59,7 @@ python setup.py install
 
 ### Running Flask Server
 
-1. Type `cd ../../`; Go back to project root directory
+1. Type `cd ../../`; go back to project root directory
 
 2. Type the following:
 ```
