@@ -2,6 +2,7 @@ from flask import render_template, request, url_for, redirect, flash, jsonify, m
 from flask import Blueprint
 from flask import session as login_session
 from sqlalchemy import asc, desc, exc
+from sqlalchemy.orm import exc as oexc
 
 from item_catalogue import app, DBSession
 from item_catalogue.model.category import Category
@@ -110,7 +111,7 @@ def editItem(category_slug,item_slug):
 				   .join(MenuItem.category)
 				   .filter(Category.slug==category_slug, MenuItem.slug==item_slug)
 				   .one()).MenuItem
-		except exc.NoResultFound:
+		except oexc.NoResultFound:
 			session.close()
 
 			flash("Not allowed. The item doesn't exist.", "error")
@@ -219,7 +220,7 @@ def readItem(category_slug,item_slug):
 	try:
 		item = (session.query(MenuItem,Category.slug).join(MenuItem.category).
 			filter(Category.slug==category_slug,MenuItem.slug==item_slug).one())
-	except exc.NoResultFound:
+	except oexc.NoResultFound:
 		flash("Not allowed. The item doesn't exist.", "error")
 		return redirect(url_for("home.readMain"))
 
