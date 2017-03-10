@@ -14,11 +14,16 @@ def readCategory(category_slug):
 
 	try:
 		category = session.query(Category).filter_by(slug=category_slug).one()
-	except exc.SQLAlchemyError:
-			session.close()
+	except oexc.NoResultFound:
+		session.close()
 
-			flash("Not allowed. The page doesn't exist.", "error")
-			return redirect(url_for("home.readMain"))
+		flash("Not allowed. The page doesn't exist.", "error")
+		return redirect(url_for("home.readMain"))
+	except oexc.MultipleResultsFound:
+		session.close()
+
+		flash("Error occured. Multiple categories found.", "error")
+		return redirect(url_for("home.readMain"))
 
 	categories_for_menu = session.query(Category).order_by(asc(Category.name)).all()
 	items = session.query(MenuItem).filter_by(category_id=category.id).all()

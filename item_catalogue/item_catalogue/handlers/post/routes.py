@@ -76,10 +76,15 @@ def editItem(category_slug,item_slug):
 		try:
 			category = session.query(Category).filter_by(slug=category_slug).one()
 			item = session.query(MenuItem).filter_by(slug=item_slug,category_id=category.id).one()
-		except exc.SQLAlchemyError:
+		except oexc.NoResultFound:
 			session.close()
 
 			flash("Not allowed. The item doesn't exist.", "error")
+			return redirect(url_for("home.readMain"))
+		except oexc.MultipleResultsFound:
+			session.close()
+
+			flash("Error occured. Multiple items found.", "error")
 			return redirect(url_for("home.readMain"))
 
 		if not helper.is_signed_in():
@@ -173,13 +178,20 @@ def deleteItem(category_slug, item_slug):
 			item = (session.query(MenuItem).join(MenuItem.category).
 				filter(Category.slug==category_slug, MenuItem.slug==item_slug).
 				one())
-		except exc.SQLAlchemyError:
+		except oexc.NoResultFound:
 			session.close()
 
 			flash("Not allowed. The item doesn't exist.", "error")
 			return redirect(url_for("home.readMain"))
+		except oexc.MultipleResultsFound:
+			session.close()
+
+			flash("Error occured. Multiple items found.", "error")
+			return redirect(url_for("home.readMain"))
 
 		if not helper.is_signed_in():
+			session.close()
+
 			flash("Not allowed. 'Delete' feature requires login.", "error")
 			return redirect(url_for("login.readLogin"))
 
@@ -195,13 +207,20 @@ def deleteItem(category_slug, item_slug):
 			item = (session.query(MenuItem).join(MenuItem.category).
 				filter(Category.slug==category_slug, MenuItem.slug==item_slug).
 				one())
-		except exc.SQLAlchemyError:
+		except oexc.NoResultFound:
 			session.close()
 
 			flash("Not allowed. The item doesn't exist.", "error")
 			return redirect(url_for("home.readMain"))
+		except oexc.MultipleResultsFound:
+			session.close()
+
+			flash("Error occured. Multiple items found.", "error")
+			return redirect(url_for("home.readMain"))
 
 		if not helper.is_signed_in():
+			session.close()
+
 			flash("Not allowed. 'Delete' feature requires login.", "error")
 			return redirect(url_for("login.readLogin"))
 
@@ -221,7 +240,14 @@ def readItem(category_slug,item_slug):
 		item = (session.query(MenuItem,Category.slug).join(MenuItem.category).
 			filter(Category.slug==category_slug,MenuItem.slug==item_slug).one())
 	except oexc.NoResultFound:
+		session.close()
+
 		flash("Not allowed. The item doesn't exist.", "error")
+		return redirect(url_for("home.readMain"))
+	except oexc.MultipleResultsFound:
+		session.close()
+
+		flash("Error occured. Multiple items found.", "error")
 		return redirect(url_for("home.readMain"))
 
 	session.close()
