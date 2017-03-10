@@ -109,8 +109,8 @@ def editItem(category_slug,item_slug):
 			old_item = (session.query(MenuItem, Category.slug)
 				   .join(MenuItem.category)
 				   .filter(Category.slug==category_slug, MenuItem.slug==item_slug)
-				   .one())[0]
-		except exc.SQLAlchemyError:
+				   .one()).MenuItem
+		except exc.NoResultFound:
 			session.close()
 
 			flash("Not allowed. The item doesn't exist.", "error")
@@ -150,7 +150,8 @@ def editItem(category_slug,item_slug):
 			flash("Not allowed. There already exists an item with the same slug.", "error")
 			return render_template("editItem.html", new_title=new_title, new_description=new_description, new_category_id=new_category_id, categories=categories, category_slug=category_slug, item_slug=item_slug, logged_in=True)
 
-		old_item.title = new_title
+		old_item.name = new_title
+		old_item.slug = new_item_slug
 		old_item.description = new_description
 		old_item.category_id = new_category_id
 		session.add(old_item)
@@ -216,10 +217,9 @@ def readItem(category_slug,item_slug):
 	session = DBSession()
 
 	try:
-		item = (session.query(Category.slug,MenuItem).join(MenuItem.category).
+		item = (session.query(MenuItem,Category.slug).join(MenuItem.category).
 			filter(Category.slug==category_slug,MenuItem.slug==item_slug).one())
-	except exc.SQLAlchemyError:
-
+	except exc.NoResultFound:
 		flash("Not allowed. The item doesn't exist.", "error")
 		return redirect(url_for("home.readMain"))
 
