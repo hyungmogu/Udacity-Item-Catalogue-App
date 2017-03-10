@@ -18,11 +18,11 @@ This is a project for Udacity's "Introduction to Full-stack Development" course.
 ## Getting Started
 ### Setting up
 
-#### Installing Git
+#### 1. Installing Git
 
 1. Follow the instruction provoided [here](https://www.atlassian.com/git/tutorials/install-git)
 
-#### Installing Vagrant
+#### 2. Installing Vagrant
 
 1. Download and install [Virtual Box](https://www.virtualbox.org/)
 2. Download and install [Vagrant](https://www.vagrantup.com/downloads.html)
@@ -30,18 +30,18 @@ This is a project for Udacity's "Introduction to Full-stack Development" course.
 3. Boot into BIOS and enable virtual environment
   - NOTE: This step varies for different motherboard models and versions. Please refer to instruction provided by manufacturer for details.  
 
-#### Downloading Project Files
+#### 3. Downloading Project Files
 
 1. Navigate to a directory of choice
 2. Type `git clone https://github.com/hyungmogu/Udacity-Item-Catalogue-App/`; download the repository
 
-#### Running Vagrant
+#### 4. Running Vagrant
 
 1. Type `cd udacity-item-catalogue`; navigate to where `VagrantFile` is located
 2. Type `vagrant up`; let vagrant to setup dependencies
 3. Type `vagrant ssh`; login to the virtual machine
 
-#### Installing Dependencies for Python
+#### 5. Installing Dependencies for Python
 
 1. Type the following after loggin in:
 ```
@@ -49,7 +49,7 @@ cd /vagrant/item-catalogue
 python setup.py install
 ```
 
-#### Setting up OAuth for Google and Facebook Login
+#### 6. Setting up OAuth for Google and Facebook Login
 
 1. Type `cd item-catalogue`; go inside the project directory
 2. Open `client_secret.json` and `fb_client_secret.json` using an editor of choice; follow instructions there
