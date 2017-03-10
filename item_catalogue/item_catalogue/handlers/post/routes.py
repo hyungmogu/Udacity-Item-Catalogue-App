@@ -2,6 +2,7 @@ from flask import render_template, request, url_for, redirect, flash, jsonify, m
 from flask import Blueprint
 from flask import session as login_session
 from sqlalchemy import asc, desc, exc
+from sqlalchemy.orm import exc as oexc
 
 from item_catalogue import app, DBSession
 from item_catalogue.model.category import Category
@@ -75,13 +76,17 @@ def editItem(category_slug,item_slug):
 		try:
 			category = session.query(Category).filter_by(slug=category_slug).one()
 			item = session.query(MenuItem).filter_by(slug=item_slug,category_id=category.id).one()
-		except exc.SQLAlchemyError:
+		except oexc.NoResultFound:
 			session.close()
 
 			flash("Not allowed. The item doesn't exist.", "error")
 			return redirect(url_for("home.readMain"))
+		except oexc.MultipleResultsFound:
+			session.close()
 
-		# Check if user is authorized to edit the post.
+			flash("Error occured. Multiple items found.", "error")
+			return redirect(url_for("home.readMain"))
+
 		if not helper.is_signed_in():
 			session.close()
 
@@ -90,14 +95,11 @@ def editItem(category_slug,item_slug):
 
 		session.close()
 
-		return render_template("editItem.html",categories=categories,category_slug=category_slug,item=item,item_slug=item_slug)
+		return render_template("editItem.html", categories=categories, category_slug=category_slug, item=item, item_slug=item_slug, logged_in=True)
 
 	elif request.method == "POST":	
 		# TODO: Add a feature that allows users to choose their own slug
 		# TODO: Add a function that checks for special symbols other than '_' in slugs
-		# TODO: Add a function that returns true if user is modifying the same post.
-		#		If so, update title, description, and then redirect user to readItem page.
-		# TODO: Fix the problem of user not being allowed to modify their own post.
 		session = DBSession()
 
 		new_title = request.form["title"]
@@ -113,8 +115,8 @@ def editItem(category_slug,item_slug):
 			old_item = (session.query(MenuItem, Category.slug)
 				   .join(MenuItem.category)
 				   .filter(Category.slug==category_slug, MenuItem.slug==item_slug)
-				   .one())[0]
-		except exc.SQLAlchemyError:
+				   .one()).MenuItem
+		except oexc.NoResultFound:
 			session.close()
 
 			flash("Not allowed. The item doesn't exist.", "error")
@@ -132,7 +134,6 @@ def editItem(category_slug,item_slug):
 			flash("'%s' successfully edited."%new_title, "success")
 			return redirect(url_for('post.readItem',category_slug=category_slug,item_slug=item_slug))
 
-		# Otherwise, proceed.
 		# Check if all conditions are met to edit blog post.
 		if not helper.is_signed_in():
 			session.close()
@@ -148,14 +149,15 @@ def editItem(category_slug,item_slug):
 			session.close()
 
 			flash("Not allowed. Both title and description must not be empty.", "error")
-			return render_template("editItem.html", new_title=new_title,new_description=new_description,new_category_id=new_category_id,categories=categories,category_slug=category_slug,item_slug=item_slug)
+			return render_template("editItem.html", new_title=new_title, new_description=new_description, new_category_id=new_category_id, categories=categories, category_slug=category_slug, item_slug=item_slug, logged_in=True)
 		if not helper.is_unique(num_of_identical_items):
 			session.close()
 
 			flash("Not allowed. There already exists an item with the same slug.", "error")
-			return render_template("editItem.html",new_title=new_title,new_description=new_description,new_category_id=new_category_id,categories=categories,category_slug=category_slug,item_slug=item_slug)
+			return render_template("editItem.html", new_title=new_title, new_description=new_description, new_category_id=new_category_id, categories=categories, category_slug=category_slug, item_slug=item_slug, logged_in=True)
 
-		old_item.title = new_title
+		old_item.name = new_title
+		old_item.slug = new_item_slug
 		old_item.description = new_description
 		old_item.category_id = new_category_id
 		session.add(old_item)
@@ -176,20 +178,27 @@ def deleteItem(category_slug, item_slug):
 			item = (session.query(MenuItem).join(MenuItem.category).
 				filter(Category.slug==category_slug, MenuItem.slug==item_slug).
 				one())
-		except exc.SQLAlchemyError:
+		except oexc.NoResultFound:
 			session.close()
 
 			flash("Not allowed. The item doesn't exist.", "error")
 			return redirect(url_for("home.readMain"))
+		except oexc.MultipleResultsFound:
+			session.close()
+
+			flash("Error occured. Multiple items found.", "error")
+			return redirect(url_for("home.readMain"))
 
 		if not helper.is_signed_in():
+			session.close()
+
 			flash("Not allowed. 'Delete' feature requires login.", "error")
 			return redirect(url_for("login.readLogin"))
 
 		session.close()
 
 		return render_template("deleteItem.html", category_slug=category_slug,
-			item_slug=item_slug)
+			item_slug=item_slug, logged_in=True)
 
 	elif (request.method == "POST"):
 		session = DBSession()
@@ -198,13 +207,20 @@ def deleteItem(category_slug, item_slug):
 			item = (session.query(MenuItem).join(MenuItem.category).
 				filter(Category.slug==category_slug, MenuItem.slug==item_slug).
 				one())
-		except exc.SQLAlchemyError:
+		except oexc.NoResultFound:
 			session.close()
 
 			flash("Not allowed. The item doesn't exist.", "error")
 			return redirect(url_for("home.readMain"))
+		except oexc.MultipleResultsFound:
+			session.close()
+
+			flash("Error occured. Multiple items found.", "error")
+			return redirect(url_for("home.readMain"))
 
 		if not helper.is_signed_in():
+			session.close()
+
 			flash("Not allowed. 'Delete' feature requires login.", "error")
 			return redirect(url_for("login.readLogin"))
 
@@ -221,11 +237,17 @@ def readItem(category_slug,item_slug):
 	session = DBSession()
 
 	try:
-		item = (session.query(Category.slug,MenuItem).join(MenuItem.category).
+		item = (session.query(MenuItem,Category.slug).join(MenuItem.category).
 			filter(Category.slug==category_slug,MenuItem.slug==item_slug).one())
-	except exc.SQLAlchemyError:
+	except oexc.NoResultFound:
+		session.close()
 
 		flash("Not allowed. The item doesn't exist.", "error")
+		return redirect(url_for("home.readMain"))
+	except oexc.MultipleResultsFound:
+		session.close()
+
+		flash("Error occured. Multiple items found.", "error")
 		return redirect(url_for("home.readMain"))
 
 	session.close()
