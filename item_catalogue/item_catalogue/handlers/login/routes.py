@@ -15,10 +15,11 @@ mod = Blueprint("login",__name__,template_folder="templates")
 @mod.route("/login/")
 def readLogin():
 	# Create state token.
-	# Note: It shields user from Cross Site Reference Forgery Attack.
+	# Note: This shields user from Cross Site Reference Forgery Attack.
 	state = "".join(random.choice(string.ascii_uppercase + string.digits +
 			string.ascii_lowercase) for x in xrange(32))
 	login_session["state"] = state
+
 	return render_template("login.html",session_state=login_session["state"])
 
 @mod.route("/login/gconnect", methods=["POST"])

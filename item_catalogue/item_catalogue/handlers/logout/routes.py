@@ -22,12 +22,10 @@ def logout():
 		  - Facebook: https://developers.facebook.com/docs/facebook-login/permissions/requesting-and-revoking#revokelogin 
 
 	"""
-	# TODO: Fix Facebook's 'unsupported delete request' error.
 	if not helper.is_signed_in():
 		flash("You've already logged out.", "warning")
 		return redirect(url_for("home.readMain"))
 
-	# Revoke access token.
 	if login_session["provider"] == "google":
 		# access_token = login_session["access_token"]
 
