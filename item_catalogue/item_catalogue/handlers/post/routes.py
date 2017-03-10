@@ -81,7 +81,6 @@ def editItem(category_slug,item_slug):
 			flash("Not allowed. The item doesn't exist.", "error")
 			return redirect(url_for("home.readMain"))
 
-		# Check if user is authorized to edit the post.
 		if not helper.is_signed_in():
 			session.close()
 
@@ -95,9 +94,6 @@ def editItem(category_slug,item_slug):
 	elif request.method == "POST":	
 		# TODO: Add a feature that allows users to choose their own slug
 		# TODO: Add a function that checks for special symbols other than '_' in slugs
-		# TODO: Add a function that returns true if user is modifying the same post.
-		#		If so, update title, description, and then redirect user to readItem page.
-		# TODO: Fix the problem of user not being allowed to modify their own post.
 		session = DBSession()
 
 		new_title = request.form["title"]
@@ -132,7 +128,6 @@ def editItem(category_slug,item_slug):
 			flash("'%s' successfully edited."%new_title, "success")
 			return redirect(url_for('post.readItem',category_slug=category_slug,item_slug=item_slug))
 
-		# Otherwise, proceed.
 		# Check if all conditions are met to edit blog post.
 		if not helper.is_signed_in():
 			session.close()

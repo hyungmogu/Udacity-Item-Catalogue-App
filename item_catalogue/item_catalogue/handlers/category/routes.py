@@ -10,12 +10,10 @@ mod = Blueprint("category", __name__, template_folder="templates")
 
 @mod.route("/items/<string:category_slug>/")
 def readCategory(category_slug):
-	# TODO: Fix items not showing on page.
-
 	session = DBSession()
 
 	try:
-		current_category = session.query(Category).filter_by(slug=category_slug).one()
+		category = session.query(Category).filter_by(slug=category_slug).one()
 	except exc.SQLAlchemyError:
 			session.close()
 
@@ -23,9 +21,9 @@ def readCategory(category_slug):
 			return redirect(url_for("home.readMain"))
 
 	categories_for_menu = session.query(Category).order_by(asc(Category.name)).all()
-	items = session.query(MenuItem).filter_by(category_id=current_category.id).all()
+	items = session.query(MenuItem).filter_by(category_id=category.id).all()
 	items_count = (session.query(MenuItem)
-						  .filter_by(category_id=current_category.id).count())
+						  .filter_by(category_id=category.id).count())
 
 	# Determine which button to put. Login or logout?
 	# If logged in, insert logout buttion.
@@ -33,12 +31,12 @@ def readCategory(category_slug):
 	if not helper.is_signed_in():
 		session.close()
 
-		return render_template("category.html", currentCategory=current_category,
+		return render_template("category.html", currentCategory=category,
 				categories=categories_for_menu, menuItems=items,
 				count=items_count)
 
 	session.close()
 
-	return render_template("category.html", currentCategory=current_category,
+	return render_template("category.html", currentCategory=category,
 			categories=categories_for_menu, menuItems=items,
 			count=items_count, logged_in=True)
