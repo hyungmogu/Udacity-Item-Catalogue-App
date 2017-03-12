@@ -63,24 +63,24 @@ header .contents {
 	padding: 0.7em 0.6em;
 }
 
-header .contents #nav {
+#nav {
 	display: flex;
 }
 
-header .contents #nav #logo {
+#logo {
 	width: 60%;
 }
 
-header .contents #nav #logo a {
+#logo a {
 	color: white;
 }
 
-header .contents #nav #logo h1 {
+#logo h1 {
 	margin: 0;
 	display: inline-block;
 }
 
-header .contents #nav #user {
+#user {
 	text-align: right;
 	width: 40%;
 	padding-top: 0.24em;
@@ -124,7 +124,7 @@ main .contents .box {
 	position: relative;
 }
 
-main .contents .box .header .options {
+main .header .options {
 	left: 0;
 	margin: 0.4em 0;
 	position: absolute;
@@ -134,36 +134,36 @@ main .contents .box .header .options {
 	z-index: 9999;
 }
 
-main .contents .box .header .options .wrapper {
+main .header .options .wrapper {
 	padding: 0 0.83em;
 }
 
 /*Contents - Navigation (category and latest menu)*/
-main .contents .box #menu {
+#menu {
 	display: flex;
 	flex-wrap: wrap;
 	position: relative;
 }
 
-main .contents .box #menu .part ul {
+#menu .part ul {
 	list-style-type: none;
 	padding-left: 0;
 }
 
-main .contents .box #menu #menu-items {
-	width: 70%;
-}
-
-main .contents .box #menu #categories {
+#categories {
 	width: 30%;
 }
 
-main .contents .box #menu #menu-items .menu-item span {
+#menu-items {
+	width: 70%;
+}
+
+#menu-items .menu-item span {
 	color: #bbb;
 }
 
 /*Contents - Login*/
-main .contents .box .login-buttons{
+main .login-buttons{
 	max-width: 15.1em;
 	margin: 0 0 1em 0;
 }
