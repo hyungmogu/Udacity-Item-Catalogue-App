@@ -9,7 +9,7 @@ h5 {
 
 a {
 	text-decoration: none;
-	color: #DB5015;
+	color: #d51;
 }
 
 html {
@@ -18,7 +18,7 @@ html {
 
 body {
 	margin: 0; height: relative;
-	background-color: #DCDCDC;
+	background-color: #ddd;
 }
 
 label {
@@ -36,7 +36,7 @@ label {
 }
 
 .button.orange {
-	background-color: #DB5015;
+	background-color: #d51;
 	color: white;
 }
 
@@ -51,12 +51,12 @@ label {
 }
 
 .title {
-	color: #0A2243;
+	color: #123;
 }
 
 /*Header*/
 header {
-	background-color: #0A2243;
+	background-color: #123;
 	color: white;
 	margin-bottom: 0.83em;
 }
@@ -100,21 +100,21 @@ header .contents #nav #user {
 }
 
 #messages .message.error {
-	background-color: #d9534f;
+	background-color: #d55;
 	color: white;
-	border-color: #d43f3a;
+	border-color: #c43;
 }
 
 #messages .message.success {
-	background-color: #5cb85c;
+	background-color: #5b5;
 	color: white;
-	border-color: #4cae4c;
+	border-color: #4a4;
 }
 
 #messages .message.warning {
-	background-color: #f0ad4e;
+	background-color: #ea5;
 	color: white;
-	border-color: #eea236;
+	border-color: #f93;
 }
 
 /*Contents - General*/
@@ -122,7 +122,7 @@ main .contents .box {
 	background-color: white;
 	border-style: solid;
 	border-width: 1px;
-	border-color: #AFAFAF;
+	border-color: #aaa;
 	padding: 0 0.83em;
 	position: relative;
 }
@@ -162,7 +162,7 @@ main .contents .box #menu #categories {
 }
 
 main .contents .box #menu #menu-items .menu-item span {
-	color: #bbbbbb;
+	color: #bbb ;
 }
 
 /*Contents - Login*/
