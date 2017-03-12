@@ -80,48 +80,48 @@ function signInCallback(authResult){
 // FB SIGNIN
 //The credit for this approach goes to 'Facebook Login for the Web with Javascript SDK' guide.
 //See https://developers.facebook.com/docs/facebook-login/web for details.
-  function fbLogin(){
+function fbLogin(){
     FB.login(function(response){
-      sendTokenToServer(response);
+        sendTokenToServer(response);
     },{'scope': 'public_profile,email'});
-  };
+};
 
-  window.fbAsyncInit = function() {
+window.fbAsyncInit = function() {
     FB.init({
-      appId      : '1754114728182463',
-      cookie     : true,  // enable cookies to allow the server to access 
-                          // the session
-      xfbml      : true,  // parse social plugins on this page
-      version    : 'v2.8' // use graph api version 2.8
+        appId      : '1754114728182463',
+        cookie     : true,  // enable cookies to allow the server to access 
+                            // the session
+        xfbml      : true,  // parse social plugins on this page
+        version    : 'v2.8' // use graph api version 2.8
     });
-  };
+};
 
-  // Load the SDK asynchronously
-  (function(d, s, id) {
+// Load the SDK asynchronously
+(function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) return;
     js = d.createElement(s); js.id = id;
     js.src = "//connect.facebook.net/en_US/sdk.js";
     fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
+}(document, 'script', 'facebook-jssdk'));
 
 function sendTokenToServer(response){
     var access_token = response.authResponse.accessToken;
     $.ajax({
-      type: 'POST',
-      url: '/login/fbconnect?state={{session_state}}',
-      processData: false,
-      data: access_token,
-      contentType: 'application/octet-stream; charset=utf-8',
-      success: function(result){
-        if(!result){
-          $('#result').html('Facebook OAuth Error: Received error while logging in.');
+        type: 'POST',
+        url: '/login/fbconnect?state={{session_state}}',
+        processData: false,
+        data: access_token,
+        contentType: 'application/octet-stream; charset=utf-8',
+        success: function(result){
+            if(!result){
+                $('#result').html('Facebook OAuth Error: Received error while logging in.');
+            }
+            else{
+                window.location.href = '/welcome';
+            }
         }
-        else{
-          window.location.href = '/welcome';
-        }
-      }
     });
-  };
+};
 </script>
 {%endblock%}

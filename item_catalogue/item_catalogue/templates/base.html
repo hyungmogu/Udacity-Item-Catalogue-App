@@ -1,55 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-	<title>{%block title%}{%endblock%}</title>
-	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-	<link rel="stylesheet" href="{{url_for('static',filename='styles/bootstrap.min.css')}}">
-	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
-	<link rel="shortcut icon" href="{{url_for('static',filename='favicon.ico')}}" type="image/x-icon">
-	{%block import%}{%endblock%}
+    <title>{%block title%}{%endblock%}</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="{{url_for('static',filename='styles/bootstrap.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
+    <link rel="shortcut icon" href="{{url_for('static',filename='favicon.ico')}}" type="image/x-icon">
+    {%block import%}{%endblock%}
 </head>
 <body>
-	<header>
-		<div class="contents">
-			<section id="nav">
-				<div id="logo">
-					<a href="/"><h1>Catalogue App</h1></a>
-				</div>
-				{%if logged_in%}
-					<div id="user">
-						<a href="/logout" class="button orange">Logout</a>
-					</div>
-				{%else%}
-					<div id="user">
-						<a href="/login" class="button orange">Login</a>
-					</div>
-				{%endif%}
-			</section>
-		</div>
-	</header>
-	{%with messages = get_flashed_messages(with_categories=true)%}
-		{%if messages%}
-			<section id="messages">
-				<div class="contents">
-					{%for message in messages%}
-						<div class="message {{message[0]}}">
-							<span>{{message[1]}}</span>
-						</div>
-					{%endfor%}
-				</div>
-			</section>
-		{%endif%}
-	{%endwith%}
-	<main>
-		<div class="contents">
-			<div class="box">
-				{%block header%}{%endblock%}
-				{%block contents%}{%endblock%}
-			</div>
-		</div>
-	</main>
+    <header>
+        <div class="contents">
+            <section id="nav">
+                <div id="logo">
+                    <a href="/"><h1>Catalogue App</h1></a>
+                </div>
+                {%if logged_in%}
+                    <div id="user">
+                        <a href="/logout" class="button orange">Logout</a>
+                    </div>
+                {%else%}
+                    <div id="user">
+                        <a href="/login" class="button orange">Login</a>
+                    </div>
+                {%endif%}
+            </section>
+        </div>
+    </header>
+    {%with messages = get_flashed_messages(with_categories=true)%}
+        {%if messages%}
+            <section id="messages">
+                <div class="contents">
+                    {%for message in messages%}
+                        <div class="message {{message[0]}}">
+                            <span>{{message[1]}}</span>
+                        </div>
+                    {%endfor%}
+                </div>
+            </section>
+        {%endif%}
+    {%endwith%}
+    <main>
+        <div class="contents">
+            <div class="box">
+                {%block header%}{%endblock%}
+                {%block contents%}{%endblock%}
+            </div>
+        </div>
+    </main>
 </body>
 {%block javascript%}{%endblock%}
 </html>
