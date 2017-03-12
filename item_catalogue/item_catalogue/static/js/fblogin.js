@@ -5,7 +5,7 @@ function fbLogin(session_token){
     FB.login(function(response){
         sendTokenToServer(response,session_token);
     },{'scope': 'public_profile,email'});
-};
+}
 
 window.fbAsyncInit = function() {
     FB.init({
@@ -37,10 +37,9 @@ function sendTokenToServer(response, session_token){
         success: function(result){
             if(!result){
                 $('#result').html('Facebook OAuth Error: Received error while logging in.');
-            }
-            else{
+            } else{
                 window.location.href = '/welcome';
             }
         }
     });
-};
+}
