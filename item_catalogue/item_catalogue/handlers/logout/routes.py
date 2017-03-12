@@ -18,8 +18,11 @@ def logout():
 
           Source:
 
-          - Google: https://developers.google.com/identity/protocols/OAuth2InstalledApp#tokenrevoke
-          - Facebook: https://developers.facebook.com/docs/facebook-login/permissions/requesting-and-revoking#revokelogin 
+          - Google: https://developers.google.com/identity/protocols/
+                    OAuth2InstalledApp#tokenrevoke
+          - Facebook: https://developers.facebook.com/docs/
+                      facebook-login/permissions/
+                      requesting-and-revoking#revokelogin 
 
     """
     if not helper.is_signed_in():
@@ -29,7 +32,9 @@ def logout():
     if login_session["provider"] == "google":
         # access_token = login_session["access_token"]
 
-        # url = "https://accounts.google.com/o/oauth2/revoke?token=%s" % access_token
+        # url = ("https://accounts.google.com/o/oauth2/revoke?token=%s" 
+        #        % access_token)
+        #
         # print(url)
         # internet = httplib2.Http()
         # result = internet.request(url, "GET")[0]
@@ -50,7 +55,8 @@ def logout():
     elif login_session["provider"]=="facebook":
         # facebook_id = login_session["facebook_id"]
 
-        # url = "https://graph.facebook.com/%s/permissions?access_token=" % facebook_id
+        # url = ("https://graph.facebook.com/%s/permissions?access_token=" 
+        #        % facebook_id)
         # h = httplib2.Http()
         # result = h.request(url, 'DELETE')[1]
 

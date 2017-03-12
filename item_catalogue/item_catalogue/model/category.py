@@ -15,4 +15,4 @@ class Category(Base):
             'id': self.id,
             'name': self.name,
             'slug': self.slug
-        }
+            }

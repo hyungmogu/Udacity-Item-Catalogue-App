@@ -1,4 +1,4 @@
-from flask import render_template, request, url_for, redirect, flash, jsonify, make_response
+from flask import (render_template, request, url_for, redirect, flash, jsonify, make_response)
 from flask import Blueprint
 from flask import session as login_session
 from sqlalchemy import asc, desc, exc
@@ -36,8 +36,13 @@ def createItem():
 
         item_slug = helper.generate_slug(title)
         categories = session.query(Category).all()
-        category_slug = session.query(Category).filter_by(id=category_id).one().slug
-        num_of_identical_items = int(session.query(MenuItem).filter_by(category_id=category_id, slug=item_slug).count())
+        category_slug = (
+            session.query(Category)
+            .filter_by(id=category_id)
+            .one().slug)
+        num_of_identical_items = int(
+            session.query(MenuItem).
+            filter_by(category_id=category_id, slug=item_slug).count())
 
         if not helper.is_signed_in():
             session.close()
@@ -47,14 +52,19 @@ def createItem():
         if not (title and description):
             session.close()
 
-            flash("Not allowed. Both title and description must exist.", "error")
-            return render_template('newItem.html', categories=categories, logged_in=True, title=title, category_id=category_id, description=description)
+            flash("Not allowed. Both title and description must exist.", 
+                  "error")
+            return render_template(
+                'newItem.html', categories=categories, logged_in=True, 
+                title=title, category_id=category_id, description=description)
         if not helper.is_unique(num_of_identical_items):
             session.close()
 
             flash("Not allowed. There already exists an item with the same "
                   "slug.", "error")
-            return render_template("newItem.html",categories=categories, logged_in=True, title=title, category_id=category_id, description=description)
+            return render_template(
+                "newItem.html",categories=categories, logged_in=True, 
+                title=title, category_id=category_id, description=description)
 
         item = MenuItem(name=title, slug=item_slug,
                 description=description, category_id=category_id)
@@ -64,7 +74,8 @@ def createItem():
         session.close()
 
         flash("'%s' has been successfully created."%title, "success")
-        return redirect(url_for('post.readItem', category_slug=category_slug, item_slug=item_slug))
+        return redirect(url_for(
+            'post.readItem', category_slug=category_slug, item_slug=item_slug))
 
 @mod.route("/items/<string:category_slug>/<string:item_slug>/edit/", 
     methods=["GET","POST"])
@@ -74,8 +85,14 @@ def editItem(category_slug,item_slug):
 
         categories = session.query(Category).all()
         try:
-            category = session.query(Category).filter_by(slug=category_slug).one()
-            item = session.query(MenuItem).filter_by(slug=item_slug,category_id=category.id).one()
+            category = (
+                session.query(Category)
+                .filter_by(slug=category_slug)
+                .one())
+            item = (
+                session.query(MenuItem)
+                .filter_by(slug=item_slug, category_id=category.id)
+                .one())
         except oexc.NoResultFound:
             session.close()
 
@@ -95,11 +112,13 @@ def editItem(category_slug,item_slug):
 
         session.close()
 
-        return render_template("editItem.html", categories=categories, category_slug=category_slug, item=item, item_slug=item_slug, logged_in=True)
+        return render_template(
+            "editItem.html", categories=categories, category_slug=category_slug, 
+            item=item, item_slug=item_slug, logged_in=True)
 
     elif request.method == "POST":  
         # TODO: Add a feature that allows users to choose their own slug
-        # TODO: Add a function that checks for special symbols other than '_' in slugs
+        # TODO: Add a function that validates slugs
         session = DBSession()
 
         new_title = request.form["title"]
@@ -108,21 +127,29 @@ def editItem(category_slug,item_slug):
         new_item_slug = helper.generate_slug(new_title)
 
         categories = session.query(Category).all()
-        num_of_identical_items = int(session.query(MenuItem).filter_by(category_id=new_category_id,slug=new_item_slug).count())
+        num_of_identical_items = (
+            int(session.query(MenuItem).
+            filter_by(category_id=new_category_id, slug=new_item_slug).
+            count()))
 
         try:
-            new_category_slug = session.query(Category).filter_by(id=new_category_id).one().slug
-            old_item = (session.query(MenuItem, Category.slug)
-                   .join(MenuItem.category)
-                   .filter(Category.slug==category_slug, MenuItem.slug==item_slug)
-                   .one()).MenuItem
+            new_category_slug = (
+                session.query(Category)
+                .filter_by(id=new_category_id)
+                .one().slug)
+            old_item = (
+                session.query(MenuItem, Category.slug)
+                .join(MenuItem.category)
+                .filter(Category.slug==category_slug,
+                        MenuItem.slug==item_slug)
+                .one()).MenuItem
         except oexc.NoResultFound:
             session.close()
 
             flash("Not allowed. The item doesn't exist.", "error")
             return redirect(url_for("home.readMain"))
 
-        # Check if user is updating post without changing slug and category
+        # Check if user is updating without changing slug and category
         if (category_slug==new_category_slug) and (item_slug==new_item_slug):
             old_item.title = new_title
             old_item.description = new_description
@@ -132,7 +159,9 @@ def editItem(category_slug,item_slug):
             session.close()
 
             flash("'%s' successfully edited."%new_title, "success")
-            return redirect(url_for('post.readItem',category_slug=category_slug,item_slug=item_slug))
+            return redirect(url_for(
+                'post.readItem', category_slug=category_slug,
+                item_slug=item_slug))
 
         # Check if all conditions are met to edit blog post.
         if not helper.is_signed_in():
@@ -140,21 +169,41 @@ def editItem(category_slug,item_slug):
 
             flash("Not allowed. 'Update' feature requires login", "error")
             return redirect(url_for("login.readLogin"))
-        if not helper.is_data_changed(new_title, new_description, new_item_slug, new_category_id, old_item):
+        if not helper.is_data_changed(
+                new_title, new_description, new_item_slug, 
+                new_category_id, old_item):
             session.close()
 
             flash("No data has been changed.","warning")
-            return redirect(url_for('post.readItem', category_slug=category_slug, item_slug=item_slug)) 
+            return redirect(url_for(
+                'post.readItem', category_slug=category_slug,
+                item_slug=item_slug)) 
         if not (new_title and new_description):
             session.close()
 
-            flash("Not allowed. Both title and description must not be empty.", "error")
-            return render_template("editItem.html", new_title=new_title, new_description=new_description, new_category_id=new_category_id, categories=categories, category_slug=category_slug, item_slug=item_slug, logged_in=True)
+            flash("Not allowed. Both title and description must not be empty.",
+                  "error")
+            return render_template(
+                "editItem.html", new_title=new_title, 
+                new_description=new_description,
+                new_category_id=new_category_id, 
+                categories=categories, 
+                category_slug=category_slug, 
+                item_slug=item_slug,
+                logged_in=True)
         if not helper.is_unique(num_of_identical_items):
             session.close()
 
-            flash("Not allowed. There already exists an item with the same slug.", "error")
-            return render_template("editItem.html", new_title=new_title, new_description=new_description, new_category_id=new_category_id, categories=categories, category_slug=category_slug, item_slug=item_slug, logged_in=True)
+            flash("Not allowed. There already exists an item with the same "
+                  "slug.", "error")
+            return render_template(
+                "editItem.html", new_title=new_title, 
+                new_description=new_description, 
+                new_category_id=new_category_id,
+                categories=categories,
+                category_slug=category_slug,
+                item_slug=item_slug,
+                logged_in=True)
 
         old_item.name = new_title
         old_item.slug = new_item_slug
@@ -166,7 +215,9 @@ def editItem(category_slug,item_slug):
         session.close()
 
         flash("'%s' successfully edited."%new_title, "success")
-        return redirect(url_for('post.readItem',category_slug=new_category_slug,item_slug=new_item_slug))
+        return redirect(url_for(
+            'post.readItem', category_slug=new_category_slug,
+            item_slug=new_item_slug))
 
 @mod.route("/items/<string:category_slug>/<string:item_slug>/delete/", 
     methods=["GET","POST"])
@@ -175,9 +226,11 @@ def deleteItem(category_slug, item_slug):
         session = DBSession()
 
         try:
-            item = (session.query(MenuItem).join(MenuItem.category).
-                filter(Category.slug==category_slug, MenuItem.slug==item_slug).
-                one())
+            item = (
+                session.query(MenuItem).join(MenuItem.category)
+                .filter(Category.slug==category_slug,
+                        MenuItem.slug==item_slug)
+                .one())
         except oexc.NoResultFound:
             session.close()
 
@@ -197,16 +250,19 @@ def deleteItem(category_slug, item_slug):
 
         session.close()
 
-        return render_template("deleteItem.html", category_slug=category_slug,
+        return render_template(
+            "deleteItem.html", category_slug=category_slug,
             item_slug=item_slug, logged_in=True)
 
     elif (request.method == "POST"):
         session = DBSession()
 
         try:
-            item = (session.query(MenuItem).join(MenuItem.category).
-                filter(Category.slug==category_slug, MenuItem.slug==item_slug).
-                one())
+            item = (
+                session.query(MenuItem).join(MenuItem.category)
+                .filter(Category.slug==category_slug, 
+                        MenuItem.slug==item_slug)
+                .one())
         except oexc.NoResultFound:
             session.close()
 
@@ -237,8 +293,11 @@ def readItem(category_slug,item_slug):
     session = DBSession()
 
     try:
-        item = (session.query(MenuItem,Category.slug).join(MenuItem.category).
-            filter(Category.slug==category_slug,MenuItem.slug==item_slug).one())
+        item = (
+            session.query(MenuItem,Category.slug).join(MenuItem.category)
+            .filter(Category.slug==category_slug, 
+                    MenuItem.slug==item_slug)
+            .one())
     except oexc.NoResultFound:
         session.close()
 

@@ -12,5 +12,6 @@ def readWelcome():
         flash("Not allowed. 'Welcome' page requires login.", "error")
         redirect(url_for("login.readLogin"))
 
-    return render_template("welcome.html", username=login_session["username"], logged_in=True)
+    return render_template("welcome.html", username=login_session["username"],
+                           logged_in=True)
 

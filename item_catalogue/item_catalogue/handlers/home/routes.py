@@ -12,9 +12,11 @@ mod = Blueprint("home", __name__, template_folder="templates")
 def readMain():
     session = DBSession()
 
-    categories_for_menu = session.query(Category).order_by(asc(Category.name)).all()
-    items = (session.query(Category.slug,MenuItem.name,MenuItem.slug).
-            join(MenuItem.category).order_by(desc(MenuItem.id)).limit(20).all())
+    categories_for_menu = (
+        session.query(Category).order_by(asc(Category.name)).all())
+    items = (
+        session.query(Category.slug, MenuItem.name, MenuItem.slug)
+        .join(MenuItem.category).order_by(desc(MenuItem.id)).limit(20).all())
 
     # Determine which button to put. Login or logout?
     # If logged in, insert logout buttion.
@@ -22,9 +24,11 @@ def readMain():
     if not helper.is_signed_in():
         session.close()
 
-        return render_template("main.html", menuItems=items, categories=categories_for_menu)
+        return render_template(
+            "main.html", menuItems=items, categories=categories_for_menu)
 
     session.close()
 
-    return render_template("main.html", menuItems=items, categories=categories_for_menu,
-                           logged_in=True)
+    return render_template(
+        "main.html", menuItems=items, categories=categories_for_menu,
+        logged_in=True)

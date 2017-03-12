@@ -24,7 +24,8 @@ def readLogin():
 
 @mod.route("/login/gconnect", methods=["POST"])
 def gconnect():
-    G_CLIENT_ID = json.loads(open("client_secrets.json","r").read())["web"]["client_id"]
+    G_CLIENT_ID = (
+        json.loads(open("client_secrets.json","r").read())["web"]["client_id"])
     one_time_code = request.data
 
     # Harvest access token and gplus_id
@@ -48,8 +49,8 @@ def gconnect():
         return helper.send_response(500,result.get("error"))
     # If valid, verify that it is for this app.
     if (result["issued_to"] != G_CLIENT_ID):
-        return helper.send_response(401,result.get("Login invalid. Token's client ID "
-                "does not match"))
+        return helper.send_response(
+            401, result.get("Login invalid. Token's client ID does not match"))
     # If all is well, the credential is correct with high confidence.
     if helper.g_is_user_already_logged_in(gplus_id):
         return helper.send_response(200, "Current User is already logged in.")

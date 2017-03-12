@@ -5,7 +5,8 @@ def is_signed_in():
         return False
     return True
 
-def is_data_changed(new_title, new_description, new_item_slug, new_category_id, old_item):
+def is_data_changed(
+        new_title, new_description, new_item_slug, new_category_id, old_item):
     if not (new_title == old_item.name):
         return True
     if not (new_item_slug == old_item.slug):

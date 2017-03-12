@@ -25,10 +25,11 @@ def readCategory(category_slug):
         flash("Error occured. Multiple categories found.", "error")
         return redirect(url_for("home.readMain"))
 
-    categories_for_menu = session.query(Category).order_by(asc(Category.name)).all()
+    categories_for_menu = (
+        session.query(Category).order_by(asc(Category.name)).all())
     items = session.query(MenuItem).filter_by(category_id=category.id).all()
-    items_count = (session.query(MenuItem)
-                          .filter_by(category_id=category.id).count())
+    items_count = (
+        session.query(MenuItem).filter_by(category_id=category.id).count())
 
     # Determine which button to put. Login or logout?
     # If logged in, insert logout buttion.
@@ -36,12 +37,14 @@ def readCategory(category_slug):
     if not helper.is_signed_in():
         session.close()
 
-        return render_template("category.html", currentCategory=category,
-                categories=categories_for_menu, menuItems=items,
-                count=items_count)
+        return render_template(
+            "category.html", currentCategory=category,
+            categories=categories_for_menu, menuItems=items,
+            count=items_count)
 
     session.close()
 
-    return render_template("category.html", currentCategory=category,
-            categories=categories_for_menu, menuItems=items,
-            count=items_count, logged_in=True)
+    return render_template(
+        "category.html", currentCategory=category,
+        categories=categories_for_menu, menuItems=items,
+        count=items_count, logged_in=True)

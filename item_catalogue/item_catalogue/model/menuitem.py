@@ -21,4 +21,4 @@ class MenuItem(Base):
             'slug': self.slug,
             'description': self.description,
             'category_id': self.category_id,
-        }
+            }
