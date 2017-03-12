@@ -4,49 +4,49 @@
 {%block import%}{%endblock%}
 
 {%block header%}
-	<section class="header">
-		<h2 class="title">New Item</h2>
-	</section>
+    <section class="header">
+        <h2 class="title">New Item</h2>
+    </section>
 {%endblock%}
 
 {%block contents%}
-	<section id="menu-item-form">
-		<form action="/items/new/" method="POST" enctype="multipart/form-data">
-			<div class="form-group">
-				<label for='form-title'>Title</label>
-				{%if title%}
-				<input id="form-title" type="text" name="title" value="{{title}}">
-				{%else%}
-				<input id="form-title" type="text" name="title">
-				{%endif%}
-			</div>
-			<div class="form-group">
-				<label for='form-description'>Description</label>
-				{%if description%}
-				<textarea id="form-description" name="description" cols='40' rows='4'>{{description}}</textarea>
-				{%else%}
-				<textarea id="form-description" name="description" cols='40' rows='4'></textarea>
-				{%endif%}
-			</div>
-			<div class="form-group">
-				<label for='form-category'>Category</label>
-				<select id='form-category' name="category">
-					{%if category_id%}
-						{%for category in categories%}
-						<option value={{category.id}} {%if category.id == category_id%}selected{%endif%}>{{category.name}}</option>
-						{%endfor%}
-					{%else%}
-						{%for category in categories%}
-						<option value={{category.id}}>{{category.name}}</option>
-						{%endfor%}
-					{%endif%}
-				</select>
-			</div>
-			<div class="form-group">
-				<input type="submit" value="submit">
-			</div>
-		</form>
-	</section>
+    <section id="menu-item-form">
+        <form action="/items/new/" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="form-title">Title</label>
+                {%if title%}
+                <input id="form-title" type="text" name="title" value="{{title}}">
+                {%else%}
+                <input id="form-title" type="text" name="title">
+                {%endif%}
+            </div>
+            <div class="form-group">
+                <label for="form-description">Description</label>
+                {%if description%}
+                <textarea id="form-description" name="description" cols="40" rows="4">{{description}}</textarea>
+                {%else%}
+                <textarea id="form-description" name="description" cols="40" rows="4"></textarea>
+                {%endif%}
+            </div>
+            <div class="form-group">
+                <label for="form-category">Category</label>
+                <select id="form-category" name="category">
+                    {%if category_id%}
+                        {%for category in categories%}
+                        <option value={{category.id}} {%if category.id == category_id%}selected{%endif%}>{{category.name}}</option>
+                        {%endfor%}
+                    {%else%}
+                        {%for category in categories%}
+                        <option value={{category.id}}>{{category.name}}</option>
+                        {%endfor%}
+                    {%endif%}
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="submit">
+            </div>
+        </form>
+    </section>
 {%endblock%}
 
 
