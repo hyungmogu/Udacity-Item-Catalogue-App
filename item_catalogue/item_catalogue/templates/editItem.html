@@ -33,8 +33,8 @@
                 {%endif%}
             </div>
             <div class="form-group">
-                <label for='form-category'>Category</label>
-                <select id='form-category' name="category">
+                <label for="form-category">Category</label>
+                <select id="form-category" name="category">
                     {%if new_category_id%}
                         {%for category in categories%}
                             <option value={{category.id}} {%if category.id == new_category_id%}selected{%endif%}>{{category.name}}</option>
