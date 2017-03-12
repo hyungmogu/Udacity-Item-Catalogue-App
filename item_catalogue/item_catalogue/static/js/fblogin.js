@@ -5,7 +5,7 @@ function fbLogin(session_token){
     FB.login(function(response){
         sendTokenToServer(response,session_token);
     },{'scope': 'public_profile,email'});
-};
+}
 
 window.fbAsyncInit = function() {
     FB.init({
@@ -42,4 +42,4 @@ function sendTokenToServer(response, session_token){
             }
         }
     });
-};
+}

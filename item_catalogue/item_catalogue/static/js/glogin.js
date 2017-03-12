@@ -39,4 +39,4 @@ function gLogin(session_token){
             $('section.header').append('<ul id="messages"><li class="message">Google OAuth Error: Error occured while communicating with Google server.</li></ul>');
         };
     });
-};
+}
