@@ -19,19 +19,23 @@
     <section id="menu">
         <div id="categories" class="part">
             <h2 class="title">Categories</h2>
+
             <ul>
             {%for category in categories%}
                 <li class="menu-item"><a href="/items/{{category.slug}}">{{category.name}}</a></li>
             {%endfor%}
             </ul>
+
         </div>
         <div id="menu-items" class="part">
             <h2 class="title">{{currentCategory.name}} Items ({{count}} Items)</h2>
+
             <ul>
             {%for menuItem in menuItems%}
                 <li class="menu-item"><a href="/items/{{currentCategory.slug}}/{{menuItem.slug}}/">{{menuItem.name}}</a></li>
             {%endfor%}
             </ul>
+            
         </div>
     </section>
 {%endblock%}
