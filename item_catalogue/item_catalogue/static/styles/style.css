@@ -8,7 +8,7 @@ h5 {
 }
 
 a {
-	text-decoration:none;
+	text-decoration: none;
 	color: #DB5015;
 }
 
@@ -67,7 +67,7 @@ header .contents {
 }
 
 header .contents #nav {
-	display:flex;
+	display: flex;
 }
 
 header .contents #nav #logo {
@@ -80,7 +80,7 @@ header .contents #nav #logo a {
 
 header .contents #nav #logo h1 {
 	margin: 0;
-	display:inline-block;
+	display: inline-block;
 }
 
 header .contents #nav #user {
@@ -143,13 +143,13 @@ main .contents .box .header .options .wrapper {
 
 /*Contents - Navigation (category and latest menu)*/
 main .contents .box #menu {
-	display:flex;
-	flex-wrap:wrap;
+	display: flex;
+	flex-wrap: wrap;
 	position: relative;
 }
 
 main .contents .box #menu .part ul {
-	list-style-type:none;
+	list-style-type: none;
 	padding-left: 0;
 }
 
