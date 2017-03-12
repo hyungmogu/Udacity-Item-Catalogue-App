@@ -8,6 +8,7 @@ from .. import helper
 
 mod = Blueprint("home", __name__, template_folder="templates")
 
+
 @mod.route("/")
 def readMain():
     session = DBSession()

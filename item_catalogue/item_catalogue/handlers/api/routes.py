@@ -6,6 +6,7 @@ from item_catalogue.model.menuitem import MenuItem
 
 mod = Blueprint("api", __name__, template_folder="templates")
 
+
 @mod.route("/catalog.json/")
 def readAPI():
     session = DBSession()

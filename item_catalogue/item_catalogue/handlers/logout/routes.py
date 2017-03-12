@@ -8,6 +8,7 @@ from .. import helper
 
 mod = Blueprint("logout", __name__, template_folder="templates")
 
+
 @mod.route("/logout")
 def logout():
     """

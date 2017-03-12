@@ -11,6 +11,7 @@ from . import helper
 
 mod = Blueprint("login",__name__,template_folder="templates")
 
+
 #LOGIN
 @mod.route("/login/")
 def readLogin():
@@ -21,6 +22,7 @@ def readLogin():
     login_session["state"] = state
 
     return render_template("login.html",session_state=login_session["state"])
+
 
 @mod.route("/login/gconnect", methods=["POST"])
 def gconnect():
@@ -65,6 +67,7 @@ def gconnect():
     login_session["email"] = data["email"]
 
     return helper.send_response(200, "success")
+
 
 @mod.route("/login/fbconnect",methods=["POST"])
 def fbconnect():

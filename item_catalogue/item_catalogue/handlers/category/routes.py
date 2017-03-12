@@ -8,6 +8,7 @@ from .. import helper
 
 mod = Blueprint("category", __name__, template_folder="templates")
 
+
 @mod.route("/items/<string:category_slug>/")
 def readCategory(category_slug):
     session = DBSession()

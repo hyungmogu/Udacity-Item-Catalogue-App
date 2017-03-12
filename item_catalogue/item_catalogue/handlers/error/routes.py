@@ -2,6 +2,7 @@ from flask import Blueprint, redirect, url_for, flash
 
 mod = Blueprint("error", __name__)
 
+
 #ERROR HANDLERS
 @mod.app_errorhandler(404)
 def page_not_found(error):

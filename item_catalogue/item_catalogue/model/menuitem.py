@@ -4,6 +4,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String
 from item_catalogue.model import Base
 from item_catalogue.model.category import Category
 
+
 class MenuItem(Base):
     __tablename__ = 'menu_item'
     id = Column(Integer, primary_key = True)

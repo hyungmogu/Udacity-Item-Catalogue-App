@@ -11,6 +11,7 @@ from .. import helper
 
 mod = Blueprint("post", __name__, template_folder="templates")
 
+
 @mod.route("/items/new/", methods=["GET","POST"])
 def createItem():
     if(request.method == "GET"):
@@ -76,6 +77,7 @@ def createItem():
         flash("'%s' has been successfully created."%title, "success")
         return redirect(url_for(
             'post.readItem', category_slug=category_slug, item_slug=item_slug))
+
 
 @mod.route("/items/<string:category_slug>/<string:item_slug>/edit/", 
     methods=["GET","POST"])
@@ -219,6 +221,7 @@ def editItem(category_slug,item_slug):
             'post.readItem', category_slug=new_category_slug,
             item_slug=new_item_slug))
 
+
 @mod.route("/items/<string:category_slug>/<string:item_slug>/delete/", 
     methods=["GET","POST"])
 def deleteItem(category_slug, item_slug):
@@ -287,6 +290,7 @@ def deleteItem(category_slug, item_slug):
         
         flash("'%s' successfully deleted." % item.name, "success")
         return redirect(url_for("home.readMain"))
+
 
 @mod.route("/items/<string:category_slug>/<string:item_slug>/")
 def readItem(category_slug,item_slug):
