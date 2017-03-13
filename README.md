@@ -6,26 +6,23 @@
 
 This is a project for Udacity's "Introduction to Full-stack Development" course. The project utilizes FLASK, SQLAlchemy, SQLite, Python, Jinja2 and CSS3.
 
-## Step-by-step Instruction
+## Dependencies
+- Flask 0.11.0
+- SQLAlchemy 1.1.4
+- Jinja2 2.8
+- httplib2 0.9.2
+- oauth2client 4.0.0
+- requests 2.2.1
+- sqlite3 3.8.2
 
-### 1. Downloading File
+## Getting Started
+### Setting up
 
-#### Windows
+#### 1. Installing Git
 
-1. Install [git bash](https://git-scm.com/downloads) 
-2. Open git bash
-3. Navigate to a directory of choice
-4. Type `git clone https://github.com/hyungmogu/Udacity-Item-Catalogue-App/`; download the repository
+1. Follow the instruction provoided [here](https://www.atlassian.com/git/tutorials/install-git)
 
-#### Linux/MacOS
-
-1. Open terminal
-2. Navigate to a directory of choice
-3. Type `git clone https://github.com/hyungmogu/Udacity-Item-Catalogue-App/`; download the repository
-
-### 2. Installing Vagrant
-
-#### Windows, Linux and Mac OS
+#### 2. Installing Vagrant
 
 1. Download and install [Virtual Box](https://www.virtualbox.org/)
 2. Download and install [Vagrant](https://www.vagrantup.com/downloads.html)
@@ -33,39 +30,47 @@ This is a project for Udacity's "Introduction to Full-stack Development" course.
 3. Boot into BIOS and enable virtual environment
   - NOTE: This step varies for different motherboard models and versions. Please refer to instruction provided by manufacturer for details.  
 
-### 3. Running Vagrant
+#### 3. Downloading Project Files
 
-#### Windows
+1. Navigate to a directory of choice
+2. Type `git clone https://github.com/hyungmogu/Udacity-Item-Catalogue-App/`; download the repository
 
-1. Open git bash
-2. Navigate to the directory where the cloned repo is located
-3. Type `cd /udacity-tournament-result/vagrant/`; navigate to where `VagrantFile` is located
-4. Type `vagrant up`; let vagrant to setup dependencies
-5. Type `vagrant ssh` when step 4 is finished; login to the virtual machine
+#### 4. Running Vagrant
+
+1. Type `cd udacity-item-catalogue`; navigate to where `VagrantFile` is located
+2. Type `vagrant up`; let vagrant to setup dependencies
+3. Type `vagrant ssh`; login to the virtual machine
+
+#### 5. Installing Dependencies for Python
+
+1. Type the following after loggin in:
+```
+cd /vagrant/item-catalogue
+python setup.py install
+```
+
+#### 6. Setting up OAuth for Google and Facebook Login
+
+1. Type `cd item-catalogue`; go inside the project directory
+2. Open `client_secret.json` and `fb_client_secret.json` using an editor of choice; follow instructions there
+3. Type `cd static/js`; navigate to the directory containing OAuth Javascript SDKs.
+4. Open `fblogin.js` and `glogin.js` using an editor of choice; fill in using information obtained from step 2.
 
 
-#### Linux, Mac OS
+### Running Flask Server
 
-1. Open terminal
-2. Navigate to the directory where the cloned repo is located
-3. Type `cd /udacity-tournament-result/vagrant/`; navigate to where `VagrantFile` is located
-4. Type `vagrant up`; let vagrant to setup dependencies
-5. Type `vagrant ssh` when step 4 is finished; login to the virtual machine
+1. Type `cd ../../`; go back to project root directory
 
-### 4. Running Flask Server (In Vagrant)
+2. Type the following:
+```
+export FLASK_APP=run.py
+flask run
+```
 
-1. Type `cd /vagrant/Item\ Catalogue` after logging in
-2. Type `export FLASK_APP=web_server.py` once inside
-3. Type `flask run`
-
-### 5. Viewing Content
+### Viewing Demo
 
 1. Type `http://localhost:5000/` in browser
 
-### 6. Closing Server
+### Closing Server
 
-#### Windows
-1. Press `Ctrl` + `c` in virtual machine where local server is running
-
-#### Linux, Mac OS
-1. Press `Ctrl` + `c` in terminal where local server is running
+1. Press `Ctrl` + `c` in window where local server is running
