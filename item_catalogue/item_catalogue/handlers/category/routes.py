@@ -8,40 +8,44 @@ from .. import helper
 
 mod = Blueprint("category", __name__, template_folder="templates")
 
+
 @mod.route("/items/<string:category_slug>/")
-def readCategory(category_slug):
-	session = DBSession()
+def read_category(category_slug):
+    session = DBSession()
 
-	try:
-		category = session.query(Category).filter_by(slug=category_slug).one()
-	except oexc.NoResultFound:
-		session.close()
+    try:
+        category = session.query(Category).filter_by(slug=category_slug).one()
+    except oexc.NoResultFound:
+        session.close()
 
-		flash("Not allowed. The page doesn't exist.", "error")
-		return redirect(url_for("home.readMain"))
-	except oexc.MultipleResultsFound:
-		session.close()
+        flash("Not allowed. The page doesn't exist.", "error")
+        return redirect(url_for("home.read_main"))
+    except oexc.MultipleResultsFound:
+        session.close()
 
-		flash("Error occured. Multiple categories found.", "error")
-		return redirect(url_for("home.readMain"))
+        flash("Error occured. Multiple categories found.", "error")
+        return redirect(url_for("home.read_main"))
 
-	categories_for_menu = session.query(Category).order_by(asc(Category.name)).all()
-	items = session.query(MenuItem).filter_by(category_id=category.id).all()
-	items_count = (session.query(MenuItem)
-						  .filter_by(category_id=category.id).count())
+    categories_for_menu = (
+        session.query(Category).order_by(asc(Category.name)).all())
+    items = session.query(MenuItem).filter_by(category_id=category.id).all()
+    items_count = (
+        session.query(MenuItem).filter_by(category_id=category.id).count())
 
-	# Determine which button to put. Login or logout?
-	# If logged in, insert logout buttion.
-	# If not, insert login button
-	if not helper.is_signed_in():
-		session.close()
+    # Determine which button to put. Login or logout?
+    # If logged in, insert logout buttion.
+    # If not, insert login button
+    if not helper.is_signed_in():
+        session.close()
 
-		return render_template("category.html", currentCategory=category,
-				categories=categories_for_menu, menuItems=items,
-				count=items_count)
+        return render_template(
+            "category.html", current_category=category,
+            categories=categories_for_menu, menu_items=items,
+            count=items_count)
 
-	session.close()
+    session.close()
 
-	return render_template("category.html", currentCategory=category,
-			categories=categories_for_menu, menuItems=items,
-			count=items_count, logged_in=True)
+    return render_template(
+        "category.html", current_category=category,
+        categories=categories_for_menu, menu_items=items,
+        count=items_count, logged_in=True)

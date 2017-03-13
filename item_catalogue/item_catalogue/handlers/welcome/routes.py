@@ -8,9 +8,10 @@ mod = Blueprint("welcome", __name__, template_folder="templates")
 
 @mod.route("/welcome/")
 def readWelcome():
-	if not helper.is_signed_in():
-		flash("Not allowed. 'Welcome' page requires login.", "error")
-		redirect(url_for("login.readLogin"))
+    if not helper.is_signed_in():
+        flash("Not allowed. 'Welcome' page requires login.", "error")
+        redirect(url_for("login.readLogin"))
 
-	return render_template("welcome.html", username=login_session["username"], logged_in=True)
+    return render_template("welcome.html", username=login_session["username"],
+                           logged_in=True)
 

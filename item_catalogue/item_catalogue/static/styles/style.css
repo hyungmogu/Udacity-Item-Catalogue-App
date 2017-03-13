@@ -1,48 +1,169 @@
+/*General*/
 h1,
 h2,
 h3,
 h4,
-h5 {font-family: Arial;}
-a {text-decoration:none; color: #DB5015;}
+h5 {
+	font-family: Arial;
+}
 
-html {height: 100%;}
-body {margin: 0; height: relative; background-color: #DCDCDC;}
-label {display: block; font-weight: bold;}
+a {
+	text-decoration: none;
+	color: #d51;
+}
 
-.button {border-style: solid; border-width: 0.1em; border-radius: 0.3em; border-color: transparent; padding: 0.42em 1.1em; display: inline-block;}
-.button.orange {background-color: #DB5015; color: white;}
-.contents {padding: 0 0.6em; max-width: 768px; margin: 0 auto;}
-.form-group {margin: 1em 0;}
-.title {color: #0A2243;}
+html {
+	height: 100%;
+}
+
+body {
+	margin: 0; height: relative;
+	background-color: #ddd;
+}
+
+label {
+	display: block;
+	font-weight: bold;
+}
+
+.button {
+	border-radius: 0.3em;
+	border: 0.1em solid transparent;
+	padding: 0.42em 1.1em;
+	display: inline-block;
+}
+
+.button.orange {
+	background-color: #d51;
+	color: white;
+}
+
+.contents {
+	padding: 0 0.6em;
+	max-width: 768px;
+	margin: 0 auto;
+}
+
+.form-group {
+	margin: 1em 0;
+}
+
+.title {
+	color: #123;
+}
 
 /*Header*/
-header {background-color: #0A2243; color: white; margin-bottom: 0.83em;}
-header .contents {padding-top: 0.7em; padding-bottom: 0.7em;}
-header .contents #nav {display:flex;}
-header .contents #nav #logo {width: 60%;} 
-header .contents #nav #logo a {color: white;}
-header .contents #nav #logo h1 {margin: 0; display:inline-block;}
-header .contents #nav #user {text-align: right; width: 40%; padding-top: 0.24em;}
+header {
+	background-color: #123;
+	color: white;
+	margin-bottom: 0.83em;
+}
 
-/*Message box*/
-#messages {margin-bottom: 1em;}
-#messages .message {padding: 1em 0.83em; border-radius: 5px;}
-#messages .message.error {background-color: #d9534f; color: white; border-color: #d43f3a;}
-#messages .message.success {background-color: #5cb85c; color: white; border-color: #4cae4c;}
-#messages .message.warning {background-color: #f0ad4e; color: white; border-color: #eea236;}
+header .contents {
+	padding: 0.7em 0.6em;
+}
 
-/*Main*/
-main .contents .box {background-color: white; border-style: solid; border-width: 1px; border-color: #AFAFAF; padding: 0 0.83em; position: relative;}
-main .contents .box .header .options {left: 0; margin: 0.4em 0; position: absolute; text-align: right; top: 0; width: 100%; z-index: 9999;}
-main .contents .box .header .options .wrapper {padding: 0 0.83em;}
-main .contents .box .login-buttons{max-width: 15.1em; margin-bottom: 1em;}
-/*Main - Header*/
+#nav {
+	display: flex;
+}
 
-/*Main - Menu*/
-main .contents .box #menu {display:flex; flex-wrap:wrap; position: relative;}
-main .contents .box #menu .part ul {list-style-type:none; padding-left: 0;}
+#logo {
+	width: 60%;
+}
 
-main .contents .box #menu #menu-items {width: 70%;}
-main .contents .box #menu #categories {width: 30%;}
+#logo a {
+	color: white;
+}
 
-main .contents .box #menu #menu-items .menu-item span {color: #bbbbbb;}
+#logo h1 {
+	margin: 0;
+	display: inline-block;
+}
+
+#user {
+	text-align: right;
+	width: 40%;
+	padding-top: 0.24em;
+}
+
+/*Messages*/
+#messages {
+	margin-bottom: 1em;
+}
+
+#messages .message {
+	padding: 1em 0.83em;
+	border-radius: 5px;
+}
+
+#messages .message.error {
+	background-color: #d55;
+	color: white;
+	border-color: #c43;
+}
+
+#messages .message.success {
+	background-color: #5b5;
+	color: white;
+	border-color: #4a4;
+}
+
+#messages .message.warning {
+	background-color: #ea5;
+	color: white;
+	border-color: #f93;
+}
+
+/*Contents - General*/
+main .contents .box {
+	background-color: white;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #aaa;
+	padding: 0 0.83em;
+	position: relative;
+}
+
+main .header .options {
+	left: 0;
+	margin: 0.4em 0;
+	position: absolute;
+	text-align: right;
+	top: 0;
+	width: 100%;
+	z-index: 9999;
+}
+
+main .header .options .wrapper {
+	padding: 0 0.83em;
+}
+
+/*Contents - Navigation (category and latest menu)*/
+#menu {
+	display: flex;
+	flex-wrap: wrap;
+	position: relative;
+}
+
+#menu .part ul {
+	list-style-type: none;
+	padding-left: 0;
+}
+
+#categories {
+	width: 30%;
+}
+
+#menu-items {
+	width: 70%;
+}
+
+#menu-items .menu-item span {
+	color: #bbb;
+}
+
+/*Contents - Login*/
+main .login-buttons{
+	max-width: 15.1em;
+	margin: 0 0 1em 0;
+}

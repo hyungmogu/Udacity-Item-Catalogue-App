@@ -1,4 +1,4 @@
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 __author__ = "Hyungmo Gu"
 
 
@@ -14,6 +14,7 @@ engine = create_engine("sqlite:///model/itemcatalogue.db")
 DBSession = sessionmaker(bind = engine)
 
 import item_catalogue.handlers
+
 
 # url_for cash busting.
 # Note: This solves the trouble of css not refreshing the old file.

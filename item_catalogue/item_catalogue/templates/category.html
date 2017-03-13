@@ -1,39 +1,43 @@
 {%extends "base.html"%}
 
-{%block title%}{{currentCategory.name}}|Item Catalogue{%endblock%}
+{%block title%}{{current_category.name}}|Item Catalogue{%endblock%}
 {%block import%}{%endblock%}
 
 {%block header%}
-	<section class="header">
-		{%if logged_in%}
-		<div class="options">
-			<div class="wrapper">
-				<a href="/items/new/">Add New Item</a>
-			</div>
-		</div>
-		{%endif%}
-	</section>
+    <section class="header">
+        {%if logged_in%}
+        <div class="options">
+            <div class="wrapper">
+                <a href="/items/new/">Add New Item</a>
+            </div>
+        </div>
+        {%endif%}
+    </section>
 {%endblock%}
 
 {%block contents%}
-	<section id="menu">
-		<div id="categories" class="part">
-			<h2 class="title">Categories</h2>
-			<ul>
-			{%for category in categories%}
-				<li class="menu-item"><a href="/items/{{category.slug}}">{{category.name}}</a></li>
-			{%endfor%}
-			</ul>
-		</div>
-		<div id="menu-items" class="part">
-			<h2 class="title">{{currentCategory.name}} Items ({{count}} Items)</h2>
-			<ul>
-			{%for menuItem in menuItems%}
-				<li class="menu-item"><a href="/items/{{currentCategory.slug}}/{{menuItem.slug}}/">{{menuItem.name}}</a></li>
-			{%endfor%}
-			</ul>
-		</div>
-	</section>
+    <section id="menu">
+        <div id="categories" class="part">
+            <h2 class="title">Categories</h2>
+
+            <ul>
+            {%for category in categories%}
+                <li class="menu-item"><a href="/items/{{category.slug}}">{{category.name}}</a></li>
+            {%endfor%}
+            </ul>
+
+        </div>
+        <div id="menu-items" class="part">
+            <h2 class="title">{{current_category.name}} Items ({{count}} Items)</h2>
+
+            <ul>
+            {%for menu_item in menu_items%}
+                <li class="menu-item"><a href="/items/{{current_category.slug}}/{{menu_item.slug}}/">{{menu_item.name}}</a></li>
+            {%endfor%}
+            </ul>
+            
+        </div>
+    </section>
 {%endblock%}
 
 
