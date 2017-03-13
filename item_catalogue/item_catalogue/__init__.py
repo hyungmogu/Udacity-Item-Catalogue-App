@@ -15,6 +15,7 @@ DBSession = sessionmaker(bind = engine)
 
 import item_catalogue.handlers
 
+
 # url_for cash busting.
 # Note: This solves the trouble of css not refreshing the old file.
 # More info can be found here: http://flask.pocoo.org/snippets/40/.

@@ -31,8 +31,8 @@
             <h2 class="title">Latest Items</h2>
 
             <ul>
-            {%for menuItem in menuItems%}
-                <li class="menu-item"><a href="/items/{{menuItem[0]}}/{{menuItem[2]}}/">{{menuItem[1]}} <span>({{menuItem[0]}})</span></a></li>
+            {%for menu_item in menu_items%}
+                <li class="menu-item"><a href="/items/{{menu_item[0]}}/{{menu_item[2]}}/">{{menu_item[1]}} <span>({{menu_item[0]}})</span></a></li>
             {%endfor%}
             </ul>
             
