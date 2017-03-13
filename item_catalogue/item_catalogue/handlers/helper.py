@@ -9,13 +9,13 @@ def is_signed_in():
 
 def is_data_changed(
         new_title, new_description, new_item_slug, new_category_id, old_item):
-    if not (new_title == old_item.name):
+    if not new_title == old_item.name:
         return True
-    if not (new_item_slug == old_item.slug):
+    if not new_item_slug == old_item.slug:
         return True
-    if not (new_description == old_item.description):
+    if not new_description == old_item.description:
         return True
-    if not (new_category_id == old_item.category_id):
+    if not new_category_id == old_item.category_id:
         return True
     return False
 

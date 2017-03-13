@@ -14,7 +14,7 @@ mod = Blueprint("post", __name__, template_folder="templates")
 
 @mod.route("/items/new/", methods=["GET","POST"])
 def create_item():
-    if(request.method == "GET"):
+    if request.method == "GET":
         session = DBSession()
 
         categories = session.query(Category).all()
@@ -28,7 +28,7 @@ def create_item():
         return render_template("newItem.html", categories = categories,
                 logged_in=True)
 
-    elif(request.method == "POST"):
+    elif request.method == "POST":
         session = DBSession()
 
         title = request.form["title"]
@@ -50,7 +50,7 @@ def create_item():
 
             flash("Not allowed. 'New Item' feature requires login.", "error")
             return redirect(url_for('login.read_login'))
-        if not (title and description):
+        if not title and description:
             session.close()
 
             flash("Not allowed. Both title and description must exist.", 
@@ -180,7 +180,7 @@ def edit_item(category_slug,item_slug):
             return redirect(url_for(
                 'post.readItem', category_slug=category_slug,
                 item_slug=item_slug)) 
-        if not (new_title and new_description):
+        if not new_title and new_description:
             session.close()
 
             flash("Not allowed. Both title and description must not be empty.",
@@ -225,7 +225,7 @@ def edit_item(category_slug,item_slug):
 @mod.route("/items/<string:category_slug>/<string:item_slug>/delete/", 
     methods=["GET","POST"])
 def delete_item(category_slug, item_slug):
-    if(request.method == "GET"):
+    if request.method == "GET":
         session = DBSession()
 
         try:
@@ -257,7 +257,7 @@ def delete_item(category_slug, item_slug):
             "deleteItem.html", category_slug=category_slug,
             item_slug=item_slug, logged_in=True)
 
-    elif (request.method == "POST"):
+    elif request.method == "POST":
         session = DBSession()
 
         try:
