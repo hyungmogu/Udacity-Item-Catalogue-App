@@ -14,7 +14,7 @@ mod = Blueprint("login", __name__, template_folder="templates")
 
 #LOGIN
 @mod.route("/login/")
-def readLogin():
+def read_login():
     # Create state token.
     # Note: This shields user from Cross Site Reference Forgery Attack.
     state = "".join(random.choice(string.ascii_uppercase + string.digits +
@@ -25,7 +25,7 @@ def readLogin():
 
 
 @mod.route("/login/gconnect", methods=["POST"])
-def gconnect():
+def g_connect():
     G_CLIENT_ID = (
         json.loads(open("client_secrets.json", "r").read())["web"]["client_id"])
     one_time_code = request.data
@@ -70,7 +70,7 @@ def gconnect():
 
 
 @mod.route("/login/fbconnect", methods=["POST"])
-def fbconnect():
+def fb_connect():
     one_time_token = request.data
 
     if not helper.is_session_token_valid():

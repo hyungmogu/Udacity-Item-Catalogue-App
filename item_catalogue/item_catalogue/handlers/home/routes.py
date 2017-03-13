@@ -10,7 +10,7 @@ mod = Blueprint("home", __name__, template_folder="templates")
 
 
 @mod.route("/")
-def readMain():
+def read_main():
     session = DBSession()
 
     categories_for_menu = (

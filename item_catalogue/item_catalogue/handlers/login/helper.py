@@ -8,7 +8,7 @@ from oauth2client.client import flow_from_clientsecrets
 
 
 def send_response(status_code,message=""):
-    response = make_response(json.dumps(message),status_code)
+    response = make_response(json.dumps(message), status_code)
     response.headers["Content-Type"] = "application/json"
 
     return response
@@ -58,9 +58,9 @@ def g_check_access_token(access_token):
 def fb_get_access_token(one_time_token):
     REDIRECT_URI = "http://localhost:5000/welcome"
     FB_APP_ID = (
-        json.loads(open("fb_client_secrets.json","r").read())["web"]["app_id"])
+        json.loads(open("fb_client_secrets.json", "r").read())["web"]["app_id"])
     FB_APP_SECRET = (
-        json.loads(open("fb_client_secrets.json","r").read())["web"]["app_secret"])
+        json.loads(open("fb_client_secrets.json", "r").read())["web"]["app_secret"])
 
     url = ("https://graph.facebook.com/oauth/access_token?"
         "grant_type=fb_exchange_token&"

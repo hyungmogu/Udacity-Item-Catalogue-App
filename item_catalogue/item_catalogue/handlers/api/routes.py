@@ -8,7 +8,7 @@ mod = Blueprint("api", __name__, template_folder="templates")
 
 
 @mod.route("/catalog.json/")
-def readAPI():
+def read_api():
     session = DBSession()
     categories = session.query(Category).all()
 

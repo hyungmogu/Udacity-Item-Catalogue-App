@@ -13,7 +13,7 @@ mod = Blueprint("post", __name__, template_folder="templates")
 
 
 @mod.route("/items/new/", methods=["GET","POST"])
-def createItem():
+def create_item():
     if(request.method == "GET"):
         session = DBSession()
 
@@ -21,7 +21,7 @@ def createItem():
 
         if not helper.is_signed_in():
             flash("Not allowed. 'New Item' page requires login.", "error")
-            return redirect(url_for("login.readLogin"))
+            return redirect(url_for("login.read_login"))
 
         session.close()
 
@@ -49,7 +49,7 @@ def createItem():
             session.close()
 
             flash("Not allowed. 'New Item' feature requires login.", "error")
-            return redirect(url_for('login.readLogin'))
+            return redirect(url_for('login.read_login'))
         if not (title and description):
             session.close()
 
@@ -81,7 +81,7 @@ def createItem():
 
 @mod.route("/items/<string:category_slug>/<string:item_slug>/edit/", 
     methods=["GET","POST"])
-def editItem(category_slug,item_slug):
+def edit_item(category_slug,item_slug):
     if request.method == "GET":
         session = DBSession()
 
@@ -99,18 +99,18 @@ def editItem(category_slug,item_slug):
             session.close()
 
             flash("Not allowed. The item doesn't exist.", "error")
-            return redirect(url_for("home.readMain"))
+            return redirect(url_for("home.read_main"))
         except oexc.MultipleResultsFound:
             session.close()
 
             flash("Error occured. Multiple items found.", "error")
-            return redirect(url_for("home.readMain"))
+            return redirect(url_for("home.read_main"))
 
         if not helper.is_signed_in():
             session.close()
 
             flash("Not allowed. 'Update' feature requires login", "error")
-            return redirect(url_for("login.readLogin"))
+            return redirect(url_for("login.read_login"))
 
         session.close()
 
@@ -149,7 +149,7 @@ def editItem(category_slug,item_slug):
             session.close()
 
             flash("Not allowed. The item doesn't exist.", "error")
-            return redirect(url_for("home.readMain"))
+            return redirect(url_for("home.read_main"))
 
         # Check if user is updating without changing slug and category
         if (category_slug==new_category_slug) and (item_slug==new_item_slug):
@@ -170,7 +170,7 @@ def editItem(category_slug,item_slug):
             session.close()
 
             flash("Not allowed. 'Update' feature requires login", "error")
-            return redirect(url_for("login.readLogin"))
+            return redirect(url_for("login.read_login"))
         if not helper.is_data_changed(
                 new_title, new_description, new_item_slug, 
                 new_category_id, old_item):
@@ -224,7 +224,7 @@ def editItem(category_slug,item_slug):
 
 @mod.route("/items/<string:category_slug>/<string:item_slug>/delete/", 
     methods=["GET","POST"])
-def deleteItem(category_slug, item_slug):
+def delete_item(category_slug, item_slug):
     if(request.method == "GET"):
         session = DBSession()
 
@@ -238,18 +238,18 @@ def deleteItem(category_slug, item_slug):
             session.close()
 
             flash("Not allowed. The item doesn't exist.", "error")
-            return redirect(url_for("home.readMain"))
+            return redirect(url_for("home.read_main"))
         except oexc.MultipleResultsFound:
             session.close()
 
             flash("Error occured. Multiple items found.", "error")
-            return redirect(url_for("home.readMain"))
+            return redirect(url_for("home.read_main"))
 
         if not helper.is_signed_in():
             session.close()
 
             flash("Not allowed. 'Delete' feature requires login.", "error")
-            return redirect(url_for("login.readLogin"))
+            return redirect(url_for("login.read_login"))
 
         session.close()
 
@@ -270,18 +270,18 @@ def deleteItem(category_slug, item_slug):
             session.close()
 
             flash("Not allowed. The item doesn't exist.", "error")
-            return redirect(url_for("home.readMain"))
+            return redirect(url_for("home.read_main"))
         except oexc.MultipleResultsFound:
             session.close()
 
             flash("Error occured. Multiple items found.", "error")
-            return redirect(url_for("home.readMain"))
+            return redirect(url_for("home.read_main"))
 
         if not helper.is_signed_in():
             session.close()
 
             flash("Not allowed. 'Delete' feature requires login.", "error")
-            return redirect(url_for("login.readLogin"))
+            return redirect(url_for("login.read_login"))
 
         session.delete(item)
         session.commit()
@@ -289,11 +289,11 @@ def deleteItem(category_slug, item_slug):
         session.close()
         
         flash("'%s' successfully deleted." % item.name, "success")
-        return redirect(url_for("home.readMain"))
+        return redirect(url_for("home.read_main"))
 
 
 @mod.route("/items/<string:category_slug>/<string:item_slug>/")
-def readItem(category_slug,item_slug):
+def read_item(category_slug,item_slug):
     session = DBSession()
 
     try:
@@ -306,12 +306,12 @@ def readItem(category_slug,item_slug):
         session.close()
 
         flash("Not allowed. The item doesn't exist.", "error")
-        return redirect(url_for("home.readMain"))
+        return redirect(url_for("home.read_main"))
     except oexc.MultipleResultsFound:
         session.close()
 
         flash("Error occured. Multiple items found.", "error")
-        return redirect(url_for("home.readMain"))
+        return redirect(url_for("home.read_main"))
 
     session.close()
 

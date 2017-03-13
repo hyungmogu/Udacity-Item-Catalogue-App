@@ -28,7 +28,7 @@ def logout():
     """
     if not helper.is_signed_in():
         flash("You've already logged out.", "warning")
-        return redirect(url_for("home.readMain"))
+        return redirect(url_for("home.read_main"))
 
     if login_session["provider"] == "google":
         # access_token = login_session["access_token"]
@@ -44,7 +44,7 @@ def logout():
 
         # if not int(result["status"]) == 200:
         #   flash("Error occured while logging out.", "error")
-        #   return redirect(url_for("home.readMain"))
+        #   return redirect(url_for("home.read_main"))
 
         del login_session["access_token"]
         del login_session["gplus_id"]
@@ -68,4 +68,4 @@ def logout():
         del login_session["provider"]
 
     flash("Logout Successful.", "success")
-    return redirect(url_for("home.readMain"))
+    return redirect(url_for("home.read_main"))

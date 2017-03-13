@@ -8,4 +8,4 @@ mod = Blueprint("error", __name__)
 def page_not_found(error):
     flash("Not allowed. The page or item you've requested doesn't exist.", 
           "error")
-    return redirect(url_for("home.readMain"))
+    return redirect(url_for("home.read_main"))

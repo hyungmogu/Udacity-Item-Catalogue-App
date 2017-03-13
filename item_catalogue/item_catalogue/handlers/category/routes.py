@@ -10,7 +10,7 @@ mod = Blueprint("category", __name__, template_folder="templates")
 
 
 @mod.route("/items/<string:category_slug>/")
-def readCategory(category_slug):
+def read_category(category_slug):
     session = DBSession()
 
     try:
@@ -19,12 +19,12 @@ def readCategory(category_slug):
         session.close()
 
         flash("Not allowed. The page doesn't exist.", "error")
-        return redirect(url_for("home.readMain"))
+        return redirect(url_for("home.read_main"))
     except oexc.MultipleResultsFound:
         session.close()
 
         flash("Error occured. Multiple categories found.", "error")
-        return redirect(url_for("home.readMain"))
+        return redirect(url_for("home.read_main"))
 
     categories_for_menu = (
         session.query(Category).order_by(asc(Category.name)).all())
