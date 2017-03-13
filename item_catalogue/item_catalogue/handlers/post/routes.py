@@ -142,8 +142,8 @@ def edit_item(category_slug,item_slug):
             old_item = (
                 session.query(MenuItem, Category.slug)
                 .join(MenuItem.category)
-                .filter(Category.slug==category_slug,
-                        MenuItem.slug==item_slug)
+                .filter(Category.slug == category_slug,
+                        MenuItem.slug == item_slug)
                 .one()).MenuItem
         except oexc.NoResultFound:
             session.close()
@@ -152,7 +152,7 @@ def edit_item(category_slug,item_slug):
             return redirect(url_for("home.read_main"))
 
         # Check if user is updating without changing slug and category
-        if (category_slug==new_category_slug) and (item_slug==new_item_slug):
+        if (category_slug == new_category_slug) and (item_slug == new_item_slug):
             old_item.title = new_title
             old_item.description = new_description
             session.add(old_item)
@@ -231,8 +231,8 @@ def delete_item(category_slug, item_slug):
         try:
             item = (
                 session.query(MenuItem).join(MenuItem.category)
-                .filter(Category.slug==category_slug,
-                        MenuItem.slug==item_slug)
+                .filter(Category.slug == category_slug,
+                        MenuItem.slug == item_slug)
                 .one())
         except oexc.NoResultFound:
             session.close()
@@ -263,8 +263,8 @@ def delete_item(category_slug, item_slug):
         try:
             item = (
                 session.query(MenuItem).join(MenuItem.category)
-                .filter(Category.slug==category_slug, 
-                        MenuItem.slug==item_slug)
+                .filter(Category.slug == category_slug, 
+                        MenuItem.slug == item_slug)
                 .one())
         except oexc.NoResultFound:
             session.close()
@@ -299,8 +299,8 @@ def read_item(category_slug,item_slug):
     try:
         item = (
             session.query(MenuItem,Category.slug).join(MenuItem.category)
-            .filter(Category.slug==category_slug, 
-                    MenuItem.slug==item_slug)
+            .filter(Category.slug == category_slug, 
+                    MenuItem.slug == item_slug)
             .one())
     except oexc.NoResultFound:
         session.close()
