@@ -39,13 +39,13 @@ def read_category(category_slug):
         session.close()
 
         return render_template(
-            "category.html", currentCategory=category,
-            categories=categories_for_menu, menuItems=items,
+            "category.html", current_category=category,
+            categories=categories_for_menu, menu_items=items,
             count=items_count)
 
     session.close()
 
     return render_template(
-        "category.html", currentCategory=category,
-        categories=categories_for_menu, menuItems=items,
+        "category.html", current_category=category,
+        categories=categories_for_menu, menu_items=items,
         count=items_count, logged_in=True)

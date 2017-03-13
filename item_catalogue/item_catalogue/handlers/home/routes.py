@@ -26,10 +26,10 @@ def read_main():
         session.close()
 
         return render_template(
-            "main.html", menuItems=items, categories=categories_for_menu)
+            "main.html", menu_items=items, categories=categories_for_menu)
 
     session.close()
 
     return render_template(
-        "main.html", menuItems=items, categories=categories_for_menu,
+        "main.html", menu_items=items, categories=categories_for_menu,
         logged_in=True)
