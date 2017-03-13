@@ -35,7 +35,7 @@ def g_get_user_data(access_token):
 
 
 def is_session_token_valid():
-    # Note: this shields user from Cross Reference Site Forgery Attack.
+    # Note: this shields user from Cross Site Request Forgery Attack.
     if request.args.get("state") != login_session["state"]:
         return False
     return True 

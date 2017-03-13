@@ -16,7 +16,7 @@ mod = Blueprint("login", __name__, template_folder="templates")
 @mod.route("/login/")
 def read_login():
     # Create state token.
-    # Note: This shields user from Cross Site Reference Forgery Attack.
+    # Note: This shields user from Cross Site Request Forgery Attack.
     state = "".join(random.choice(string.ascii_uppercase + string.digits +
             string.ascii_lowercase) for x in xrange(32))
     login_session["state"] = state
