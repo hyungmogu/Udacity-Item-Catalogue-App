@@ -9,7 +9,7 @@ from oauth2client.client import FlowExchangeError
 
 from . import helper
 
-mod = Blueprint("login",__name__,template_folder="templates")
+mod = Blueprint("login", __name__, template_folder="templates")
 
 
 #LOGIN
@@ -21,13 +21,13 @@ def readLogin():
             string.ascii_lowercase) for x in xrange(32))
     login_session["state"] = state
 
-    return render_template("login.html",session_state=login_session["state"])
+    return render_template("login.html", session_state=login_session["state"])
 
 
 @mod.route("/login/gconnect", methods=["POST"])
 def gconnect():
     G_CLIENT_ID = (
-        json.loads(open("client_secrets.json","r").read())["web"]["client_id"])
+        json.loads(open("client_secrets.json", "r").read())["web"]["client_id"])
     one_time_code = request.data
 
     # Harvest access token and gplus_id
@@ -42,13 +42,13 @@ def gconnect():
 
     # First, check if somebody is attempting CSRF attack
     if not helper.is_session_token_valid():
-        return send_response(401,"Invalid state token")
+        return send_response(401, "Invalid state token")
     # Check for errors in transmission.
     if result.get("error"):
-        return helper.send_response(500,result.get("error"))
+        return helper.send_response(500, result.get("error"))
     # If all is well, check if the token is for intended user.
     if result["user_id"] != gplus_id:
-        return helper.send_response(500,result.get("error"))
+        return helper.send_response(500, result.get("error"))
     # If valid, verify that it is for this app.
     if (result["issued_to"] != G_CLIENT_ID):
         return helper.send_response(
@@ -69,12 +69,12 @@ def gconnect():
     return helper.send_response(200, "success")
 
 
-@mod.route("/login/fbconnect",methods=["POST"])
+@mod.route("/login/fbconnect", methods=["POST"])
 def fbconnect():
     one_time_token = request.data
 
     if not helper.is_session_token_valid():
-        return helper.send_response(401,"Invalid state token")
+        return helper.send_response(401, "Invalid state token")
 
     access_token = helper.fb_get_access_token(one_time_token)
 
