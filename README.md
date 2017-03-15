@@ -76,6 +76,7 @@ python setup.py install
    g. Click `Create` when done
    
    h. Click `Download JSON` and save in the project directory
+   
    i. Change name to `g_credential.json`
 
 3. In terminal, type `cd static/js`; navigate to the directory containing OAuth Javascript SDKs.
@@ -94,7 +95,7 @@ python setup.py install
    
    d. Click `Dashboard` under the main menu
    
-   e. Copy `App ID` and `App Secret`; paste them to the corresponding location in `fb_credential.json`
+   e. Copy `App ID` and `App Secret`; paste them to the corresponding locations in `fb_credential.json`
    
 4. Save and quit
 5. In terminal, type `cd static/js`; navigate to the directory containing OAuth Javascript SDKs.
