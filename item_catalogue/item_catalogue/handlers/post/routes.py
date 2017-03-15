@@ -12,7 +12,7 @@ from .. import helper
 mod = Blueprint("post", __name__, template_folder="templates")
 
 
-@mod.route("/items/new/", methods=["GET","POST"])
+@mod.route("/items/new/", methods=["GET", "POST"])
 def create_item():
     if request.method == "GET":
         session = DBSession()
@@ -53,7 +53,7 @@ def create_item():
         if not title and description:
             session.close()
 
-            flash("Not allowed. Both title and description must exist.", 
+            flash("Not allowed. Both title and description must exist.",
                   "error")
             return render_template(
                 'newItem.html', categories=categories, logged_in=True, 
@@ -64,7 +64,7 @@ def create_item():
             flash("Not allowed. There already exists an item with the same "
                   "slug.", "error")
             return render_template(
-                "newItem.html",categories=categories, logged_in=True, 
+                "newItem.html", categories=categories, logged_in=True, 
                 title=title, category_id=category_id, description=description)
 
         item = MenuItem(name=title, slug=item_slug,
@@ -79,9 +79,9 @@ def create_item():
             'post.read_item', category_slug=category_slug, item_slug=item_slug))
 
 
-@mod.route("/items/<string:category_slug>/<string:item_slug>/edit/", 
-    methods=["GET","POST"])
-def edit_item(category_slug,item_slug):
+@mod.route("/items/<string:category_slug>/<string:item_slug>/edit/",
+    methods=["GET", "POST"])
+def edit_item(category_slug, item_slug):
     if request.method == "GET":
         session = DBSession()
 
@@ -115,7 +115,7 @@ def edit_item(category_slug,item_slug):
         session.close()
 
         return render_template(
-            "editItem.html", categories=categories, category_slug=category_slug, 
+            "editItem.html", categories=categories, category_slug=category_slug,
             item=item, item_slug=item_slug, logged_in=True)
 
     elif request.method == "POST":  
@@ -222,8 +222,8 @@ def edit_item(category_slug,item_slug):
             item_slug=new_item_slug))
 
 
-@mod.route("/items/<string:category_slug>/<string:item_slug>/delete/", 
-    methods=["GET","POST"])
+@mod.route("/items/<string:category_slug>/<string:item_slug>/delete/",
+    methods=["GET", "POST"])
 def delete_item(category_slug, item_slug):
     if request.method == "GET":
         session = DBSession()
@@ -293,12 +293,12 @@ def delete_item(category_slug, item_slug):
 
 
 @mod.route("/items/<string:category_slug>/<string:item_slug>/")
-def read_item(category_slug,item_slug):
+def read_item(category_slug, item_slug):
     session = DBSession()
 
     try:
         item = (
-            session.query(MenuItem,Category.slug).join(MenuItem.category)
+            session.query(MenuItem, Category.slug).join(MenuItem.category)
             .filter(Category.slug == category_slug, 
                     MenuItem.slug == item_slug)
             .one())
