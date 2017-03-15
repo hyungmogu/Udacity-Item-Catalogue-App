@@ -1,4 +1,4 @@
-__version__ = "0.3.2"
+__version__ = "0.3.3"
 __author__ = "Hyungmo Gu"
 
 
@@ -15,7 +15,6 @@ DBSession = sessionmaker(bind = engine)
 
 import item_catalogue.handlers
 
-
 # url_for cash busting.
 # Note: This solves the trouble of css not refreshing the old file.
 # More info can be found here: http://flask.pocoo.org/snippets/40/.
@@ -31,3 +30,4 @@ def dated_url_for(endpoint, **values):
                                      endpoint, filename)
             values['q'] = int(os.stat(file_path).st_mtime)
     return url_for(endpoint, **values)
+

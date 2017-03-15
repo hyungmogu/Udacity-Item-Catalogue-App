@@ -15,10 +15,10 @@ def send_response(status_code,message=""):
 
 
 def g_is_user_already_logged_in(gplus_id):
-    stored_credentials = login_session.get("access_token")
+    stored_credential = login_session.get("access_token")
     stored_gplus_id = login_session.get("gplus_id")
 
-    if stored_credentials is None:
+    if stored_credential is None:
         return False
     if gplus_id != stored_gplus_id:
         return False
@@ -41,9 +41,9 @@ def is_session_token_valid():
     return True 
 
 
-def g_get_credentials(one_time_code):
+def g_get_credential(one_time_code):
     oauth_flow = flow_from_clientsecrets(
-        "client_secrets.json",scope="openid profile email")
+        "g_credential.json", scope="openid profile email")
     oauth_flow.redirect_uri = "postmessage"
     return oauth_flow.step2_exchange(one_time_code)
 
@@ -58,9 +58,9 @@ def g_check_access_token(access_token):
 def fb_get_access_token(one_time_token):
     REDIRECT_URI = "http://localhost:5000/welcome"
     FB_APP_ID = (
-        json.loads(open("fb_client_secrets.json", "r").read())["web"]["app_id"])
+        json.loads(open("fb_credential.json", "r").read())["web"]["app_id"])
     FB_APP_SECRET = (
-        json.loads(open("fb_client_secrets.json", "r").read())["web"]["app_secret"])
+        json.loads(open("fb_credential.json", "r").read())["web"]["app_secret"])
 
     url = ("https://graph.facebook.com/oauth/access_token?"
         "grant_type=fb_exchange_token&"

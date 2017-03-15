@@ -27,14 +27,14 @@ def read_login():
 @mod.route("/login/gconnect", methods=["POST"])
 def g_connect():
     G_CLIENT_ID = (
-        json.loads(open("client_secrets.json", "r").read())["web"]["client_id"])
+        json.loads(open("g_credential.json", "r").read())["web"]["client_id"])
     one_time_code = request.data
 
     # Harvest access token and gplus_id
     try:
-        credentials = helper.g_get_credentials(one_time_code)
-        access_token = credentials.access_token
-        gplus_id = credentials.id_token["sub"]
+        credential = helper.g_get_credential(one_time_code)
+        access_token = credential.access_token
+        gplus_id = credential.id_token["sub"]
     except FlowExchangeError:
         return send_response(401, "Failed to upgrade the authorization code.")
 
