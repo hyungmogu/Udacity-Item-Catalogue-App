@@ -2,12 +2,8 @@ from setuptools import setup
 
 setup(
     name = "item_catlogue",
-<<<<<<< HEAD
-    version='0.3.1',
-=======
-    version='0.3.2',
->>>>>>> release-0.3.2
-    author='Hyungmo Gu',
+    version = "0.3.2",
+    author = "Hyungmo Gu",
     packages = ["item_catalogue"],
     inlude_package_data = True,
     install_requires = [
@@ -17,5 +13,5 @@ setup(
         "httplib2==0.9.2",
         "oauth2client==4.0.0",
         "requests==2.2.1"
-    ] 
-)
+        ] 
+    )
