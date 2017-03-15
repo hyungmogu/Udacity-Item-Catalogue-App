@@ -76,7 +76,7 @@ def create_item():
 
         flash("'%s' has been successfully created."%title, "success")
         return redirect(url_for(
-            'post.readItem', category_slug=category_slug, item_slug=item_slug))
+            'post.read_item', category_slug=category_slug, item_slug=item_slug))
 
 
 @mod.route("/items/<string:category_slug>/<string:item_slug>/edit/", 
@@ -162,7 +162,7 @@ def edit_item(category_slug,item_slug):
 
             flash("'%s' successfully edited."%new_title, "success")
             return redirect(url_for(
-                'post.readItem', category_slug=category_slug,
+                'post.read_item', category_slug=category_slug,
                 item_slug=item_slug))
 
         # Check if all conditions are met to edit blog post.
@@ -178,7 +178,7 @@ def edit_item(category_slug,item_slug):
 
             flash("No data has been changed.","warning")
             return redirect(url_for(
-                'post.readItem', category_slug=category_slug,
+                'post.read_item', category_slug=category_slug,
                 item_slug=item_slug)) 
         if not new_title and new_description:
             session.close()
@@ -218,7 +218,7 @@ def edit_item(category_slug,item_slug):
 
         flash("'%s' successfully edited."%new_title, "success")
         return redirect(url_for(
-            'post.readItem', category_slug=new_category_slug,
+            'post.read_item', category_slug=new_category_slug,
             item_slug=new_item_slug))
 
 
