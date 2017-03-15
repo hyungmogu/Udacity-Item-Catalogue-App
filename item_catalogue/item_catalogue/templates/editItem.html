@@ -15,9 +15,9 @@
             <div class="form-group">
                 <label for="form-title">Title</label>
                 {%if new_title%}
-                    <input id="form-title" type="text" name="title" value={{new_title}}>
+                    <input id="form-title" type="text" name="title" value="{{new_title}}">
                 {%elif item%}
-                    <input id="form-title" type="text" name="title" value={{item.name}}>
+                    <input id="form-title" type="text" name="title" value="{{item.name}}">
                 {%else%}
                     <input id="form-title" type="text" name="title">
                 {%endif%}
@@ -37,11 +37,11 @@
                 <select id="form-category" name="category">
                     {%if new_category_id%}
                         {%for category in categories%}
-                            <option value={{category.id}} {%if category.id == new_category_id%}selected{%endif%}>{{category.name}}</option>
+                            <option value="{{category.id}}" {%if category.id == new_category_id%}selected{%endif%}>{{category.name}}</option>
                         {%endfor%}
                     {%elif item%}
                         {%for category in categories%}
-                            <option value={{category.id}} {%if category.id == item.category_id%}selected{%endif%}>{{category.name}}</option>
+                            <option value="{{category.id}}" {%if category.id == item.category_id%}selected{%endif%}>{{category.name}}</option>
                         {%endfor%}
                     {%endif%}
                 </select>
