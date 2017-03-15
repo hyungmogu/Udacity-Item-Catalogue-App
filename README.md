@@ -49,12 +49,56 @@ cd /vagrant/item-catalogue
 python setup.py install
 ```
 
-#### 6. Setting up OAuth for Google and Facebook Login
+#### 6. Setting up OAuth for Google Login
 
 1. Type `cd item-catalogue`; go inside the project directory
-2. Open `client_secret.json` and `fb_client_secret.json` using an editor of choice; follow instructions there
-3. Type `cd static/js`; navigate to the directory containing OAuth Javascript SDKs.
-4. Open `fblogin.js` and `glogin.js` using an editor of choice; fill in using information obtained from step 2.
+2. Open a browser; obtain credentials following the steps below
+
+   a. Go to https://console.developers.com/apis/credential
+   
+   b. Click `Create a Project` after loggin in
+   
+   c. Click `Oauth Consent Screen` after step b.
+   
+   d. Enter the following information; click save
+
+        - Product Name: Item Catalogue
+        - Homepage URL: http://localhost:5000
+
+   e. Click `Create Credentials`; then click `OAuth Client ID`
+   
+   f. Select `Web Application`; enter the following information:
+ 
+        - Name: Item Catalogue
+        - Authorized Javascript Origin: http://localhost:5000
+        - Authorized Redirect URI: http://localhost:5000/welcome
+
+   g. Click `Create` when done
+   
+   h. Click `Download JSON` and save in the project directory
+   i. Change name to `g_credential.json`
+
+3. In terminal, type `cd static/js`; navigate to the directory containing OAuth Javascript SDKs.
+4. Open `glogin.js` using an editor of choice; fill in using information obtained from step 2
+
+#### 6. Setting up OAuth for Facebook Login
+
+1. In the project directory, open `fb_credential.json` using an editor of choice
+2. Open a browser; obtain the values of `app_id` and `app_secret`
+
+   a. Go to https://developers.facebook.com/apps
+   
+   b. Click `Add New App`
+   
+   c. Fill in the inputs; click `Create App ID` when done
+   
+   d. Click `Dashboard` under the main menu
+   
+   e. Copy `App ID` and `App Secret`; paste them to the corresponding location in `fb_credential.json`
+   
+4. Save and quit
+5. In terminal, type `cd static/js`; navigate to the directory containing OAuth Javascript SDKs.
+6. Open `fblogin.js` using an editor of choice; fill in using information obtained from step 2
 
 
 ### Running Flask Server
