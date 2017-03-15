@@ -52,54 +52,53 @@ python setup.py install
 #### 6. Setting up OAuth for Google Login
 
 1. Type `cd item-catalogue`; go inside the project directory
-2. Open `client_secrets.json` using an editor of choice
-3. Obtain the values of `client_id` and `client_secret` from Google
+2. Open a browser; obtain credentials following the steps below
 
-   a. Open a browser and go to https://console.developers.com/apis/credential
+   a. Go to https://console.developers.com/apis/credential
    
-   b. Click 'Create a Project' after loggin in
+   b. Click `Create a Project` after loggin in
    
-   c. Click 'Oauth Consent Screen' after step b.
+   c. Click `Oauth Consent Screen` after step b.
    
    d. Enter the following information; click save
 
         - Product Name: Item Catalogue
         - Homepage URL: http://localhost:5000
 
-   e. Click 'Create Credentials'; then click 'OAuth Client ID'
+   e. Click `Create Credentials`; then click `OAuth Client ID`
    
-   f. Select 'Web Application'; enter the following information:
+   f. Select `Web Application`; enter the following information:
  
         - Name: Item Catalogue
         - Authorized Javascript Origin: http://localhost:5000
         - Authorized Redirect URI: http://localhost:5000/welcome
 
-   g. Click 'Create' when done
+   g. Click `Create` when done
    
-   h. Copy 'Client ID' and 'Client Secret'; paste the values in the corresponding keys
+   h. Click `Download JSON` and save in the project directory
+   i. Change name to `g_credential.json`
 
-4. Save and quit
-5. Type `cd static/js`; navigate to the directory containing OAuth Javascript SDKs.
-6. Open `glogin.js` using an editor of choice; fill in using information obtained from step 3
+3. In terminal, type `cd static/js`; navigate to the directory containing OAuth Javascript SDKs.
+4. Open `glogin.js` using an editor of choice; fill in using information obtained from step 2
 
 #### 6. Setting up OAuth for Facebook Login
 
-1. In the project directory, open `fb_client_secrets.json` using an editor of choice
-2. Obtain the values of "client_id" and "client_secret" from Facebook
+1. In the project directory, open `fb_credential.json` using an editor of choice
+2. Open a browser; obtain the values of `app_id` and `app_secret`
 
-   a. Open a browser and go to https://developers.facebook.com/apps
+   a. Go to https://developers.facebook.com/apps
    
-   b. Click 'Add New App'
+   b. Click `Add New App`
    
-   c. Fill in the inputs; click 'Create App ID' when done
+   c. Fill in the inputs; click `Create App ID` when done
    
-   d. Click 'Dashboard' under the main menu
+   d. Click `Dashboard` under the main menu
    
-   e. Copy 'App ID' and 'App Secret'; paste the values in the corresponding keys
+   e. Copy `App ID` and `App Secret`; paste them in corresponding keys in .json file
    
 4. Save and quit
-5. Type `cd static/js`; navigate to the directory containing OAuth Javascript SDKs.
-6. Open `fblogin.js` using an editor of choice; fill in using information obtained from step 2.
+5. In terminal, type `cd static/js`; navigate to the directory containing OAuth Javascript SDKs.
+6. Open `fblogin.js` using an editor of choice; fill in using information obtained from step 2
 
 
 ### Running Flask Server
