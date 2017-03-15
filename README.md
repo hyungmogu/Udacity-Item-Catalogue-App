@@ -53,45 +53,51 @@ python setup.py install
 
 1. Type `cd item-catalogue`; go inside the project directory
 2. Open `client_secrets.json` using an editor of choice
-3. Fill in the values of `client_id` and `client_secret` from Google
+3. Obtain the values of `client_id` and `client_secret` from Google
 
-  1. Open a browser and go to https://console.developers.com/apis/credential
+   a. Open a browser and go to https://console.developers.com/apis/credential
+   
+   b. Click 'Create a Project' after loggin in
+   
+   c. Click 'Oauth Consent Screen' after step b.
+   
+   d. Enter the following information; click save
 
-  2. Click 'Create a Project' after loggin in
+        - Product Name: Item Catalogue
+        - Homepage URL: http://localhost:5000
 
-  3. Click 'Oauth Consent Screen' after step b.
+   e. Click 'Create Credentials'; then click 'OAuth Client ID'
+   
+   f. Select 'Web Application'; enter the following information:
+ 
+        - Name: Item Catalogue
+        - Authorized Javascript Origin: http://localhost:5000
+        - Authorized Redirect URI: http://localhost:5000/welcome
 
-  4. Enter the following information; click save
+   g. Click 'Create' when done
+   
+   h. Copy 'Client ID' and 'Client Secret'; paste the values in the corresponding keys
 
-      * Product Name: Item Catalogue
-      * Homepage URL: http://localhost:5000
-
-  5. Click 'Create Credentials'; then click 'OAuth Client ID'
-
-  6. Select 'Web Application'; enter the following information:
-
-      * Name: Item Catalogue
-      * Authorized Javascript Origin: http://localhost:5000
-      * Authorized Redirect URI: http://localhost:5000/welcome
-
-  7. Click 'Create' when done
-
-  8. Copy 'Client ID' and 'Client Secret'; paste the values in the corresponding key
-
-4. Save `client_secrets.json` and quit
+4. Save and quit
 5. Type `cd static/js`; navigate to the directory containing OAuth Javascript SDKs.
 6. Open `glogin.js` using an editor of choice; fill in using information obtained from step 3
 
 #### 6. Setting up OAuth for Facebook Login
 
 1. In the project directory, open `fb_client_secrets.json` using an editor of choice
-2. Retrieve the values of "client_id" and "client_secret" from Facebook
-  1. Open a browser and go to https://developers.facebook.com/apps
-  2. Click 'Add New App'
-  3. Fill in the inputs; click 'Create App ID' when done
-  4. Click 'Dashboard' under the main menu
-  5. Copy 'App ID' and 'App Secret'; paste the values in the corresponding key
-4. Save `fb_client_secrets.json` and quit
+2. Obtain the values of "client_id" and "client_secret" from Facebook
+
+   a. Open a browser and go to https://developers.facebook.com/apps
+   
+   b. Click 'Add New App'
+   
+   c. Fill in the inputs; click 'Create App ID' when done
+   
+   d. Click 'Dashboard' under the main menu
+   
+   e. Copy 'App ID' and 'App Secret'; paste the values in the corresponding keys
+   
+4. Save and quit
 5. Type `cd static/js`; navigate to the directory containing OAuth Javascript SDKs.
 6. Open `fblogin.js` using an editor of choice; fill in using information obtained from step 2.
 
