@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name = "item_catlogue",
-    version = "0.3.2",
+    version = "0.3.3",
     author = "Hyungmo Gu",
     packages = ["item_catalogue"],
     inlude_package_data = True,
