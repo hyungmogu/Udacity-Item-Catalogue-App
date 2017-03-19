@@ -4,7 +4,11 @@
 
 ## Introduction
 
-This is a project for Udacity's "Introduction to Full-stack Development" course. The project utilizes FLASK, SQLAlchemy, SQLite, Python, Jinja2 and CSS3.
+This is a project for the course ‘introduction to full-stack development’. 
+
+Here, users can create, delete, edit and read posts, retrieve data in JSON format, and login to the website using Google and Facebook Account. It showcases the author’s ability to develop program using CRUD functionalities, iterative design principles, and also the ability to implement JSON endpoints and OAuth2 login system. 
+
+This project utilizes FLASK, SQLAlchemy, SQLite, Python, Jinja2, CSS3, Bootstrap (very little), Javascript and JQuery.
 
 ## Dependencies
 - Flask 0.11.0
