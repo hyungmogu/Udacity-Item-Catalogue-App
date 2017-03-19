@@ -59,7 +59,7 @@ cd /vagrant/item-catalogue
 python setup.py install
 ```
 
-### 4. Setup OAuth for Login via Google
+### 4. Setup Google OAuth
 
 1. Download credential
 
@@ -96,7 +96,7 @@ cd /vagrant/item_catalogue/item_catalogue/static/js
 ```
 4. Open and complete the file using information from step 1
 
-### 5. Setup OAuth for Login via Facebook
+### 5. Setup Facebook OAuth
 
 1. Obtain credential:
 
