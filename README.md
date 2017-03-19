@@ -4,11 +4,20 @@
 
 ## Introduction
 
-This is a project for the course ‘introduction to full-stack development’. 
+This is a project for the course `introduction to full-stack development`. 
 
-Here, users can create, delete, edit and read posts, retrieve data in JSON format, and login to the website using Google and Facebook Account. It showcases the author’s ability to develop program using CRUD functionalities, iterative design principles, and also the ability to implement JSON endpoints and OAuth2 login system. 
+Here, users can create, delete, edit and read posts, retrieve data via server-side web API, and login using account from Google and Facebook. 
 
-This project utilizes FLASK, SQLAlchemy, SQLite, Python, Jinja2, CSS3, Bootstrap (very little), Javascript and JQuery.
+This project is created for demonstration purposes. It is not open to contribution. However, users are free to clone and explore.
+
+This project utilizes FLASK, SQLAlchemy, SQLite, Python, Jinja2, CSS3, Bootstrap, Javascript and JQuery.
+
+## Table of Contents
+* Introduction
+* Dependences
+* Prerequisites
+* Installation
+* Usage
 
 ## Dependencies
 - Flask 0.11.0
@@ -19,59 +28,62 @@ This project utilizes FLASK, SQLAlchemy, SQLite, Python, Jinja2, CSS3, Bootstrap
 - requests 2.2.1
 - sqlite3 3.8.2
 
-## Getting Started
-### Setting up
+## Prerequisites
+1. [Git](https://www.atlassian.com/git/tutorials/install-git)
+2. [Vagrant](https://www.vagrantup.com/downloads.html) ([Virtual Box](https://www.virtualbox.org/) is required)
 
-#### 1. Installing Git
-
-1. Follow the instruction provoided [here](https://www.atlassian.com/git/tutorials/install-git)
-
-#### 2. Installing Vagrant
-
-1. Download and install [Virtual Box](https://www.virtualbox.org/)
-2. Download and install [Vagrant](https://www.vagrantup.com/downloads.html)
-  - NOTE: Ubuntu is a [Debian-based operating system](https://en.wikipedia.org/wiki/Ubuntu_(operating_system)).
-3. Boot into BIOS and enable virtual environment
-  - NOTE: This step varies for different motherboard models and versions. Please refer to instruction provided by manufacturer for details.  
-
-#### 3. Downloading Project Files
+## Installation
+### 1. Download Project Files
 
 1. Navigate to a directory of choice
-2. Type `git clone https://github.com/hyungmogu/Udacity-Item-Catalogue-App/`; download the repository
+2. Download git repository
+```
+git clone https://github.com/hyungmogu/Udacity-Item-Catalogue-App/
+```
 
-#### 4. Running Vagrant
+### 2. Run Vagrant
 
-1. Type `cd udacity-item-catalogue`; navigate to where `VagrantFile` is located
-2. Type `vagrant up`; let vagrant to setup dependencies
-3. Type `vagrant ssh`; login to the virtual machine
+1. Navigate to where `VagrantFile` is located
+```
+cd <FOLDER_CONTAINING_CLONED_REPO>/udacity-item-catalogue
+```
+2. Setup vagrant
+```
+vagrant up
+```
+3. Login
+```
+vagrant ssh
+```
 
-#### 5. Installing Dependencies for Python
-
-1. Type the following after loggin in:
+### 3. Install Dependencies
 ```
 cd /vagrant/item-catalogue
 python setup.py install
 ```
 
-#### 6. Setting up OAuth for Google Login
+### 4. Setup OAuth for Login via Google
 
-1. Type `cd item-catalogue`; go inside the project directory
-2. Open a browser; obtain credentials following the steps below
+1. Go inside the project directory
+```
+cd item-catalogue
+```
+2. Obtain credential
 
    a. Go to https://console.developers.com/apis/credential
    
-   b. Click `Create a Project` after loggin in
+   b. Click `Create a Project`
    
-   c. Click `Oauth Consent Screen` after step b.
+   c. Click `Oauth Consent Screen`
    
-   d. Enter the following information; click save
+   d. Save after entering the following information:
 
         - Product Name: Item Catalogue
         - Homepage URL: http://localhost:5000
 
-   e. Click `Create Credentials`; then click `OAuth Client ID`
+   e. Click `Create Credentials`>`OAuth Client ID`
    
-   f. Select `Web Application`; enter the following information:
+   f. Enter the following information after selecting `Web Application`:
  
         - Name: Item Catalogue
         - Authorized Javascript Origin: http://localhost:5000
@@ -79,17 +91,21 @@ python setup.py install
 
    g. Click `Create` when done
    
-   h. Click `Download JSON` and save in the project directory
+   h. Click `Download JSON` 
    
-   i. Change name to `g_credential.json`
+   i. Save the file in `/vagrant/item_catalogue/item_catalogue` (or `<FOLDER_CONTAINING_CLONED_REPO>/udacity-item-catalogue/item_catalogue` outside vagrant)
+   
+   j. Change name to `g_credential.json`
 
-3. In terminal, type `cd static/js`; navigate to the directory containing OAuth Javascript SDKs.
-4. Open `glogin.js` using an editor of choice; fill in using information obtained from step 2
+3. Navigate to the directory containing `glogin.js`
+```
+cd static/js
+```
+4. Open and complete the file using information from step 2
 
-#### 6. Setting up OAuth for Facebook Login
+### 5. Setup OAuth for Login via Facebook
 
-1. In the project directory, open `fb_credential.json` using an editor of choice
-2. Open a browser; obtain the values of `app_id` and `app_secret`
+1. Obtain credential:
 
    a. Go to https://developers.facebook.com/apps
    
@@ -99,26 +115,32 @@ python setup.py install
    
    d. Click `Dashboard` under the main menu
    
-   e. Copy `App ID` and `App Secret`; paste them to the corresponding locations in `fb_credential.json`
+   e. Open `fb_credential.json` in `vagrant/item_catalogue/item_catalogue` 
    
-4. Save and quit
-5. In terminal, type `cd static/js`; navigate to the directory containing OAuth Javascript SDKs.
-6. Open `fblogin.js` using an editor of choice; fill in using information obtained from step 2
+   e. Copy `App ID` and `App Secret`; paste each in `app_id` and `app_secret`, respectively
+   
+   f. Save and quit
+   
+3. Navigate to directory containing `fblogin.js`
+```
+cd static/js
+```
+4. Open and complete the file using information from step 1
 
+## Usages
 
-### Running Flask Server
-
-1. Type `cd ../../`; go back to project root directory
-
-2. Type the following:
+### Viewing Demo
+1. Navigate to `/vagrant/item_catalogue/item_catalogue`
+2. Start Flask server
 ```
 export FLASK_APP=run.py
 flask run
 ```
+3. Enter `http://localhost:5000/` in browser
 
-### Viewing Demo
+### Accessing Web API
+1. Enter `http://localhost:5000/catalogue.json` in browser
 
-1. Type `http://localhost:5000/` in browser
 
 ### Closing Server
 
