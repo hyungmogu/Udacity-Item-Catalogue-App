@@ -35,7 +35,7 @@ This project utilizes FLASK, SQLAlchemy, SQLite, Python, Jinja2, CSS3, Bootstrap
 1. Navigate to a directory of choice
 2. Download git repository
 ```
-git clone https://github.com/hyungmogu/Udacity-Item-Catalogue-App/
+git clone https://github.com/hyungmogu/udacity-item-catalogue/
 ```
 
 ### 2. Run Vagrant
@@ -55,7 +55,7 @@ vagrant ssh
 
 ### 3. Install Dependencies
 ```
-cd /vagrant/item-catalogue
+cd /vagrant/item_catalogue
 python setup.py install
 ```
 
@@ -88,7 +88,7 @@ python setup.py install
    
    i. Click `Download JSON` 
    
-   j. Save the file in `/vagrant/item_catalogue/item_catalogue` (or `<FOLDER_CONTAINING_CLONED_REPO>/udacity-item-catalogue/item_catalogue` outside vagrant)
+   j. Save the file in `/vagrant/item_catalogue/item_catalogue` (or `<FOLDER_CONTAINING_CLONED_REPO>/udacity-item_catalogue/item_catalogue` outside vagrant)
    
    k. Change name to `g_credential.json`
 
