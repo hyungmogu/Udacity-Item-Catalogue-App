@@ -61,11 +61,7 @@ python setup.py install
 
 ### 4. Setup OAuth for Login via Google
 
-1. Go inside the project directory
-```
-cd item-catalogue
-```
-2. Obtain credential
+1. Obtain credential
 
    a. Go to https://console.developers.com/apis/credential
    
@@ -96,9 +92,9 @@ cd item-catalogue
 
 3. Navigate to the directory containing `glogin.js`
 ```
-cd static/js
+cd /vagrant/item_catalogue/item_catalogue/static/js
 ```
-4. Open and complete the file using information from step 2
+4. Open and complete the file using information from step 1
 
 ### 5. Setup OAuth for Login via Facebook
 
@@ -120,7 +116,7 @@ cd static/js
    
 3. Navigate to directory containing `fblogin.js`
 ```
-cd static/js
+cd /vagrant/item_catalogue/item_catalogue/static/js
 ```
 4. Open and complete the file using information from step 1
 
