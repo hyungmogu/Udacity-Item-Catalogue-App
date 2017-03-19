@@ -101,6 +101,7 @@ cd /vagrant/item_catalogue/item_catalogue/static/js
 ### 5. Setup Facebook OAuth
 
 1. Obtain credential:
+
    a. Open `fb_credential.json` in `vagrant/item_catalogue/item_catalogue` 
 
    b. Go to https://developers.facebook.com/apps
