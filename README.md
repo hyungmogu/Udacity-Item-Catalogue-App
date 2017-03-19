@@ -96,7 +96,7 @@ sudo python setup.py install
 ```
 cd /vagrant/item_catalogue/item_catalogue/static/js
 ```
-4. Open and complete the file using information from step 1
+4. Open and fill in missing information using the file from step 1
 
 ### 5. Setup Facebook OAuth
 
@@ -119,7 +119,7 @@ cd /vagrant/item_catalogue/item_catalogue/static/js
 ```
 cd /vagrant/item_catalogue/item_catalogue/static/js
 ```
-3. Open and complete the file using information from step 1
+3. Open and fill in missing information using the file from step 1
 
 ### 6. Setup Secret Key
 
