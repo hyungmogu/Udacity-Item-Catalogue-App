@@ -1,9 +1,5 @@
 # Udacity FSND 5th Project: Item Catalogue
 
----
-
-## Introduction
-
 This is a project for the course `introduction to full-stack development`. 
 
 Here, users can create, delete, edit and read posts, retrieve data via server-side web API, and login using account from Google and Facebook. 
@@ -12,8 +8,9 @@ This project is created for demonstration purposes. It is not open to contributi
 
 This project utilizes FLASK, SQLAlchemy, SQLite, Python, Jinja2, CSS3, Bootstrap, Javascript and JQuery.
 
+---
+
 ## Table of Contents
-* Introduction
 * Dependences
 * Prerequisites
 * Installation
