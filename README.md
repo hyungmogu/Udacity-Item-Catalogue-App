@@ -67,7 +67,7 @@ python setup.py install
    
    b. Click `Create a Project`
    
-   c. Click `Oauth Consent Screen`
+   c. Click `Credentials`>`Oauth Consent Screen`
    
    d. Save after entering the following:
 
@@ -79,16 +79,18 @@ python setup.py install
    f. Enter the following after selecting `Web Application`:
  
         - Name: Item Catalogue
-        - Authorized Javascript Origin: http://localhost:5000
-        - Authorized Redirect URI: http://localhost:5000/welcome
+        - Authorized Javascript Origins: http://localhost:5000
+        - Authorized Redirect URIs: http://localhost:5000/welcome
 
    g. Click `Create` when done
    
-   h. Click `Download JSON` 
+   h. Click `Item Catalogue`
    
-   i. Save the file in `/vagrant/item_catalogue/item_catalogue` (or `<FOLDER_CONTAINING_CLONED_REPO>/udacity-item-catalogue/item_catalogue` outside vagrant)
+   i. Click `Download JSON` 
    
-   j. Change name to `g_credential.json`
+   j. Save the file in `/vagrant/item_catalogue/item_catalogue` (or `<FOLDER_CONTAINING_CLONED_REPO>/udacity-item-catalogue/item_catalogue` outside vagrant)
+   
+   k. Change name to `g_credential.json`
 
 3. Navigate to `glogin.js`
 ```
@@ -99,26 +101,25 @@ cd /vagrant/item_catalogue/item_catalogue/static/js
 ### 5. Setup Facebook OAuth
 
 1. Obtain credential:
+   a. Open `fb_credential.json` in `vagrant/item_catalogue/item_catalogue` 
 
-   a. Go to https://developers.facebook.com/apps
+   b. Go to https://developers.facebook.com/apps
    
-   b. Click `Add New App`
+   c. Click `Add New App`
    
-   c. Fill in the form, and click `Create App ID` when done
+   d. Fill in the form, and click `Create App ID` when done
    
-   d. Click `Dashboard` under the main menu
+   e. Click `Dashboard` under the main menu
    
-   e. Open `fb_credential.json` in `vagrant/item_catalogue/item_catalogue` 
+   f. Copy `App ID` and `App Secret`; paste each to `app_id` and `app_secret` in `fb_credential.json`, respectively
    
-   e. Copy `App ID` and `App Secret`; paste each to `app_id` and `app_secret`, respectively
+   g. Save and quit
    
-   f. Save and quit
-   
-3. Navigate to `fblogin.js`
+2. Navigate to `fblogin.js`
 ```
 cd /vagrant/item_catalogue/item_catalogue/static/js
 ```
-4. Open and complete the file using information from step 1
+3. Open and complete the file using information from step 1
 
 ### 6. Setup Secret Key
 
@@ -141,7 +142,7 @@ flask run
 3. Enter `http://localhost:5000/` in browser
 
 ### Accessing Web API
-1. Enter `http://localhost:5000/catalogue.json` in browser
+1. Enter `http://localhost:5000/catalog.json` in browser
 
 
 ### Closing Server
