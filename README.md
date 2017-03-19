@@ -56,7 +56,7 @@ vagrant ssh
 ### 3. Install Dependencies
 ```
 cd /vagrant/item_catalogue
-python setup.py install
+sudo python setup.py install
 ```
 
 ### 4. Setup Google OAuth
