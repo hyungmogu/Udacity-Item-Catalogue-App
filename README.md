@@ -4,7 +4,7 @@ This is a project for the course `introduction to full-stack development`.
 
 Here, users can create, delete, edit and read posts, retrieve data via server-side web API, and login using account from Google and Facebook. 
 
-This project is created for demonstration purposes. It is not open to contribution. However, users are free to clone and explore.
+This project is for demonstration purposes. It is not open to contribution. However, users are free to clone and explore.
 
 This project utilizes FLASK, SQLAlchemy, SQLite, Python, Jinja2, CSS3, Bootstrap, Javascript and JQuery.
 
@@ -61,22 +61,22 @@ python setup.py install
 
 ### 4. Setup OAuth for Login via Google
 
-1. Obtain credential
+1. Download credential
 
-   a. Go to https://console.developers.com/apis/credential
+   a. Go to https://console.developers.google.com/apis/credentials
    
    b. Click `Create a Project`
    
    c. Click `Oauth Consent Screen`
    
-   d. Save after entering the following information:
+   d. Save after entering the following:
 
         - Product Name: Item Catalogue
         - Homepage URL: http://localhost:5000
 
    e. Click `Create Credentials`>`OAuth Client ID`
    
-   f. Enter the following information after selecting `Web Application`:
+   f. Enter the following after selecting `Web Application`:
  
         - Name: Item Catalogue
         - Authorized Javascript Origin: http://localhost:5000
@@ -90,7 +90,7 @@ python setup.py install
    
    j. Change name to `g_credential.json`
 
-3. Navigate to the directory containing `glogin.js`
+3. Navigate to `glogin.js`
 ```
 cd /vagrant/item_catalogue/item_catalogue/static/js
 ```
@@ -104,21 +104,30 @@ cd /vagrant/item_catalogue/item_catalogue/static/js
    
    b. Click `Add New App`
    
-   c. Fill in the inputs; click `Create App ID` when done
+   c. Fill in the form, and click `Create App ID` when done
    
    d. Click `Dashboard` under the main menu
    
    e. Open `fb_credential.json` in `vagrant/item_catalogue/item_catalogue` 
    
-   e. Copy `App ID` and `App Secret`; paste each in `app_id` and `app_secret`, respectively
+   e. Copy `App ID` and `App Secret`; paste each to `app_id` and `app_secret`, respectively
    
    f. Save and quit
    
-3. Navigate to directory containing `fblogin.js`
+3. Navigate to `fblogin.js`
 ```
 cd /vagrant/item_catalogue/item_catalogue/static/js
 ```
 4. Open and complete the file using information from step 1
+
+### 6. Setup Secret Key
+
+1. Navigate to `run.py`
+```
+cd /vagrant/item_catalogue/item_catalogue
+```
+
+2. Open file, and replace the value in `app.secret_key` with lengthy and random combinations of characters
 
 ## Usages
 
