@@ -1,4 +1,4 @@
-__version__ = "0.3.3"
+__version__ = "0.4.0"
 __author__ = "Hyungmo Gu"
 
 
@@ -9,11 +9,15 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from flask import Flask, url_for
 
+from item_catalogue.model import Base
+
 app = Flask(__name__)
 engine = create_engine("sqlite:///model/itemcatalogue.db")
+Base.metadata.bind = engine
 DBSession = sessionmaker(bind = engine)
 
 import item_catalogue.handlers
+import item_catalogue.add_sample_data
 
 # url_for cash busting.
 # Note: This solves the trouble of css not refreshing the old file.

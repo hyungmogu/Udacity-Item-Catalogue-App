@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, url_for
+from flask import session as login_session
 from sqlalchemy import asc, desc
 
 from item_catalogue import DBSession

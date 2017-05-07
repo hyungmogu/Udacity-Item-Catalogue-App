@@ -9,8 +9,8 @@ function fbLogin(session_token){
 
 window.fbAsyncInit = function() {
     FB.init({
-        appId      : '<ADD APP ID HERE>',
-        cookie     : true,  // enable cookies to allow the server to access 
+        appId      : '1754114728182463',
+        cookie     : true,  // enable cookies to allow the server to access
                             // the session
         xfbml      : true,  // parse social plugins on this page
         version    : 'v2.8' // use graph api version 2.8
