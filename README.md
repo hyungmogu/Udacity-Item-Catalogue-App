@@ -1,8 +1,8 @@
 # Udacity FSND 5th Project: Item Catalogue
 
-This is a project for the course `introduction to full-stack development`. 
+This is a project for the course `introduction to full-stack development`.
 
-Here, users can create, delete, edit and read posts, retrieve data via server-side web API, and login using account from Google and Facebook. 
+Here, users can create, delete, edit and read posts, retrieve data via server-side web API, and login using account from Google and Facebook.
 
 This project is for demonstration purposes. It is not open to contribution. However, users are free to clone and explore.
 
@@ -64,32 +64,32 @@ sudo python setup.py install
 1. Download credential
 
    a. Go to https://console.developers.google.com/apis/credentials
-   
+
    b. Click `Create a Project`
-   
+
    c. Click `Credentials`>`Oauth Consent Screen`
-   
+
    d. Save after entering the following:
 
         - Product Name: Item Catalogue
         - Homepage URL: http://localhost:5000
 
    e. Click `Create Credentials`>`OAuth Client ID`
-   
+
    f. Enter the following after selecting `Web Application`:
- 
+
         - Name: Item Catalogue
         - Authorized Javascript Origins: http://localhost:5000
         - Authorized Redirect URIs: http://localhost:5000/welcome
 
    g. Click `Create` when done
-   
+
    h. Click `Item Catalogue`
-   
-   i. Click `Download JSON` 
-   
+
+   i. Click `Download JSON`
+
    j. Save the file in `/vagrant/item_catalogue/item_catalogue` (or `<FOLDER_CONTAINING_CLONED_REPO>/udacity-item_catalogue/item_catalogue` outside vagrant)
-   
+
    k. Change name to `g_credential.json`
 
 3. Navigate to `glogin.js`
@@ -102,20 +102,20 @@ cd /vagrant/item_catalogue/item_catalogue/static/js
 
 1. Obtain credential:
 
-   a. Open `fb_credential.json` in `vagrant/item_catalogue/item_catalogue` 
+   a. Open `fb_credential.json` in `vagrant/item_catalogue/item_catalogue`
 
    b. Go to https://developers.facebook.com/apps
-   
+
    c. Click `Add New App`
-   
+
    d. Fill in the form, and click `Create App ID` when done
-   
+
    e. Click `Dashboard` under the main menu
-   
+
    f. Copy `App ID` and `App Secret`; paste each to `app_id` and `app_secret` in `fb_credential.json`, respectively
-   
+
    g. Save and quit
-   
+
 2. Navigate to `fblogin.js`
 ```
 cd /vagrant/item_catalogue/item_catalogue/static/js
@@ -143,8 +143,9 @@ flask run
 3. Enter `http://localhost:5000/` in browser
 
 ### Accessing Web API
-1. Enter `http://localhost:5000/catalog.json` in browser
-
+1. Enter `http://localhost:5000/catalog.json` to view all items
+2. Enter `http://localhost:5000/catalog.json/<category_slug>` to view items in the category
+3. Enter `http://localhost:5000/catalog.json/<category_slug>/<item_slug>` to view specifc item
 
 ### Closing Server
 
