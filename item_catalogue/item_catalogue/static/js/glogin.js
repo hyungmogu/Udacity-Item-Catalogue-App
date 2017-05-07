@@ -4,7 +4,7 @@
 function start(){
     gapi.load('auth2',function(){
         auth2 = gapi.auth2.init({
-            client_id: '<ADD CLIENT ID HERE>',
+            client_id: '204396521992-k942mpj3pchloa0njikr3g3alu9l7n6v.apps.googleusercontent.com',
             scope: 'openid profile email',
         });
     });
