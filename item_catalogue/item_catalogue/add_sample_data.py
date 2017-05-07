@@ -126,7 +126,10 @@ for category in categories:
 
 
 for item in items:
-	new_item = MenuItem(name = item["name"], slug = item["slug"], category_id = item["category_id"], description = item["description"], author_email = item["email"])
+	new_item = MenuItem(
+		name = item["name"], slug = item["slug"],
+		category_id = item["category_id"], description = item["description"],
+		author_email = item["email"])
 
 	session.add(new_item)
 	session.commit()

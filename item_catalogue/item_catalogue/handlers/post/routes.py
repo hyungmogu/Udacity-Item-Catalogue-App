@@ -117,7 +117,8 @@ def edit_item(category_slug, item_slug):
             session.close()
 
             flash("Not allowed. This post can be edited only by its author", "error")
-            return redirect(url_for("post.read_item",category_slug = category_slug, item_slug = item_slug))
+            return redirect(url_for(
+                "post.read_item", category_slug = category_slug, item_slug = item_slug))
 
         session.close()
 
@@ -183,7 +184,8 @@ def edit_item(category_slug, item_slug):
             session.close()
 
             flash("Not allowed. This post can be edited only by its author", "error")
-            return redirect(url_for("post.read_item",category_slug=category_slug, item_slug=item_slug))
+            return redirect(
+                url_for("post.read_item",category_slug=category_slug, item_slug=item_slug))
 
         if not helper.is_data_changed(
                 new_title, new_description, new_item_slug,
@@ -272,7 +274,8 @@ def delete_item(category_slug, item_slug):
             session.close()
 
             flash("Not allowed. This post can be edited only by its author", "error")
-            return redirect(url_for("post.read_item", category_slug=category_slug, item_slug=item_slug))
+            return redirect(
+                url_for("post.read_item", category_slug=category_slug, item_slug=item_slug))
 
         session.close()
 
@@ -313,7 +316,8 @@ def delete_item(category_slug, item_slug):
             session.close()
 
             flash("Not allowed. This post can be edited only by its author", "error")
-            return redirect(url_for("post.read_item", category_slug=category_slug, item_slug=item_slug))
+            return redirect(
+                url_for("post.read_item", category_slug=category_slug, item_slug=item_slug))
 
         session.delete(item)
         session.commit()
