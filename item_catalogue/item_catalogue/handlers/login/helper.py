@@ -22,7 +22,7 @@ def g_is_user_already_logged_in(gplus_id):
         return False
     if gplus_id != stored_gplus_id:
         return False
-        
+
     return True
 
 
@@ -38,7 +38,7 @@ def is_session_token_valid():
     # Note: this shields user from Cross Site Request Forgery Attack.
     if request.args.get("state") != login_session["state"]:
         return False
-    return True 
+    return True
 
 
 def g_get_credential(one_time_code):
@@ -68,15 +68,15 @@ def fb_get_access_token(one_time_token):
         "client_secret=%s&"
         "redirect_uri=%s&"
         "fb_exchange_token=%s"%(
-            FB_APP_ID, FB_APP_SECRET, 
+            FB_APP_ID, FB_APP_SECRET,
             REDIRECT_URI, one_time_token))
     h = httplib2.Http()
     result = h.request(url,"GET")[1]
-    return result.split("&")[0]
+    return json.loads(result.split("&")[0])
 
 
 def fb_get_user_data(access_token):
-    url = ("https://graph.facebook.com/v2.4/me?%s&fields=name,id,email,picture" 
+    url = ("https://graph.facebook.com/v2.4/me?access_token=%s&fields=name,id,email,picture"
            % access_token)
     h = httplib2.Http()
     result = h.request(url,"GET")[1]

@@ -76,9 +76,9 @@ def fb_connect():
     if not helper.is_session_token_valid():
         return helper.send_response(401, "Invalid state token")
 
-    access_token = helper.fb_get_access_token(one_time_token)
+    result = helper.fb_get_access_token(one_time_token)
 
-    data = helper.fb_get_user_data(access_token)
+    data = helper.fb_get_user_data(result["access_token"])
 
     login_session["provider"] = "facebook"
     login_session["username"] = data["name"]
