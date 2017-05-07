@@ -144,8 +144,8 @@ flask run
 
 ### Accessing Web API
 1. Enter `http://localhost:5000/catalog.json` to view all items
-2. Enter `http://localhost:5000/catalog.json/<category_slug>` to view items in the category
-3. Enter `http://localhost:5000/catalog.json/<category_slug>/<item_slug>` to view specifc item
+2. Enter `http://localhost:5000/catalog.json/<category_slug>` to view all items in the selected category
+3. Enter `http://localhost:5000/catalog.json/<category_slug>/<item_slug>` to view the selected item
 
 ### Closing Server
 
