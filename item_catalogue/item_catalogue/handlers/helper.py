@@ -6,6 +6,10 @@ def is_signed_in():
         return False
     return True
 
+def is_authorized(login_session, item):
+    if login_session["email"] != item.author_email:
+        return False
+    return True
 
 def is_data_changed(
         new_title, new_description, new_item_slug, new_category_id, old_item):

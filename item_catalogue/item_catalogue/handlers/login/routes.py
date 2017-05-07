@@ -58,7 +58,7 @@ def g_connect():
         return helper.send_response(200, "Current User is already logged in.")
 
     data = helper.g_get_user_data(access_token)
-    
+
     login_session["access_token"] = access_token
     login_session["gplus_id"] = gplus_id
     login_session["provider"] = "google"

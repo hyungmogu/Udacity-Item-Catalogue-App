@@ -56,7 +56,7 @@ def create_item():
             flash("Not allowed. Both title and description must exist.",
                   "error")
             return render_template(
-                'newItem.html', categories=categories, logged_in=True, 
+                'newItem.html', categories=categories, logged_in=True,
                 title=title, category_id=category_id, description=description)
         if not helper.is_unique(num_of_identical_items):
             session.close()
@@ -64,11 +64,12 @@ def create_item():
             flash("Not allowed. There already exists an item with the same "
                   "slug.", "error")
             return render_template(
-                "newItem.html", categories=categories, logged_in=True, 
+                "newItem.html", categories=categories, logged_in=True,
                 title=title, category_id=category_id, description=description)
 
         item = MenuItem(name=title, slug=item_slug,
-                description=description, category_id=category_id)
+                description=description, category_id=category_id,
+                author_email=login_session["email"])
         session.add(item)
         session.commit()
 
@@ -112,13 +113,19 @@ def edit_item(category_slug, item_slug):
             flash("Not allowed. 'Update' feature requires login", "error")
             return redirect(url_for("login.read_login"))
 
+        if not helper.is_authorized(login_session, item):
+            session.close()
+
+            flash("Not allowed. This post can be edited only by its author", "error")
+            return redirect(url_for("post.read_item",category_slug = category_slug, item_slug = item_slug))
+
         session.close()
 
         return render_template(
             "editItem.html", categories=categories, category_slug=category_slug,
             item=item, item_slug=item_slug, logged_in=True)
 
-    elif request.method == "POST":  
+    elif request.method == "POST":
         # TODO: Add a feature that allows users to choose their own slug
         # TODO: Add a function that validates slugs
         session = DBSession()
@@ -171,26 +178,33 @@ def edit_item(category_slug, item_slug):
 
             flash("Not allowed. 'Update' feature requires login", "error")
             return redirect(url_for("login.read_login"))
+
+        if not helper.is_authorized(login_session, old_item):
+            session.close()
+
+            flash("Not allowed. This post can be edited only by its author", "error")
+            return redirect(url_for("post.read_item",category_slug=category_slug, item_slug=item_slug))
+
         if not helper.is_data_changed(
-                new_title, new_description, new_item_slug, 
+                new_title, new_description, new_item_slug,
                 new_category_id, old_item):
             session.close()
 
             flash("No data has been changed.","warning")
             return redirect(url_for(
                 'post.read_item', category_slug=category_slug,
-                item_slug=item_slug)) 
+                item_slug=item_slug))
         if not new_title and new_description:
             session.close()
 
             flash("Not allowed. Both title and description must not be empty.",
                   "error")
             return render_template(
-                "editItem.html", new_title=new_title, 
+                "editItem.html", new_title=new_title,
                 new_description=new_description,
-                new_category_id=new_category_id, 
-                categories=categories, 
-                category_slug=category_slug, 
+                new_category_id=new_category_id,
+                categories=categories,
+                category_slug=category_slug,
                 item_slug=item_slug,
                 logged_in=True)
         if not helper.is_unique(num_of_identical_items):
@@ -199,8 +213,8 @@ def edit_item(category_slug, item_slug):
             flash("Not allowed. There already exists an item with the same "
                   "slug.", "error")
             return render_template(
-                "editItem.html", new_title=new_title, 
-                new_description=new_description, 
+                "editItem.html", new_title=new_title,
+                new_description=new_description,
                 new_category_id=new_category_id,
                 categories=categories,
                 category_slug=category_slug,
@@ -229,10 +243,13 @@ def delete_item(category_slug, item_slug):
         session = DBSession()
 
         try:
+            category = (
+                session.query(Category)
+                .filter_by(slug=category_slug)
+                .one())
             item = (
-                session.query(MenuItem).join(MenuItem.category)
-                .filter(Category.slug == category_slug,
-                        MenuItem.slug == item_slug)
+                session.query(MenuItem)
+                .filter_by(slug=item_slug, category_id=category.id)
                 .one())
         except oexc.NoResultFound:
             session.close()
@@ -250,6 +267,12 @@ def delete_item(category_slug, item_slug):
 
             flash("Not allowed. 'Delete' feature requires login.", "error")
             return redirect(url_for("login.read_login"))
+
+        if not helper.is_authorized(login_session, item):
+            session.close()
+
+            flash("Not allowed. This post can be edited only by its author", "error")
+            return redirect(url_for("post.read_item", category_slug=category_slug, item_slug=item_slug))
 
         session.close()
 
@@ -261,10 +284,13 @@ def delete_item(category_slug, item_slug):
         session = DBSession()
 
         try:
+            category = (
+                session.query(Category)
+                .filter_by(slug=category_slug)
+                .one())
             item = (
-                session.query(MenuItem).join(MenuItem.category)
-                .filter(Category.slug == category_slug, 
-                        MenuItem.slug == item_slug)
+                session.query(MenuItem)
+                .filter_by(slug=item_slug, category_id=category.id)
                 .one())
         except oexc.NoResultFound:
             session.close()
@@ -283,11 +309,17 @@ def delete_item(category_slug, item_slug):
             flash("Not allowed. 'Delete' feature requires login.", "error")
             return redirect(url_for("login.read_login"))
 
+        if not helper.is_authorized(login_session, item):
+            session.close()
+
+            flash("Not allowed. This post can be edited only by its author", "error")
+            return redirect(url_for("post.read_item", category_slug=category_slug, item_slug=item_slug))
+
         session.delete(item)
         session.commit()
 
         session.close()
-        
+
         flash("'%s' successfully deleted." % item.name, "success")
         return redirect(url_for("home.read_main"))
 
@@ -299,7 +331,7 @@ def read_item(category_slug, item_slug):
     try:
         item = (
             session.query(MenuItem, Category.slug).join(MenuItem.category)
-            .filter(Category.slug == category_slug, 
+            .filter(Category.slug == category_slug,
                     MenuItem.slug == item_slug)
             .one())
     except oexc.NoResultFound:

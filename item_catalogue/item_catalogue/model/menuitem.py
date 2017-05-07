@@ -10,6 +10,7 @@ class MenuItem(Base):
     id = Column(Integer, primary_key = True)
     name = Column(String(80), nullable=False)
     slug = Column(String(80), nullable=False)
+    author_email = Column(String(150), nullable=False)
     description = Column(String(300))
     category_id = Column(Integer,ForeignKey('category.id'))
     category = relationship(Category)
