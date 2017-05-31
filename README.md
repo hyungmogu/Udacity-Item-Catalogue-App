@@ -1,5 +1,7 @@
 # Udacity FSND 5th Project: Item Catalogue
 
+Note: This is Udacity evaluated assignment.
+
 This is a project for the course `introduction to full-stack development`.
 
 Here, users can create, delete, edit and read posts, retrieve data via server-side web API, and login using account from Google and Facebook.
@@ -35,14 +37,14 @@ This project utilizes FLASK, SQLAlchemy, SQLite, Python, Jinja2, CSS3, Bootstrap
 1. Navigate to a directory of choice
 2. Download git repository
 ```
-git clone https://github.com/hyungmogu/udacity-item-catalogue/
+git clone https://github.com/hyungmogu/item-catalogue/
 ```
 
 ### 2. Run Vagrant
 
 1. Navigate to where `VagrantFile` is located
 ```
-cd <FOLDER_CONTAINING_CLONED_REPO>/udacity-item-catalogue
+cd <FOLDER_CONTAINING_CLONED_REPO>/item-catalogue
 ```
 2. Setup vagrant
 ```
