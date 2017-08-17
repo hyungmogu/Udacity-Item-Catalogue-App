@@ -1,4 +1,4 @@
-# Udacity FSND 5th Project: Item Catalogue
+# Udacity FSND 5th Project: Item Catalog
 
 Note: This is Udacity evaluated assignment.
 
@@ -13,6 +13,7 @@ This project utilizes FLASK, SQLAlchemy, SQLite, Python, Jinja2, CSS3, Bootstrap
 ---
 
 ## Table of Contents
+* News
 * Dependences
 * Prerequisites
 * Installation
@@ -26,6 +27,9 @@ This project utilizes FLASK, SQLAlchemy, SQLite, Python, Jinja2, CSS3, Bootstrap
 - oauth2client 4.0.0
 - requests 2.2.1
 - sqlite3 3.8.2
+
+## News
+1. [August 16th, 2017] Fixed broken link
 
 ## Prerequisites
 1. [Git](https://www.atlassian.com/git/tutorials/install-git)
@@ -152,3 +156,4 @@ flask run
 ### Closing Server
 
 1. Press `Ctrl` + `c` in window where local server is running
+
