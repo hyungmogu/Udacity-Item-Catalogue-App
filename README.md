@@ -30,6 +30,7 @@ This project utilizes FLASK, SQLAlchemy, SQLite, Python, Jinja2, CSS3, Bootstrap
 
 ## News
 1. [August 16th, 2017] Fixed broken link
+2. [August 23rd, 2017] Fixed unresponsive google oauth for the demo site
 
 ## Prerequisites
 1. [Git](https://www.atlassian.com/git/tutorials/install-git)
